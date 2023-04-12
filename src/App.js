@@ -4,6 +4,7 @@ import Main from "./components/Main";
 import "./App.css";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
+import Map from './components/Map';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +33,7 @@ function App() {
             element={<Main isLoggedIn={isLoggedIn} handleLogIn={handleLogIn} />}
           />
           <Route path="/register" element={<Register />} />
+          <Route path="/map" element={<Map />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

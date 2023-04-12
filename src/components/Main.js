@@ -1,6 +1,5 @@
 import LogIn from "./LogIn";
 import MainContents from "./MainContents";
-import { useState } from "react";
 
 const Main = ({ isLoggedIn, handleLogIn }) => {
   if (isLoggedIn) {
