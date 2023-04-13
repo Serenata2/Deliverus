@@ -1,7 +1,8 @@
 // 환경변수 선언
-// 서버 ip 주소 :121.141.69.189
+// 서버 ip 주소 : "http://121.141.69.189:8080"
+// 현택이 핫스팟 ip 주소 : "http://172.20.10.3:8080"
 
-const BASE_URL = "http://172.20.10.3:8080"
+const BASE_URL = "http://121.141.69.189:8080"
 
 export const API = {
     REGISTER: `${BASE_URL}/api/member/register`,

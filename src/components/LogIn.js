@@ -23,6 +23,9 @@ const LogIn = ({handleLogIn}) => {
             credentials: "include",
             body: JSON.stringify(data),
         });
+        if (response.status != 200) {
+            throw new Error(`${response.status} 에러!!`);
+        }
         return response.json();
     };
 
@@ -35,6 +38,7 @@ const LogIn = ({handleLogIn}) => {
             handleLogIn(result.userId);
         } catch (err) {
             console.log("Error in Login : ", err);
+            alert("아이디 혹은 비밀번호가 틀렸습니다.");
         }
     };
 

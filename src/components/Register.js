@@ -1,7 +1,9 @@
 import {useContext, useState} from "react";
 import {API} from '../config';
+import {useNavigate} from "react-router-dom";
 
 const Register = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [nickname, setNickname] = useState("");
@@ -42,6 +44,9 @@ const Register = () => {
             body: JSON.stringify(data),
         });
 
+        if (response.status != 200) {
+            throw new Error(`${response.status} 에러 발생!`);
+        }
         return response.json();
     };
 
@@ -56,13 +61,16 @@ const Register = () => {
             return false;
         }
 
-        const data = {userid: username, nickname: nickname, passwd: password};
+        const data = {nickname: nickname, userid: username, passwd: password};
 
         try {
             const result = await getRegistrationResult(data);
             console.log("Registration Success", result);
+            alert("회원가입에 성공했습니다.");
+            navigate("/");
         } catch (err) {
             console.log("Error in Register :", err);
+            alert("회원가입 실패!")
         }
     };
 

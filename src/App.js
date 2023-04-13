@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Link, Routes, Route, useNavigate} from "react-router-dom";
 import Main from "./components/Main";
 import "./App.css";
+import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import Map from './components/Map';
 import Restaurant from "./components/Restaurant";
@@ -11,7 +12,7 @@ import {API} from './config';
 function App() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userNickname, setUserNickname] = useState(null); // User의 NickName State 변수
+    let userNickname = null; // 사용자의 NickName 변수
 
     /**
      * 로그아웃 여부를 부모 컴포넌트에서만 관리하도록 하는 함수
@@ -29,6 +30,7 @@ function App() {
             })
                 .then((respones) => {
                     navigate("/");
+                    userNickname = null;
                     setIsLoggedIn(false)
                 });
         } catch (error) {
@@ -41,7 +43,7 @@ function App() {
      *  로그인할 때 서버로부터 받은 User의 Nickname으로 state 변경
      */
     const handleLogIn = (_userNickname) => {
-        setUserNickname(_userNickname);
+        userNickname = _userNickname;
         setIsLoggedIn(true);
     };
 
@@ -63,6 +65,7 @@ function App() {
                             path="/"
                             element={<Main isLoggedIn={isLoggedIn} handleLogIn={handleLogIn}/>}
                         />
+                        <Route path="/register" element={<Register />}/>
                         <Route path="/restaurant" element={<Restaurant/>}/>
                         <Route path="/map" element={<Map/>}/>
                         <Route path="*" element={<NotFound/>}/>
