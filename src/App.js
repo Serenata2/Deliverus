@@ -6,13 +6,14 @@ import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import Map from './components/Map';
 import Restaurant from "./components/Restaurant";
-import {UserContext} from "./context";
-import {API} from './config';
+import {UserContext} from "./utils/context";
+import {API} from './utils/config';
+
 
 function App() {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    let userNickname = null; // 사용자의 NickName 변수
+    const [userNickname, setUserNickname] = useState(""); // 사용자의 NickName 변수
 
     /**
      * 로그아웃 여부를 부모 컴포넌트에서만 관리하도록 하는 함수
@@ -30,7 +31,7 @@ function App() {
             })
                 .then((respones) => {
                     navigate("/");
-                    userNickname = null;
+                    setUserNickname("");
                     setIsLoggedIn(false)
                 });
         } catch (error) {
@@ -43,7 +44,7 @@ function App() {
      *  로그인할 때 서버로부터 받은 User의 Nickname으로 state 변경
      */
     const handleLogIn = (_userNickname) => {
-        userNickname = _userNickname;
+        setUserNickname(_userNickname);
         setIsLoggedIn(true);
     };
 
