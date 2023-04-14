@@ -1,8 +1,10 @@
 import {useContext, useState} from "react";
-import {API} from '../config';
+import {API} from '../utils/config';
 import {useNavigate} from "react-router-dom";
+import * as status from "../utils/status";
 
 const Register = () => {
+
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -44,9 +46,8 @@ const Register = () => {
             body: JSON.stringify(data),
         });
 
-        if (response.status != 200) {
-            throw new Error(`${response.status} 에러 발생!`);
-        }
+        // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
+        status.registerStatus(response.status);
         return response.json();
     };
 
@@ -58,6 +59,11 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
+            alert("회원가입 형식이 맞지 않습니다.");
+            // 회원가입 입력 창 초기화
+            setUsername("");
+            setPassword("");
+            setNickname("");
             return false;
         }
 
@@ -68,9 +74,17 @@ const Register = () => {
             console.log("Registration Success", result);
             alert("회원가입에 성공했습니다.");
             navigate("/");
-        } catch (err) {
-            console.log("Error in Register :", err);
-            alert("회원가입 실패!")
+        } catch (error) {
+            if (error.name === "IdDuplicationError") {
+                alert(error.message);
+            }
+            else if (error.name === "NicknameDuplicationError"){
+                alert(error.message);
+            }
+            else {
+                alert(error.message);
+            }
+            console.log(`${error.name} : ${error.message}`);
         }
     };
 

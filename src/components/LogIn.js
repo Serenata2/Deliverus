@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {API} from '../config';
+import {API} from '../utils/config';
+import * as status from "../utils/status";
 
 const LogIn = ({handleLogIn}) => {
     const [username, setUsername] = useState("");
@@ -23,22 +24,31 @@ const LogIn = ({handleLogIn}) => {
             credentials: "include",
             body: JSON.stringify(data),
         });
-        if (response.status != 200) {
-            throw new Error(`${response.status} 에러!!`);
-        }
+        // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
+        status.loginStatus(response.status);
         return response.json();
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (error) => {
+        error.preventDefault();
         const data = {userid: username, passwd: password};
         try {
             const result = await getLogInResult(data);
-            console.log("Log In Success", result);
+            console.log("Login Success", result);
             handleLogIn(result.userId);
-        } catch (err) {
-            console.log("Error in Login : ", err);
-            alert("아이디 혹은 비밀번호가 틀렸습니다.");
+        } catch (error) {
+            // 아이디가 존재하지 않는 에러
+            if (error.name === "NoUserError") {
+                alert(error.message);
+            }
+            // 비밀번호가 틀린 에러
+            else if (error.name === "WrongPasswordError") {
+                alert(error.message);
+            }
+            else {
+                alert(error.message);
+            }
+            console.log(`${error.name} : ${error.message}`);
         }
     };
 

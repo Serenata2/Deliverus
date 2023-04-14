@@ -1,13 +1,12 @@
 import LogIn from "./LogIn";
 import MainContents from "./MainContents";
 import {useContext} from "react";
-import {UserContext} from "../context";
 
 const Main = ({isLoggedIn, handleLogIn}) => {
     if (isLoggedIn) {
-        return <MainContents/>;
+        return <MainContents />;
     } else {
-        return <LogIn handleLogIn={handleLogIn}/>;
+        return <LogIn handleLogIn={handleLogIn} />;
     }
 };
 
