@@ -1,8 +1,6 @@
-// 환경변수 선언
-// 서버 ip 주소 : "http://121.141.69.189:8080"
-// 현택이 핫스팟 ip 주소 : "http://172.20.10.3:8080"
+// API 호출 때 쓰일 URL 관련 환경변수 선언
 
-const BASE_URL = "http://121.141.69.189:8080"
+const BASE_URL = process.env.REACT_APP_TEMP_SERVER_IP;
 
 export const API = {
     REGISTER: `${BASE_URL}/api/member/register`,
