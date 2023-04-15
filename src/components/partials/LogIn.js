@@ -35,7 +35,7 @@ const LogIn = ({ handleLogIn }) => {
       body: JSON.stringify(data),
     });
     // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
-    status.loginStatus(response.status);
+    status.handleLogInResponse(response.status);
     return response.json();
   };
 

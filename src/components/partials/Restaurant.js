@@ -24,7 +24,7 @@ const Restaurant = ({ myHandle }) => {
     )
       .then((respones) => {
         // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
-        status.registerStatus(respones.status);
+        status.handleRegisterResponse(respones.status);
         return respones.json();
       })
       .then((data) => {
@@ -48,7 +48,7 @@ const Restaurant = ({ myHandle }) => {
       credentials: "include",
     })
       .then((respones) => {
-        status.registerStatus(respones.status);
+        status.handleRestaurantResponse(respones.status);
         return respones.json();
       })
       .then((data) => {

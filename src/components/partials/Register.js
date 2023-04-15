@@ -58,7 +58,7 @@ const Register = () => {
     });
 
     // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
-    status.registerStatus(response.status);
+    status.handleRegisterResponse(response.status);
     return response.json();
   };
 
