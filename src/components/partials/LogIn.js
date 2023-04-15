@@ -1,18 +1,28 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { API } from "../utils/config";
-import * as status from "../utils/status";
+import { API } from "../../utils/config";
+import * as status from "../../utils/status";
+import CircularBackdrop from "../ui/CircularBackdrop";
 
 const LogIn = ({ handleLogIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const handleIdInput = (event) => {
-    setUsername(event.target.value);
+  const handleOpen = () => {
+    setOpen(true);
   };
 
-  const handlePwInput = (event) => {
-    setPassword(event.target.value);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleIdInput = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePwInput = (e) => {
+    setPassword(e.target.value);
   };
 
   const getLogInResult = async (data) => {
@@ -31,6 +41,7 @@ const LogIn = ({ handleLogIn }) => {
 
   const handleSubmit = async (error) => {
     error.preventDefault();
+    handleOpen();
     const data = { userid: username, passwd: password };
     try {
       const result = await getLogInResult(data);
@@ -48,11 +59,14 @@ const LogIn = ({ handleLogIn }) => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
+    } finally {
+      handleClose();
     }
   };
 
   return (
     <>
+      <CircularBackdrop open={open} />
       <form onSubmit={handleSubmit} method="post">
         <label htmlFor="id">ID: </label>
         <input onChange={handleIdInput} id="id" type="text" value={username} />

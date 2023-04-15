@@ -1,7 +1,7 @@
-import { API } from "../utils/config";
+import { API } from "../../utils/config";
 import { useContext } from "react";
-import { UserContext } from "../utils/context";
-import * as status from "../utils/status";
+import { UserContext } from "../../utils/context";
+import * as status from "../../utils/status";
 
 /**
  * 가게 정보를 받아오는 API를 테스트 하는 공간입니다.
@@ -48,7 +48,7 @@ const Restaurant = ({ myHandle }) => {
       credentials: "include",
     })
       .then((respones) => {
-        status.handleRegisterResponse(respones.status);
+        status.handleRestaurantResponse(respones.status);
         return respones.json();
       })
       .then((data) => {

@@ -1,24 +1,36 @@
 import { useContext, useState } from "react";
-import { API } from "../utils/config";
+import { API } from "../../utils/config";
 import { useNavigate } from "react-router-dom";
-import * as status from "../utils/status";
+import * as status from "../../utils/status";
+import CircularBackdrop from "../ui/CircularBackdrop";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
+  const [open, setOpen] = useState(false);
 
-  const handleIdInput = (event) => {
-    setUsername(event.target.value);
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  const handlePwInput = (event) => {
-    setPassword(event.target.value);
+  const handleOpen = () => {
+    setOpen(true);
   };
 
-  const handleNicknameInput = (event) => {
-    setNickname(event.target.value);
+  const handleIdInput = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePwInput = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleNicknameInput = (e) => {
+    setNickname(e.target.value);
   };
 
   /** 정규표현식을 사용해 id, pw, nickname의 유효성 검사를 진행하는 함수 */
@@ -56,6 +68,10 @@ const Register = () => {
    * 3. 성공 유무에 따라 홈페이지로 리다이렉트
    */
   const handleSubmit = async (e) => {
+    if (isRegistering) {
+      return;
+    }
+    setIsRegistering(true);
     e.preventDefault();
     if (!validateForm()) {
       alert("회원가입 형식이 맞지 않습니다.");
@@ -63,15 +79,15 @@ const Register = () => {
       setUsername("");
       setPassword("");
       setNickname("");
+      setIsRegistering(false);
       return false;
     }
-
+    handleOpen();
     const data = { nickname: nickname, userid: username, passwd: password };
 
     try {
       const result = await getRegistrationResult(data);
       console.log("Registration Success", result);
-      alert("회원가입에 성공했습니다.");
       navigate("/");
     } catch (error) {
       if (error.name === "IdDuplicationError") {
@@ -82,11 +98,15 @@ const Register = () => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
+    } finally {
+      setIsRegistering(false);
+      handleClose();
     }
   };
 
   return (
     <>
+      <CircularBackdrop open={open} />
       <form onSubmit={handleSubmit} method="post">
         <label htmlFor="id">ID: </label>
         <input onChange={handleIdInput} id="id" type="text" value={username} />
