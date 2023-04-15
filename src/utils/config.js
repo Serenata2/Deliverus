@@ -1,6 +1,6 @@
 // API 호출 때 쓰일 URL 관련 환경변수 선언
 
-const BASE_URL = process.env.REACT_APP_TEMP_SERVER_IP;
+const BASE_URL = process.env.REACT_APP_SERVER_IP;
 
 export const API = {
     REGISTER: `${BASE_URL}/api/member/register`,

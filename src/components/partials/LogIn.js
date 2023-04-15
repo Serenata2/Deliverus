@@ -1,29 +1,18 @@
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import { useState } from "react";
 import { API } from "../../utils/config";
 import * as status from "../../utils/status";
 import CircularBackdrop from "../ui/CircularBackdrop";
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 
 const LogIn = ({ handleLogIn }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleIdInput = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePwInput = (e) => {
-    setPassword(e.target.value);
-  };
 
   const getLogInResult = async (data) => {
     const response = await fetch(`${API.LOGIN}`, {
@@ -39,12 +28,14 @@ const LogIn = ({ handleLogIn }) => {
     return response.json();
   };
 
-  const handleSubmit = async (error) => {
-    error.preventDefault();
-    handleOpen();
-    const data = { userid: username, passwd: password };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log("data : ", data.get('id'), data.get('password'));
+    const loginData = { userid: data.get('id'), passwd: data.get('password') };
+
     try {
-      const result = await getLogInResult(data);
+      const result = await getLogInResult(loginData);
       console.log("Login Success", result);
       handleLogIn(result.userId);
     } catch (error) {
@@ -59,30 +50,96 @@ const LogIn = ({ handleLogIn }) => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
-    } finally {
-      handleClose();
     }
-  };
+  }
 
   return (
-    <>
-      <CircularBackdrop open={open} />
-      <form onSubmit={handleSubmit} method="post">
-        <label htmlFor="id">ID: </label>
-        <input onChange={handleIdInput} id="id" type="text" value={username} />
-        <br />
-        <label htmlFor="password">PW: </label>
-        <input
-          onChange={handlePwInput}
-          id="password"
-          type="password"
-          value={password}
-        />
-        <br />
-        <button>로그인</button>
-      </form>
-      <Link to="/register">회원가입</Link>
-    </>
+      <Grid container component="main" sx={{height: "100vh"}}>
+        <Grid
+            item
+            xs={12}
+            sm={6}
+            md={7}
+        >
+          <Box
+              sx={{
+                margin: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+            <Typography component="h1" variant="h5" sx={{mt: 5}}>
+              Deliverus
+            </Typography>
+            <Typography component="h1" variant="h5" sx={{mt: 3}}>
+              이웃과 배달비를 공유해보세요!
+            </Typography>
+          </Box>
+
+        </Grid>
+
+        <Grid
+            item
+            xs={12}
+            sm={6}
+            md={5}
+            component={Paper}
+            elevation={6}
+            square
+        >
+          <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+          >
+            <Typography component="h1" variant="h5">
+              로그인
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+              <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="id"
+                  label="Id"
+                  name="id"
+                  autoFocus
+              />
+              <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+              />
+
+              <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{mt: 3, mb: 2}}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="/register" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+
+            </Box>
+
+          </Box>
+        </Grid>
+      </Grid>
   );
 };
 
