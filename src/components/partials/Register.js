@@ -1,16 +1,17 @@
+//import { Link } from "react-router-dom";
 import { useState } from "react";
 import { API } from "../../utils/config";
-import { useNavigate } from "react-router-dom";
 import * as status from "../../utils/status";
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ togglePage }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -61,9 +62,8 @@ const Register = () => {
       credentials: "include",
       body: JSON.stringify(data),
     });
-
     // respones의 status를 확인해서 상황에 알맞은 Error를 던집니다.
-    status.handleRegisterResponse(response.status);
+    status.handleLogInResponse(response.status);
     return response.json();
   };
 
@@ -74,7 +74,11 @@ const Register = () => {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const registerData = { nickname: nickname, userid: username, passwd: password };
+    const registerData = {
+      nickname: nickname,
+      userid: username,
+      passwd: password,
+    };
     console.log(registerData);
     if (!validateForm(registerData)) {
       alert("회원가입 형식이 맞지 않습니다.");
@@ -90,9 +94,12 @@ const Register = () => {
       console.log("Registration Success", result);
       navigate("/");
     } catch (error) {
-      if (error.name === "IdDuplicationError") {
+      // 아이디가 존재하지 않는 에러
+      if (error.name === "NoUserError") {
         alert(error.message);
-      } else if (error.name === "NicknameDuplicationError") {
+      }
+      // 비밀번호가 틀린 에러
+      else if (error.name === "WrongPasswordError") {
         alert(error.message);
       } else {
         alert(error.message);
@@ -104,109 +111,58 @@ const Register = () => {
   };
 
   return (
-      <Grid container component="main" sx={{height: "100vh"}}>
-        <Grid
-            item
-            xs={12}
-            sm={6}
-            md={7}
-        >
-          <Box
-              sx={{
-                margin: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-            <Typography component="h1" variant="h5" sx={{mt: 5}}>
-              Deliverus
-            </Typography>
-            <Typography component="h1" variant="h5" sx={{mt: 3}}>
-              이웃과 배달비를 공유해보세요!
-            </Typography>
-          </Box>
+    <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
+      <Box
+        sx={{
+          my: 8,
+          mx: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          회원가입
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="id"
+            label="Id"
+            name="id"
+            autoFocus
+            value={username}
+            onChange={handleIdInput}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePwInput}
+          />
 
-        </Grid>
-
-        <Grid
-            item
-            xs={12}
-            sm={6}
-            md={5}
-            component={Paper}
-            elevation={6}
-            square
-        >
-          <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignTiems: "center",
-          }}>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-              <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="nickname"
-                  label="닉네임을 입력하세요"
-                  type="nickname"
-                  id="nickname"
-                  value={nickname}
-                  onChange={handleNicknameInput}
-              />
-              <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="id"
-                  label="Id를 입력하세요"
-                  name="id"
-                  value={username}
-                  onChange={handleIdInput}
-                  autoFocus
-              />
-              <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password를 입력하세요"
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={handlePwInput}
-              />
-              <Typography fontSize= '0.5rem' component="h3" variant="h5">
-                비밀번호는 특수문자를 반드시 포함해야합니다
-              </Typography>
-              <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href="/" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-
-        </Grid>
-      </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+        </Box>
+        <Link href="#" onClick={() => togglePage()} variant="body2">
+          {"이미 계정이 있나요? 로그인 하러 가기"}
+        </Link>
+      </Box>
+    </Grid>
   );
-
 };
 
 export default Register;

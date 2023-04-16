@@ -7,7 +7,6 @@ import { combineReducers } from "@reduxjs/toolkit";
 const persistConfig = {
   // 1
   key: "root",
-  whitelist: ["auth"],
   storage,
 };
 
