@@ -3,7 +3,6 @@ import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import Main from "./components/Main";
 import Header from "./components/Header";
 import "./App.css";
-import Register from "./components/partials/Register";
 import NotFound from "./components/partials/NotFound";
 import Map from "./components/Map";
 import Restaurant from "./components/partials/Restaurant";
@@ -13,7 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 function App() {
   const navigator = useNavigate();
   const session = useSelector((state) => state.session.session);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!session) navigator("/");
@@ -61,7 +59,6 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/map" element={<Map />} />
           <Route path="*" element={<NotFound />} />
