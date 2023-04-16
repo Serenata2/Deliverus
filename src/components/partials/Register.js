@@ -10,9 +10,12 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import Collapse from "@mui/material/Collapse";
 
 const Register = ({ togglePage }) => {
-  const navigate = useNavigate();
+  // 알람창을 위한 변수입니다.
+  const [alertOpen, setAlertOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
@@ -81,7 +84,7 @@ const Register = ({ togglePage }) => {
     };
     console.log(registerData);
     if (!validateForm(registerData)) {
-      alert("회원가입 형식이 맞지 않습니다.");
+      setAlertOpen(true);
       setUsername("");
       setPassword("");
       setNickname("");
@@ -92,7 +95,7 @@ const Register = ({ togglePage }) => {
     try {
       const result = await getRegistrationResult(registerData);
       console.log("Registration Success", result);
-      navigate("/");
+      togglePage();
     } catch (error) {
       // 아이디가 존재하지 않는 에러
       if (error.name === "NoUserError") {
@@ -126,6 +129,17 @@ const Register = ({ togglePage }) => {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="nickname"
+              label="닉네임을 입력하세요"
+              type="nickname"
+              id="nickname"
+              value={nickname}
+              onChange={handleNicknameInput}
+          />
+          <TextField
             margin="normal"
             required
             fullWidth
@@ -147,7 +161,9 @@ const Register = ({ togglePage }) => {
             value={password}
             onChange={handlePwInput}
           />
-
+          <Typography fontSize= '0.5rem' component="h3" variant="h5">
+            비밀번호는 특수문자를 반드시 포함해야합니다
+          </Typography>
           <Button
             type="submit"
             fullWidth
@@ -156,6 +172,14 @@ const Register = ({ togglePage }) => {
           >
             Sign Up
           </Button>
+          <Collapse in={alertOpen}>
+            <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+            >
+              회원가입 형식이 맞지 않습니다!
+            </Alert>
+          </Collapse>
         </Box>
         <Link href="#" onClick={() => togglePage()} variant="body2">
           {"이미 계정이 있나요? 로그인 하러 가기"}
