@@ -11,10 +11,9 @@ const SignPage = () => {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid item xs={12} sm={6} md={7}>
+      <Grid item xs={12} sm={6} md={6}>
         <Box
           sx={{
-            margin: "auto",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
