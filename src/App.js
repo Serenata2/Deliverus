@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import Main from "./components/Main";
 import Header from "./components/Header";
@@ -7,10 +7,18 @@ import Register from "./components/partials/Register";
 import NotFound from "./components/partials/NotFound";
 import Map from "./components/Map";
 import Restaurant from "./components/partials/Restaurant";
-import { UserContext } from "./utils/context";
 import { API } from "./utils/config";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+  const navigator = useNavigate();
+  const session = useSelector((state) => state.session.session);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!session) navigator("/");
+  }, [session]);
+
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userNickname, setUserNickname] = useState(""); // 사용자의 NickName 변수
@@ -49,23 +57,16 @@ function App() {
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} handleLogOut={handleLogOutClicked} />
-      <UserContext.Provider value={handleLogOutClicked}>
-        <main>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Main isLoggedIn={isLoggedIn} handleLogIn={handleLogIn} />
-              }
-            />
-            <Route path="/register" element={<Register />} />
-            <Route path="/restaurant" element={<Restaurant />} />
-            <Route path="/map" element={<Map />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-      </UserContext.Provider>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/restaurant" element={<Restaurant />} />
+          <Route path="/map" element={<Map />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
     </>
   );
 }

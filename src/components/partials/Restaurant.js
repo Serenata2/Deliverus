@@ -2,13 +2,22 @@ import { API } from "../../utils/config";
 import { useContext } from "react";
 import { UserContext } from "../../utils/context";
 import * as status from "../../utils/status";
-
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 /**
  * 가게 정보를 받아오는 API를 테스트 하는 공간입니다.
  * 카테고리별로 가게 정보를 받아오거나, 가게 전체를 다 받아올 수 있습니다.
  */
-const Restaurant = ({ myHandle }) => {
+const Restaurant = () => {
+  // const session = useSelector((state) => state.session.session);
+  // const navigator = useNavigate();
   const handleLogOutClicked = useContext(UserContext);
+
+  /** 세션 만료시 메인화면으로 리다이렉트 합니다 */
+  // useEffect(() => {
+  //   if (!session) navigator("/");
+  // }, [session]);
 
   const restaurantCategoryTest = (event) => {
     event.preventDefault();
