@@ -3,13 +3,22 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
+import { Provider } from "react-redux";
+import store from "./components/store/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const persistor = persistStore(store);
+
 root.render(
+  <React.StrictMode>
     <BrowserRouter>
-      <CookiesProvider>
-        <App />
-      </CookiesProvider>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </BrowserRouter>
+  </React.StrictMode>
 );

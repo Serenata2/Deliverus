@@ -2,8 +2,6 @@ import {
   AppBar,
   Box,
   Toolbar,
-  IconButton,
-  Container,
   Typography,
   Button,
   ThemeProvider,
@@ -11,8 +9,13 @@ import {
 } from "@mui/material";
 
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logOut } from "./store/sessionSlice";
 
-const Header = ({ isLoggedIn, handleLogOut }) => {
+const Header = () => {
+  const dispatch = useDispatch(); // redux가 관리하는 state를 변경하는 미들웨어(함수)
+  const session = useSelector((state) => state.session.session); // 실제 redux가 관리하는 state의 값
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -45,8 +48,8 @@ const Header = ({ isLoggedIn, handleLogOut }) => {
                   Deliverus
                 </Link>
               </Typography>
-              {isLoggedIn && (
-                <Button color="primary" onClick={handleLogOut}>
+              {session && (
+                <Button color="primary" onClick={() => dispatch(logOut())}>
                   로그아웃
                 </Button>
               )}

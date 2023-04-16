@@ -10,7 +10,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
-const LogIn = ({ handleLogIn }) => {
+const LogIn = () => {
+  const dispatch = useDispatch();
 
     // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
     const [open, setOpen] = useState(false);
@@ -49,13 +50,13 @@ const LogIn = ({ handleLogIn }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
     const loginData = { userid: username, passwd: password };
     handleOpen();
     try {
       const result = await getLogInResult(loginData);
       console.log("Login Success", result);
-      handleLogIn(result.userId);
+      // handleLogIn(result.userId);
+      dispatch(logIn(result.userId));
     } catch (error) {
       // 아이디가 존재하지 않는 에러
       if (error.name === "NoUserError") {
@@ -73,32 +74,27 @@ const LogIn = ({ handleLogIn }) => {
         setPassword("");
         handleClose();
     }
-  }
+  };
 
   return (
-      <Grid container component="main" sx={{height: "100vh"}}>
-        <Grid
-            item
-            xs={12}
-            sm={6}
-            md={7}
+    <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid item xs={12} sm={6} md={7}>
+        <Box
+          sx={{
+            margin: "auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          <Box
-              sx={{
-                margin: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-            <Typography component="h1" variant="h5" sx={{mt: 5}}>
-              Deliverus
-            </Typography>
-            <Typography component="h1" variant="h5" sx={{mt: 3}}>
-              이웃과 배달비를 공유해보세요!
-            </Typography>
-          </Box>
-
-        </Grid>
+          <Typography component="h1" variant="h5" sx={{ mt: 5 }}>
+            Deliverus
+          </Typography>
+          <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
+            이웃과 배달비를 공유해보세요!
+          </Typography>
+        </Box>
+      </Grid>
 
         <Grid
             item
@@ -145,27 +141,25 @@ const LogIn = ({ handleLogIn }) => {
                   onChange={handlePwInput}
               />
 
-              <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{mt: 3, mb: 2}}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
-
-            </Box>
-
+            </Grid>
           </Box>
-        </Grid>
+        </Box>
       </Grid>
+    </Grid>
   );
 };
 
