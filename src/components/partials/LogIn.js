@@ -15,6 +15,27 @@ import { logIn } from "../store/sessionSlice";
 const LogIn = ({ togglePage }) => {
   const dispatch = useDispatch();
 
+  // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
+  const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleIdInput = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePwInput = (e) => {
+    setPassword(e.target.value);
+  };
+
   const getLogInResult = async (data) => {
     const response = await fetch(`${API.LOGIN}`, {
       method: "POST",
@@ -31,10 +52,8 @@ const LogIn = ({ togglePage }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log("data : ", data.get("id"), data.get("password"));
-    const loginData = { userid: data.get("id"), passwd: data.get("password") };
-
+    const loginData = { userid: username, passwd: password };
+    handleOpen();
     try {
       const result = await getLogInResult(loginData);
       console.log("Login Success", result);
@@ -52,6 +71,10 @@ const LogIn = ({ togglePage }) => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
+    } finally {
+      setUsername("");
+      setPassword("");
+      handleClose();
     }
   };
 
@@ -78,6 +101,8 @@ const LogIn = ({ togglePage }) => {
             label="Id"
             name="id"
             autoFocus
+            value={username}
+            onChange={handleIdInput}
           />
           <TextField
             margin="normal"
@@ -87,6 +112,8 @@ const LogIn = ({ togglePage }) => {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={handlePwInput}
           />
 
           <Button

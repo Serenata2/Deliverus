@@ -9,14 +9,52 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { useDispatch } from "react-redux";
-import { logIn } from "../store/sessionSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({ togglePage }) => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
+  // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
+  const [open, setOpen] = useState(false);
 
-  const getLogInResult = async (data) => {
-    const response = await fetch(`${API.LOGIN}`, {
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleIdInput = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePwInput = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleNicknameInput = (e) => {
+    setNickname(e.target.value);
+  };
+
+  /** 정규표현식을 사용해 id, pw, nickname의 유효성 검사를 진행하는 함수 */
+  const validateForm = (registerData) => {
+    const idPwRegex = /^[a-zA-Z0-9]{4,}$/;
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]{4,}$/;
+    if (
+      idPwRegex.test(registerData.userid) &&
+      idPwRegex.test(registerData.passwd) &&
+      nicknameRegex.test(registerData.nickname)
+    )
+      return true;
+    return false;
+  };
+
+  /** /member/register 에 회원가입 요청을 보내고 응답을 반환하는 함수 */
+  const getRegistrationResult = async (data) => {
+    const response = await fetch(`${API.REGISTER}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,17 +67,32 @@ const Register = ({ togglePage }) => {
     return response.json();
   };
 
+  /**
+   * 1. 제출하려는 폼의 유효성 검사 진행
+   * 2. 서버로부터 회원가입 성공 유무 문자열 받는 함수 호출
+   * 3. 성공 유무에 따라 홈페이지로 리다이렉트
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log("data : ", data.get("id"), data.get("password"));
-    const loginData = { userid: data.get("id"), passwd: data.get("password") };
+    const registerData = {
+      nickname: nickname,
+      userid: username,
+      passwd: password,
+    };
+    console.log(registerData);
+    if (!validateForm(registerData)) {
+      alert("회원가입 형식이 맞지 않습니다.");
+      setUsername("");
+      setPassword("");
+      setNickname("");
+      return false;
+    }
+    handleOpen();
 
     try {
-      const result = await getLogInResult(loginData);
-      console.log("Login Success", result);
-      // handleLogIn(result.userId);
-      dispatch(logIn(result.userId));
+      const result = await getRegistrationResult(registerData);
+      console.log("Registration Success", result);
+      navigate("/");
     } catch (error) {
       // 아이디가 존재하지 않는 에러
       if (error.name === "NoUserError") {
@@ -52,6 +105,8 @@ const Register = ({ togglePage }) => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
+    } finally {
+      handleClose();
     }
   };
 
@@ -78,6 +133,8 @@ const Register = ({ togglePage }) => {
             label="Id"
             name="id"
             autoFocus
+            value={username}
+            onChange={handleIdInput}
           />
           <TextField
             margin="normal"
@@ -87,6 +144,8 @@ const Register = ({ togglePage }) => {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={handlePwInput}
           />
 
           <Button
