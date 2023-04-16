@@ -135,9 +135,10 @@ const Register = ({ togglePage }) => {
               required
               fullWidth
               name="nickname"
-              label="nickname"
+              label="Nickname"
               type="nickname"
               id="nickname"
+              autoFocus
               value={nickname}
               onChange={handleNicknameInput}
           />
@@ -148,7 +149,6 @@ const Register = ({ togglePage }) => {
             id="id"
             label="Id"
             name="id"
-            autoFocus
             value={username}
             onChange={handleIdInput}
           />
