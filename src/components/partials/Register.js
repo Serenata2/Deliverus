@@ -12,7 +12,6 @@ import TextField from '@mui/material/TextField';
 
 const Register = () => {
   const navigate = useNavigate();
-  const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
@@ -211,32 +210,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-// return (
-//     <>
-//       <CircularBackdrop open={open} />
-//       <form onSubmit={handleSubmit} method="post">
-//         <label htmlFor="id">ID: </label>
-//         <input onChange={handleIdInput} id="id" type="text" value={username} />
-//         <br />
-//         <label htmlFor="password">PW: </label>
-//         <input
-//             onChange={handlePwInput}
-//             id="password"
-//             type="password"
-//             value={password}
-//         />
-//         <br />
-//         <label htmlFor="nickname">Nickname: </label>
-//         <input
-//             onChange={handleNicknameInput}
-//             id="nickname"
-//             type="text"
-//             value={nickname}
-//         />
-//         <br />
-//         <button>회원가입</button>
-//       </form>
-//     </>
-// );

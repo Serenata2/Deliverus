@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import { useSelector, useDispatch } from "react-redux";
+import { logIn } from "../store/sessionSlice"
 
 const LogIn = () => {
   const dispatch = useDispatch();
