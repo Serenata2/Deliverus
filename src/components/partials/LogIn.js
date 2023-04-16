@@ -2,10 +2,8 @@
 import { useState } from "react";
 import { API } from "../../utils/config";
 import * as status from "../../utils/status";
-import CircularBackdrop from "../ui/CircularBackdrop";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -13,6 +11,27 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
 const LogIn = ({ handleLogIn }) => {
+
+    // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
+    const [open, setOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleIdInput = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const handlePwInput = (e) => {
+        setPassword(e.target.value);
+    };
 
   const getLogInResult = async (data) => {
     const response = await fetch(`${API.LOGIN}`, {
@@ -31,9 +50,8 @@ const LogIn = ({ handleLogIn }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log("data : ", data.get('id'), data.get('password'));
-    const loginData = { userid: data.get('id'), passwd: data.get('password') };
-
+    const loginData = { userid: username, passwd: password };
+    handleOpen();
     try {
       const result = await getLogInResult(loginData);
       console.log("Login Success", result);
@@ -50,6 +68,10 @@ const LogIn = ({ handleLogIn }) => {
         alert(error.message);
       }
       console.log(`${error.name} : ${error.message}`);
+    } finally {
+        setUsername("");
+        setPassword("");
+        handleClose();
     }
   }
 
@@ -108,6 +130,8 @@ const LogIn = ({ handleLogIn }) => {
                   label="Id"
                   name="id"
                   autoFocus
+                  value={username}
+                  onChange={handleIdInput}
               />
               <TextField
                   margin="normal"
@@ -117,6 +141,8 @@ const LogIn = ({ handleLogIn }) => {
                   label="Password"
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={handlePwInput}
               />
 
               <Button
