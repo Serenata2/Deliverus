@@ -23,6 +23,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userNickname, setUserNickname] = useState(""); // 사용자의 NickName 변수
 
+
   /**
    * 로그아웃 여부를 부모 컴포넌트에서만 관리하도록 하는 함수
    * 로그아웃할 때, 서버에게 User의 Nickname을 전달해줌으로 로그아웃 구현
