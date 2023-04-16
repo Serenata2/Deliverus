@@ -11,9 +11,14 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useDispatch } from "react-redux";
 import { logIn } from "../store/sessionSlice";
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
 
 const LogIn = ({ togglePage }) => {
   const dispatch = useDispatch();
+
+  // 알람창을 위한 변수입니다.
+  const [alertOpen, setAlertOpen] = useState(false);
 
   // open과 이하의 2개 함수는 로딩 모달 관련 함수입니다!!
   const [open, setOpen] = useState(false);
@@ -68,7 +73,8 @@ const LogIn = ({ togglePage }) => {
       else if (error.name === "WrongPasswordError") {
         alert(error.message);
       } else {
-        alert(error.message);
+        // alert(error.message);
+        setAlertOpen(true);
       }
       console.log(`${error.name} : ${error.message}`);
     } finally {
@@ -124,6 +130,14 @@ const LogIn = ({ togglePage }) => {
           >
             Sign In
           </Button>
+          <Collapse in={alertOpen}>
+            <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+            >
+              로그인에 실패하였습니다!
+            </Alert>
+          </Collapse>
         </Box>
         <Link href="#" onClick={() => togglePage()} variant="body2">
           {"계정이 없나요? 회원가입하러 가기"}
