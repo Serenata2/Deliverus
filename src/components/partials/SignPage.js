@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Grid, Box, Typography, TextField, Button, Link } from "@mui/material";
 import LogIn from "./LogIn";
 import Register from "./Register";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const SignPage = () => {
   const [isLogInPage, setIsLogInPage] = useState(true);
@@ -9,24 +10,27 @@ const SignPage = () => {
     setIsLogInPage((state) => !state);
   };
 
-  return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid item xs={12} sm={6} md={6}>
-        <Box
+    const isMobile = useMediaQuery("(max-width: 600px)");
+  const deliverusMainPage = <Grid item xs={12} sm={6} md={6}>
+      <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
           }}
-        >
+      >
           <Typography component="h1" variant="h5" sx={{ mt: 5 }}>
-            Deliverus
+              Deliverus
           </Typography>
           <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
-            이웃과 배달비를 공유해보세요!
+              이웃과 배달비를 공유해보세요!
           </Typography>
-        </Box>
-      </Grid>
+      </Box>
+  </Grid>
+
+  return (
+    <Grid container component="main" sx={{ height: "100vh" }}>
+        {!isMobile && deliverusMainPage}
       {isLogInPage ? (
         <LogIn togglePage={togglePage} />
       ) : (
