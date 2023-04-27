@@ -29,6 +29,8 @@ jobs:
 
       - name: Build                   # React Build
         run: npm run build
+        env:
+          CI: ""
 
       # aws user 연결
       - name: Configure AWS credentials
