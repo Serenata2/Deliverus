@@ -19,8 +19,8 @@ jobs:
       # Github Repository Secrets를 통해 환경 변수 파일을 생성
       - name: Generate Environment Variables File for Production
         run: |
-          echo "REACT_APP_KAKAO_MAP_API_KEY=REACT_APP_KAKAO_MAP_API_KEY" >> .env.production
-          echo "REACT_APP_SERVER_IP=REACT_APP_SERVER_IP" >> .env.production
+          echo "REACT_APP_KAKAO_MAP_API_KEY=$REACT_APP_KAKAO_MAP_API_KEY" >> .env.production
+          echo "REACT_APP_SERVER_IP=$REACT_APP_SERVER_IP" >> .env.production
         env:
           REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
           REACT_APP_SERVER_IP: ${{ secrets.REACT_APP_SERVER_IP }}
