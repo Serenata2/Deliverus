@@ -16,6 +16,15 @@ jobs:
         with:
           node-version: 14
 
+      # Github Repository Secrets를 통해 환경 변수 파일을 생성
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "REACT_APP_KAKAO_MAP_API_KEY=REACT_APP_KAKAO_MAP_API_KEY" >> .env.production
+          echo "REACT_APP_SERVER_IP=REACT_APP_SERVER_IP" >> .env.production
+        env:
+          REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
+          REACT_APP_SERVER_IP: ${{ secrets.REACT_APP_SERVER_IP }}
+
       - name: Cache node modules      # node modules 캐싱
         uses: actions/cache@v3
         with:
@@ -24,6 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
+
       - name: Install Dependencies    # 의존 파일 설치
         run: npm install
 
