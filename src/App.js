@@ -8,6 +8,7 @@ import Map from "./components/Map";
 import Restaurant from "./components/restaurant/Restaurant";
 import { API } from "./utils/config";
 import { UserContext } from "./components/store/UserContext";
+import RestaurantImfo from "./components/restaurant/RestaurantImfo";
 
 function App() {
   const context = useContext(UserContext);

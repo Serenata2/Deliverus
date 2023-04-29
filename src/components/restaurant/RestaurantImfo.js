@@ -7,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import RecruitingPartyCard from "./RecruitingPartyCard";
 import MenuCard from "./MenuCard";
 
+// 가게 조회 화면 컴포넌트입니다.
+// prop으로 보여주고자 하는 가게 이름을 받습니다.
 const RestaurantImfo = ({restaurantName}) => {
 
     const tempMenuList = [
@@ -53,8 +55,8 @@ const RestaurantImfo = ({restaurantName}) => {
             메뉴
         </Typography>
         <Stack spacing={3}>
-            {tempMenuList.map((item) => {
-                return (<MenuCard menu={item} />);
+            {tempMenuList.map((item, index) => {
+                return (<MenuCard key={index} menu={item} />);
         })}
         </Stack>
     </Fragment>);

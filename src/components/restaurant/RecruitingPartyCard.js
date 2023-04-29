@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import RestaurantImfo from "./RestaurantImfo";
 
+// 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 const RecruitingPartyCard = () => {
     return (<Card variant="outlined" sx={{display: "flex"}}>
         <CardContent sx={{my: "auto", px: 0, pl: 1}}>
