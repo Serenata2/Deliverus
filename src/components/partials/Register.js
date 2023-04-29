@@ -114,14 +114,16 @@ const Register = ({ togglePage }) => {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
+    <Grid item xs={12} sm={6} md={6} component={Paper} elevation={6} square>
       <Box
         sx={{
           my: 8,
-          mx: 4,
+          mx: "auto",
+          px: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          maxWidth: "sm",
         }}
       >
         <Typography component="h1" variant="h5">
@@ -133,9 +135,10 @@ const Register = ({ togglePage }) => {
             required
             fullWidth
             name="nickname"
-            label="닉네임을 입력하세요"
+            label="Nickname"
             type="nickname"
             id="nickname"
+            autoFocus
             value={nickname}
             onChange={handleNicknameInput}
           />
@@ -146,7 +149,6 @@ const Register = ({ togglePage }) => {
             id="id"
             label="Id"
             name="id"
-            autoFocus
             value={username}
             onChange={handleIdInput}
           />
