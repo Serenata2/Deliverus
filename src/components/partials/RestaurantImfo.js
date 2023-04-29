@@ -13,36 +13,6 @@ import Avatar from '@mui/material/Avatar';
 
 const RestaurantImfo = () => {
 
-    // 정보 최신화를 위해 필요한 것
-
-    /*
-    restaurantDescript
-    1. 가게 사진
-    2. 가게 이름
-    3. 가게 설명 텍스트
-     */
-
-    /*
-    recruitingParty -> 현재 선택된 가게에 대해 모집 중인 가게 리스트
-    1. 방장의 아이콘
-    2. 파티방의 제목
-    3. 파티방의 위치와 나의 위치 사이의 거리 -> 파티방의 위치
-    4. 현재 파티방에 들어온 사람 수
-    5. 총 제한되는 파티원 수
-    6. 가게 이름 ?? -> 이건 빼도 괜찮을 듯
-     */
-
-    /*
-    restaurantMenu
-    1. 메뉴 이름
-    2. 메뉴 상세 설명 -> DB에는 없는 내용
-    3. 메뉴 가격
-    4. 자세히 보기??
-     */
-
-    // 추가 생각해야 할 부분
-
-
     // 가게 정보에 대한 Card
     const restaurantCard = (<Card variant="outlined" sx={{display: "flex"}}>
         <CardContent sx={{my: "auto", px: 0, pl: 1}}>
