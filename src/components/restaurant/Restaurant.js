@@ -2,6 +2,7 @@ import { API } from "../../utils/config";
 import { useContext } from "react";
 import { UserContext } from "../store/UserContext";
 import * as status from "../../utils/status";
+
 /**
  * 가게 정보를 받아오는 API를 테스트 하는 공간입니다.
  * 카테고리별로 가게 정보를 받아오거나, 가게 전체를 다 받아올 수 있습니다.
@@ -64,9 +65,6 @@ const Restaurant = () => {
 
   return (
     <>
-      <p>
-        <button onClick={restaurantCategoryTest}>카테고리별 가게 확인</button>
-      </p>
       <p>
         <button onClick={restaurantAllTest}>모든 가게 정보 확인</button>
       </p>

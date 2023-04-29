@@ -13,7 +13,7 @@ const MainContents = () => {
       <h3>내가 직접 딜리버스 모집하기</h3>
       <div>
         <p>
-          <Link to="/restaurant">가게 정보방 입장하기</Link>
+          <Link to="/restaurant/imformation">가게 정보방 입장하기</Link>
         </p>
       </div>
     </>
