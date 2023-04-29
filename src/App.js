@@ -5,9 +5,10 @@ import Header from "./components/Header";
 import "./App.css";
 import NotFound from "./components/partials/NotFound";
 import Map from "./components/Map";
-import Restaurant from "./components/partials/Restaurant";
+import Restaurant from "./components/restaurant/Restaurant";
 import { API } from "./utils/config";
 import { useSelector, useDispatch } from "react-redux";
+import RestaurantImfo from "./components/restaurant/RestaurantImfo";
 
 function App() {
   const navigator = useNavigate();
@@ -60,7 +61,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/restaurant" element={<Restaurant />} />
+          <Route path="/restaurant/imformation" element={<RestaurantImfo />} />
           <Route path="/map" element={<Map />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
