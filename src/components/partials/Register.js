@@ -1,4 +1,3 @@
-//import { Link } from "react-router-dom";
 import { useState } from "react";
 import { API } from "../../utils/config";
 import * as status from "../../utils/status";
@@ -9,7 +8,6 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 
@@ -118,29 +116,29 @@ const Register = ({ togglePage }) => {
       <Box
         sx={{
           my: 8,
-          mx: 'auto',
+          mx: "auto",
           px: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          maxWidth: 'sm'
+          maxWidth: "sm",
         }}
       >
         <Typography component="h1" variant="h5">
           회원가입
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1}}>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="nickname"
-              label="Nickname"
-              type="nickname"
-              id="nickname"
-              autoFocus
-              value={nickname}
-              onChange={handleNicknameInput}
+            margin="normal"
+            required
+            fullWidth
+            name="nickname"
+            label="Nickname"
+            type="nickname"
+            id="nickname"
+            autoFocus
+            value={nickname}
+            onChange={handleNicknameInput}
           />
           <TextField
             margin="normal"
@@ -163,8 +161,8 @@ const Register = ({ togglePage }) => {
             value={password}
             onChange={handlePwInput}
           />
-          <Typography fontSize= '0.5rem' component="h3" variant="h5">
-            비밀번호는 특수문자를 반드시 포함해야합니다
+          <Typography fontSize="0.5rem" component="h3" variant="h5">
+            모든 정보는 4자리 이상, 특수문자는 사용하면 안됩니다.
           </Typography>
           <Button
             type="submit"
@@ -175,10 +173,7 @@ const Register = ({ togglePage }) => {
             Sign Up
           </Button>
           <Collapse in={alertOpen}>
-            <Alert
-                severity="error"
-                sx={{ mb: 2 }}
-            >
+            <Alert severity="error" sx={{ mb: 2 }}>
               회원가입 형식이 맞지 않습니다!
             </Alert>
           </Collapse>

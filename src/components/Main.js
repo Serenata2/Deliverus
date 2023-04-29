@@ -1,12 +1,14 @@
 import LogIn from "./partials/LogIn";
 import MainContents from "./MainContents";
-import { useSelector } from "react-redux";
 import SignPage from "./partials/SignPage";
+import { useContext } from "react";
+import { UserContext } from "./store/UserContext";
 
 const Main = () => {
-  const session = useSelector((state) => state.session.session);
+  const context = useContext(UserContext);
+  const { isLoggedIn } = context.userState;
 
-  if (session) {
+  if (isLoggedIn) {
     return <MainContents />;
   } else {
     return <SignPage />;
