@@ -1,5 +1,5 @@
 //import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { API } from "../../utils/config";
 import * as status from "../../utils/status";
 import Button from "@mui/material/Button";
@@ -9,13 +9,12 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { useDispatch } from "react-redux";
-import { logIn } from "../store/sessionSlice";
-import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
+import Alert from "@mui/material/Alert";
+import Collapse from "@mui/material/Collapse";
+import { UserContext } from "../store/UserContext";
 
 const LogIn = ({ togglePage }) => {
-  const dispatch = useDispatch();
+  const { handleLogIn } = useContext(UserContext);
 
   // 알람창을 위한 변수입니다.
   const [alertOpen, setAlertOpen] = useState(false);
@@ -62,8 +61,7 @@ const LogIn = ({ togglePage }) => {
     try {
       const result = await getLogInResult(loginData);
       console.log("Login Success", result);
-      // handleLogIn(result.userId);
-      dispatch(logIn(result.userId));
+      handleLogIn(result.userId);
     } catch (error) {
       // 아이디가 존재하지 않는 에러
       if (error.name === "NoUserError") {
@@ -132,10 +130,7 @@ const LogIn = ({ togglePage }) => {
             Sign In
           </Button>
           <Collapse in={alertOpen}>
-            <Alert
-                severity="error"
-                sx={{ mb: 2 }}
-            >
+            <Alert severity="error" sx={{ mb: 2 }}>
               로그인에 실패하였습니다!
             </Alert>
           </Collapse>

@@ -7,14 +7,13 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { logOut } from "./store/sessionSlice";
+import { UserContext } from "./store/UserContext";
 
 const Header = () => {
-  const dispatch = useDispatch(); // redux가 관리하는 state를 변경하는 미들웨어(함수)
-  const session = useSelector((state) => state.session.session); // 실제 redux가 관리하는 state의 값
+  const { userState, handleLogOut } = useContext(UserContext);
+  const { isLoggedIn } = userState;
 
   const theme = createTheme({
     palette: {
@@ -48,8 +47,8 @@ const Header = () => {
                   Deliverus
                 </Link>
               </Typography>
-              {session && (
-                <Button color="primary" onClick={() => dispatch(logOut())}>
+              {isLoggedIn && (
+                <Button color="primary" onClick={() => handleLogOut()}>
                   로그아웃
                 </Button>
               )}

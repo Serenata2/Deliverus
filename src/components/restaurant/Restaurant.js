@@ -1,6 +1,6 @@
 import { API } from "../../utils/config";
 import { useContext } from "react";
-import { UserContext } from "../../utils/context";
+import { UserContext } from "../store/UserContext";
 import * as status from "../../utils/status";
 
 /**
@@ -8,9 +8,7 @@ import * as status from "../../utils/status";
  * 카테고리별로 가게 정보를 받아오거나, 가게 전체를 다 받아올 수 있습니다.
  */
 const Restaurant = () => {
-  const handleLogOutClicked = useContext(UserContext);
-
-  /** 세션 만료시 메인화면으로 리다이렉트 합니다 */
+  const { handleLogOut } = useContext(UserContext);
 
   const restaurantCategoryTest = (event) => {
     event.preventDefault();
@@ -35,7 +33,7 @@ const Restaurant = () => {
       .catch((error) => {
         // 로그인 만료 에러인 경우 로그아웃 실행
         if (error.name === "LoginExpirationError") {
-          handleLogOutClicked();
+          handleLogOut();
         }
         console.log(`${error.name} : ${error.message}`);
       });
@@ -59,23 +57,11 @@ const Restaurant = () => {
       .catch((error) => {
         // 로그인 만료 에러인 경우 로그아웃 실행
         if (error.name === "LoginExpirationError") {
-          handleLogOutClicked();
+          handleLogOut();
         }
         console.log(`${error.name} : ${error.message}`);
       });
   };
-
-  // 가게 정보를 담은 객체
-  const restImfo = {
-      name: "",
-      address : "",
-      phoneNumber : "",
-      category : "",
-      rating : 0,
-      menu : []
-  }
-
-
 
   return (
     <>
