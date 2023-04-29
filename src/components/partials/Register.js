@@ -129,15 +129,15 @@ const Register = ({ togglePage }) => {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="nickname"
-              label="닉네임을 입력하세요"
-              type="nickname"
-              id="nickname"
-              value={nickname}
-              onChange={handleNicknameInput}
+            margin="normal"
+            required
+            fullWidth
+            name="nickname"
+            label="닉네임을 입력하세요"
+            type="nickname"
+            id="nickname"
+            value={nickname}
+            onChange={handleNicknameInput}
           />
           <TextField
             margin="normal"
@@ -161,7 +161,7 @@ const Register = ({ togglePage }) => {
             value={password}
             onChange={handlePwInput}
           />
-          <Typography fontSize= '0.5rem' component="h3" variant="h5">
+          <Typography fontSize="0.5rem" component="h3" variant="h5">
             비밀번호는 특수문자를 반드시 포함해야합니다
           </Typography>
           <Button
@@ -173,10 +173,7 @@ const Register = ({ togglePage }) => {
             Sign Up
           </Button>
           <Collapse in={alertOpen}>
-            <Alert
-                severity="error"
-                sx={{ mb: 2 }}
-            >
+            <Alert severity="error" sx={{ mb: 2 }}>
               회원가입 형식이 맞지 않습니다!
             </Alert>
           </Collapse>
