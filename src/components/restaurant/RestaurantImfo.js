@@ -29,22 +29,23 @@ export const RecruitingParty = () => {
 
 const RestaurantImfo = ({restaurantName}) => {
 
-    const tempMenuList = [
-        { menuName : "치킨", price: 1000},
-        {menuName : "피자", price : 2000},
-        {menuName : "짜장면", price : 3000},
-        {menuName : "족발", price : 4000}
-    ];
+    const tempMenuList = [{menuName: "치킨", price: 1000}, {menuName: "피자", price: 2000}, {
+        menuName: "짜장면",
+        price: 3000
+    }, {menuName: "족발", price: 4000}];
+
+    // 이미지를 src/images 디렉토리에서 가져옵니다.
+    // 향후 이미지를 카테고리 별로 저장해서 모듈화 해야겠습니다. ex) require(`../../images/restaurant/${category}/${restaurantName}`
+    const image = require("../../images/chicken/bhc.png");
 
     const restaurantDescript = (<Box sx={{
-        my: 2, display: "flex", flexDirection: "column",
-        alignItems: "center", border: 1, borderRadius: '16px', py: 2
+        my: 2, display: "flex", flexDirection: "column", alignItems: "center", border: 1, borderRadius: '16px', py: 2
     }}>
-        <Image src="https://picsum.photos/id/507/2000"
-        height="250px"
-        widht="250px"
-        fit="contain"
-        duration={1000}
+        <Image src={image}
+               height="250px"
+               widht="250px"
+               fit="contain"
+               duration={1000}
         />
         <Typography component="h3" variant="h3" sx={{my: 3}}>
             BHC 상도점
@@ -59,15 +60,15 @@ const RestaurantImfo = ({restaurantName}) => {
         </Typography>
         <Stack spacing={3}>
             {tempMenuList.map((item, index) => {
-                return (<MenuCard key={index} menu={item} />);
-        })}
+                return (<MenuCard key={index} menu={item}/>);
+            })}
         </Stack>
     </Fragment>);
 
     return (
     <>
     <Box component="main" sx={{
-    my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'sm'
+    my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'md'
     }}>
         {restaurantDescript}
         <RecruitingParty />
