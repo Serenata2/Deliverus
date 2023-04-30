@@ -15,6 +15,9 @@ const MainContents = () => {
         <p>
           <Link to="/restaurant/imformation">가게 정보방 입장하기</Link>
         </p>
+        <p>
+        <Link to="/restaurant/list">가게 리스트 입장하기</Link>
+        </p>
       </div>
     </>
   );
