@@ -1,0 +1,10 @@
+.mainContents_body {
+    max-width: 800px;
+    margin: auto;
+}
+
+.mainContents_subTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
