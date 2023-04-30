@@ -11,18 +11,19 @@ import MenuCard from "./MenuCard";
 // prop으로 보여주고자 하는 가게 이름을 받습니다.
 const RestaurantImfo = ({restaurantName}) => {
 
-    const tempMenuList = [
-        { menuName : "치킨", price: 1000},
-        {menuName : "피자", price : 2000},
-        {menuName : "짜장면", price : 3000},
-        {menuName : "족발", price : 4000}
-    ];
+    const tempMenuList = [{menuName: "치킨", price: 1000}, {menuName: "피자", price: 2000}, {
+        menuName: "짜장면",
+        price: 3000
+    }, {menuName: "족발", price: 4000}];
+
+    // 이미지를 src/images 디렉토리에서 가져옵니다.
+    // 향후 이미지를 카테고리 별로 저장해서 모듈화 해야겠습니다. ex) require(`../../images/restaurant/${category}/${restaurantName}`
+    const image = require("../../images/chicken/bhc.png");
 
     const restaurantDescript = (<Box sx={{
-        my: 2, display: "flex", flexDirection: "column",
-        alignItems: "center", border: 1, borderRadius: '16px', py: 2
+        my: 2, display: "flex", flexDirection: "column", alignItems: "center", border: 1, borderRadius: '16px', py: 2
     }}>
-        <Image src="https://picsum.photos/id/507/2000"
+        <Image src={image}
                height="250px"
                widht="250px"
                fit="contain"
@@ -40,7 +41,7 @@ const RestaurantImfo = ({restaurantName}) => {
             현재 모집 중인 딜리버스
         </Typography>
         <Stack spacing={3}>
-            <RecruitingPartyCard />
+            <RecruitingPartyCard/>
         </Stack>
         <Button
             fullWidth
@@ -56,8 +57,8 @@ const RestaurantImfo = ({restaurantName}) => {
         </Typography>
         <Stack spacing={3}>
             {tempMenuList.map((item, index) => {
-                return (<MenuCard key={index} menu={item} />);
-        })}
+                return (<MenuCard key={index} menu={item}/>);
+            })}
         </Stack>
     </Fragment>);
 
