@@ -1,12 +1,12 @@
-import { useState, useEffect, useContext } from "react";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Main from "./components/Main";
 import Header from "./components/Header";
 import "./App.css";
 import NotFound from "./components/partials/NotFound";
 import Map from "./components/Map";
 import Restaurant from "./components/restaurant/Restaurant";
-import { API } from "./utils/config";
+import RestaurantList from './components/partials/restaurantList/RestaurantList';
 import { UserContext } from "./components/store/UserContext";
 import RestaurantImfo from "./components/restaurant/RestaurantImfo";
 
@@ -30,6 +30,8 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/restaurant" element={<Restaurant />} />
+          <Route path="/restaurant/list" element={<RestaurantList />} />
           <Route path="/restaurant/imformation" element={<RestaurantImfo />} />
           <Route path="/map" element={<Map />} />
           <Route path="*" element={<NotFound />} />
