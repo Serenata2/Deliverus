@@ -1,5 +1,5 @@
 import LogIn from "./partials/LogIn";
-import MainContents from "./MainContents";
+import MainContents from "./mainContents/MainContents";
 import SignPage from "./partials/SignPage";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./store/UserContext";

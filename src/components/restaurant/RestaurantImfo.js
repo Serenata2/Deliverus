@@ -9,6 +9,24 @@ import MenuCard from "./MenuCard";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 이름을 받습니다.
+
+export const RecruitingParty = () => {
+    return (<Fragment>
+        <Typography component="h6" variant="h6" sx={{mb: 1}}>
+            현재 모집 중인 딜리버스
+        </Typography>
+        <Stack spacing={3}>
+            <RecruitingPartyCard />
+        </Stack>
+        <Button
+            fullWidth
+            variant="contained"
+            sx={{mt: 3, mb: 2}}
+            onClick={() => alert("내가 딜리버스 모집하기가 클릭되었습니다.")}
+        >내가 딜리버스 모집하기</Button>
+    </Fragment>);
+}
+
 const RestaurantImfo = ({restaurantName}) => {
 
     const tempMenuList = [{menuName: "치킨", price: 1000}, {menuName: "피자", price: 2000}, {
@@ -36,21 +54,6 @@ const RestaurantImfo = ({restaurantName}) => {
             가게 설명 텍스트
         </Typography></Box>);
 
-    const recruitingParty = (<Fragment>
-        <Typography component="h6" variant="h6" sx={{mb: 1}}>
-            현재 모집 중인 딜리버스
-        </Typography>
-        <Stack spacing={3}>
-            <RecruitingPartyCard/>
-        </Stack>
-        <Button
-            fullWidth
-            variant="contained"
-            sx={{mt: 3, mb: 2}}
-            onClick={() => alert("내가 딜리버스 모집하기가 클릭되었습니다.")}
-        >내가 딜리버스 모집하기</Button>
-    </Fragment>);
-
     const restaurantMenu = (<Fragment>
         <Typography component="h6" variant="h6" sx={{mb: 1}}>
             메뉴
@@ -62,13 +65,16 @@ const RestaurantImfo = ({restaurantName}) => {
         </Stack>
     </Fragment>);
 
-    return (<Box component="main" sx={{
-        my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'sm'
+    return (
+    <>
+    <Box component="main" sx={{
+    my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'sm'
     }}>
         {restaurantDescript}
-        {recruitingParty}
+        <RecruitingParty />
         {restaurantMenu}
-    </Box>);
+    </Box>
+    </>);
 }
 
 export default RestaurantImfo;

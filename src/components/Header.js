@@ -34,6 +34,7 @@ const Header = () => {
                 component="div"
                 sx={{ flexGrow: 1, fontWeight: 700 }}
               >
+                <div style={{display: "flex"}}>
                 <Link
                   to="/"
                   style={{
@@ -46,9 +47,52 @@ const Header = () => {
                 >
                   Deliverus
                 </Link>
+                <div style={{margin: "0 0 0 100px"}}>
+                <Link
+                  to="/"
+                  style={{
+                    textDecoration: "none",
+                    background:"black",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontSize: "22px"
+                  }}
+                >
+                  홈
+                </Link>
+                <Link
+                  to="/"
+                  style={{
+                    textDecoration: "none",
+                    background:"black",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontSize: "22px",
+                    fontWeight: 200,
+                    marginLeft: "50px"
+                  }}
+                >
+                  방 만들기
+                </Link>
+                <Link
+                  to="/"
+                  style={{
+                    textDecoration: "none",
+                    background:"black",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontSize: "22px",
+                    fontWeight: 200,
+                    marginLeft: "30px"
+                  }}
+                >
+                  마이페이지
+                </Link>
+                </div>
+                </div>
               </Typography>
               {isLoggedIn && (
-                <Button color="primary" onClick={() => handleLogOut()}>
+                <Button color="primary" onClick={() => handleLogOut()} style={{ backgroundColor: "red", color: "white", marginRight: "20px"}}>
                   로그아웃
                 </Button>
               )}
