@@ -87,30 +87,31 @@ const RecruitingPartyCard = () => {
                     </CardActions>
                 </Box>
                 </Card>
-                <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
-                    <DialogTitle>가게 정보 확인</DialogTitle>
-                    <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
-                        <Image src={image}
-                               height="150px"
-                               widht="150px"
-                               fit="contain"
-                               duration={100}
-                        />
-                        <Typography align="center" component="h5" variant="h5">
-                            {clickedStore}
-                        </Typography>
-                    </DialogContent >
-                    <DialogTitle>픽업 위치 확인</DialogTitle>
-                    <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
-                        <h5>카카오 지도</h5>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>딜리버스 참가하기</Button>
-                    </DialogActions>
-                </Dialog>
             </div>
+
         );
         })}
+            <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
+                <DialogTitle>가게 정보 확인</DialogTitle>
+                <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
+                    <Image src={image}
+                           height="150px"
+                           widht="150px"
+                           fit="contain"
+                           duration={100}
+                    />
+                    <Typography align="center" component="h5" variant="h5">
+                        {clickedStore}
+                    </Typography>
+                </DialogContent >
+                <DialogTitle>픽업 위치 확인</DialogTitle>
+                <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
+                    <h5>카카오 지도</h5>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>딜리버스 참가하기</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
