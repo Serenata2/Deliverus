@@ -6,7 +6,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { useState } from 'react';
+import {useState} from "react";
+import Dialog from "@mui/material/Dialog";
+import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import Image from "mui-image";
+import image from "../../images/chicken/bhc.png";
 
 const recruitingPartyInfo = [
     {
@@ -34,11 +38,26 @@ const recruitingPartyInfo = [
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 const RecruitingPartyCard = () => {
 
+    // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
+    const [open, setOpen] = useState(false);
+    const [clickedStore, SetClickedStore] = useState("");
+
+    const handleClickOpen = (store, e) => {
+        e.preventDefault();
+        SetClickedStore(store);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const image = require("../../images/chicken/bhc.png");
+
     const [partyInfo, setPartyInfo] = useState(recruitingPartyInfo);
     console.log(partyInfo);
 
     return (
-
         <>
         {partyInfo.map((item, idx) => {
         return (
@@ -63,11 +82,32 @@ const RecruitingPartyCard = () => {
                         <Typography variant="body2" style={{fontSize: "16px"}}>
                             {item.distance}
                         </Typography>
-                        <Button size="small" onClick={() => alert("모집중인 딜리버스에서 자세히 보기가 클릭!")} style={{fontSize: "16px"}}>
+                        <Button size="small" onClick={(e) => {handleClickOpen(item.store, e)}} style={{fontSize: "16px"}}>
                             참여하기</Button>
                     </CardActions>
                 </Box>
                 </Card>
+                <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
+                    <DialogTitle>가게 정보 확인</DialogTitle>
+                    <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
+                        <Image src={image}
+                               height="150px"
+                               widht="150px"
+                               fit="contain"
+                               duration={100}
+                        />
+                        <Typography align="center" component="h5" variant="h5">
+                            {clickedStore}
+                        </Typography>
+                    </DialogContent >
+                    <DialogTitle>픽업 위치 확인</DialogTitle>
+                    <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
+                        <h5>카카오 지도</h5>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>딜리버스 참가하기</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
         })}
