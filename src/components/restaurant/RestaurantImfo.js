@@ -68,7 +68,7 @@ const RestaurantImfo = ({restaurantName}) => {
     return (
     <>
     <Box component="main" sx={{
-    my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'sm'
+    my: 8, mx: 'auto', px: 4, display: "flex", flexDirection: "column", justifyContent: "flex-start", maxWidth: 'md'
     }}>
         {restaurantDescript}
         <RecruitingParty />
