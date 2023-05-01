@@ -4,13 +4,44 @@ import { UserContext } from "../store/UserContext";
 import { RestaurantCard, storeInfo } from '../partials/restaurantList/RestaurantList';
 import RecruitingPartyCard from '../restaurant/RecruitingPartyCard';
 import styles from './MainContents.module.css'
+import {API} from "../../utils/config";
+import * as status from "../../utils/status";
 
 const MainContents = () => {
   const context = useContext(UserContext);
   const { userState } = context;
   const { username } = userState;
+
+  // 모든 가게 정보를 받아오는 API
+  const restaurantAllTest = (event) => {
+    event.preventDefault();
+    fetch(`${API.RESTAURANT_ALL}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+        .then((respones) => {
+          status.handleRestaurantResponse(respones.status);
+          return respones.json();
+        })
+        .then((data) => {
+          console.log("Respones Data from Restaurant All API : ", data);
+        })
+        .catch((error) => {
+          // 로그인 만료 에러인 경우 로그아웃 실행
+          if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+          }
+          console.log(`${error.name} : ${error.message}`);
+        });
+  };
+
   return (
     <div className={styles.mainContents_body}>
+      <p>
+        <button onClick={restaurantAllTest}>모든 가게 정보 확인</button>
+      </p>
       <h2>안녕하세요 {username}님!</h2>
       <div>
         <div className={styles.mainContents_subTitle}>
