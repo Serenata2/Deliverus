@@ -6,17 +6,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-<<<<<<< Updated upstream
-import { useState } from 'react';
-=======
 import {useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
-import image from "../../images/chicken/bhc.png";
 import KakaoMapStore from './KakaoMapStore';
 
->>>>>>> Stashed changes
 
 const recruitingPartyInfo = [
     {
@@ -50,8 +45,6 @@ const recruitingPartyInfo = [
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 const RecruitingPartyCard = () => {
 
-<<<<<<< Updated upstream
-=======
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
     const [open, setOpen] = useState(false);
     const [clickedStore, SetClickedStore] = useState("");
@@ -72,7 +65,6 @@ const RecruitingPartyCard = () => {
 
     const image = require("../../images/chicken/bhc.png");
 
->>>>>>> Stashed changes
     const [partyInfo, setPartyInfo] = useState(recruitingPartyInfo);
     console.log(partyInfo);
 
@@ -102,11 +94,7 @@ const RecruitingPartyCard = () => {
                         <Typography variant="body2" style={{fontSize: "16px"}}>
                             {item.distance}
                         </Typography>
-<<<<<<< Updated upstream
-                        <Button size="small" onClick={() => alert("모집중인 딜리버스에서 자세히 보기가 클릭!")} style={{fontSize: "16px"}}>
-=======
                         <Button size="small" onClick={(e) => {handleClickOpen(item.store, item.lat, item.lng, e)}} style={{fontSize: "16px"}}>
->>>>>>> Stashed changes
                             참여하기</Button>
                     </CardActions>
                 </Box>
@@ -114,8 +102,6 @@ const RecruitingPartyCard = () => {
             </div>
         );
         })}
-<<<<<<< Updated upstream
-=======
             <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
                 <DialogTitle>가게 정보 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
@@ -140,7 +126,6 @@ const RecruitingPartyCard = () => {
                     <Button onClick={handleClose}>딜리버스 참가하기</Button>
                 </DialogActions>
             </Dialog>
->>>>>>> Stashed changes
         </>
     );
 }
