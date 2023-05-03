@@ -11,7 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
-
+import image from "../../images/chicken/bhc.png";
 
 const recruitingPartyInfo = [
     {
@@ -69,7 +69,6 @@ const RecruitingPartyCard = () => {
     console.log(partyInfo);
 
     return (
-
         <>
         {partyInfo.map((item, idx) => {
         return (
@@ -100,6 +99,7 @@ const RecruitingPartyCard = () => {
                 </Box>
                 </Card>
             </div>
+
         );
         })}
             <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
