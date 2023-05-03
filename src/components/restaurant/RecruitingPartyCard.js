@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import image from "../../images/chicken/bhc.png";
+import Stack from "@mui/material/Stack";
 
 const recruitingPartyInfo = [
     {
@@ -58,11 +59,10 @@ const RecruitingPartyCard = () => {
     console.log(partyInfo);
 
     return (
-        <>
+        <Stack spacing={3}>
         {partyInfo.map((item, idx) => {
         return (
-            <div>
-                <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
+                <Card key={idx} variant="outlined" sx={{display: "flex", p: 1.5}}>
                 <CardContent sx={{my: "auto", px: 0, pl: 1}}>
                     <Avatar>U</Avatar>
                 </CardContent>
@@ -87,11 +87,9 @@ const RecruitingPartyCard = () => {
                     </CardActions>
                 </Box>
                 </Card>
-            </div>
-
         );
         })}
-            <Dialog open={open} onClose={handleClose} fullWidth="true" maxWidth="sm">
+            <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <DialogTitle>가게 정보 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
                     <Image src={image}
@@ -112,7 +110,7 @@ const RecruitingPartyCard = () => {
                     <Button onClick={handleClose}>딜리버스 참가하기</Button>
                 </DialogActions>
             </Dialog>
-        </>
+        </Stack>
     );
 }
 
