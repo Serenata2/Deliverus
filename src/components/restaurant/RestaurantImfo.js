@@ -15,9 +15,7 @@ export const RecruitingParty = () => {
         <Typography component="h6" variant="h6" sx={{mb: 1}}>
             현재 모집 중인 딜리버스
         </Typography>
-        <Stack spacing={3}>
-            <RecruitingPartyCard />
-        </Stack>
+        <RecruitingPartyCard />
         <Button
             fullWidth
             variant="contained"
@@ -35,7 +33,7 @@ const RestaurantImfo = ({restaurantName}) => {
     }, {menuName: "족발", price: 4000}];
 
     // 이미지를 src/images 디렉토리에서 가져옵니다.
-    // 향후 이미지를 카테고리 별로 저장해서 모듈화 해야겠습니다. ex) require(`../../images/restaurant/${category}/${restaurantName}`
+    // 향후 이미지를 카테고리 별로 저장해서 모듈화 해야겠습니다. ex) require(`../../images/restaurant/${category}/${restaurantName}.png)`
     const image = require("../../images/chicken/bhc.png");
 
     const restaurantDescript = (<Box sx={{

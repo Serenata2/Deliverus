@@ -20,6 +20,8 @@ const UserContextProvider = (props) => {
       const initInfo = {
         username: "",
         isLoggedIn: false,
+        userPos: null,
+        userPosAddr : "",
       };
       sessionStorage.setItem("userInfo", JSON.stringify(initInfo));
       return initInfo;
@@ -58,7 +60,7 @@ const UserContextProvider = (props) => {
         credentials: "include",
       }).then((respones) => {
         navigate("/");
-        setUserState({ ...userState, username: "", isLoggedIn: false });
+        setUserState({ ...userState, username: "", isLoggedIn: false, userPos : null });
       });
     } catch (error) {
       console.log("Error in Logout : ", error);
@@ -75,9 +77,19 @@ const UserContextProvider = (props) => {
     setUserState({ ...userState, username: _userNickname, isLoggedIn: true });
   };
 
+  // User의 Position을 인자로 들어오는 값으로 변경하는 함수
+  const handleInitUserPos = (_userPos, _userPosAddr) => {
+    setUserState({...userState, userPos : _userPos, userPosAddr : _userPosAddr});
+  }
+
+  // User의 Position값을 변경할 수 있도록 User의 Position을 초기화 해주는 함수
+  const handleChangeUserPos = () => {
+    setUserState({...userState, userPos : null, userPosAddr: ""});
+  }
+
   // 초기 값 설정
   return (
-    <UserContext.Provider value={{ userState, handleLogOut, handleLogIn }}>
+    <UserContext.Provider value={{ userState, handleLogOut, handleLogIn, handleInitUserPos, handleChangeUserPos }}>
       {props.children}
     </UserContext.Provider>
   );

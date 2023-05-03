@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../store/UserContext";
 import { RestaurantCard, storeInfo } from '../partials/restaurantList/RestaurantList';
 import RecruitingPartyCard from '../restaurant/RecruitingPartyCard';
 import styles from './MainContents.module.css'
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
+import {Box, Button} from "@mui/material";
 
 const MainContents = () => {
   const context = useContext(UserContext);
-  const { userState } = context;
-  const { username } = userState;
+  const { userState, handleChangeUserPos } = context;
+  const { username, userPosAddr } = userState;
 
   // 모든 가게 정보를 받아오는 API
   const restaurantAllTest = (event) => {
@@ -39,10 +40,14 @@ const MainContents = () => {
 
   return (
     <div className={styles.mainContents_body}>
-      <p>
+        <Link to="/map">카카오 지도</Link>
         <button onClick={restaurantAllTest}>모든 가게 정보 확인</button>
-      </p>
       <h2>안녕하세요 {username}님!</h2>
+        <Box sx={{display: "flex", justifyContent: "flex-start"}}>
+            <h5>📌{userPosAddr}</h5>
+            <Button
+                onClick={handleChangeUserPos}>Change</Button>
+        </Box>
       <div>
         <div className={styles.mainContents_subTitle}>
           <h3>
