@@ -1,65 +1,70 @@
-import React, {useEffect, useState} from 'react';
-const {kakao} = window;
+import React, {Fragment, useContext, useState} from 'react';
+import PositionSettingMap from "./PositionSettingMap"
+import {Box, Button} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import {UserContext} from "./store/UserContext";
 
-export default function PositionSetting(props) {
+function PositionSetting() {
+    const context = useContext(UserContext);
+    const { handleInitUserPos } = context;
 
-    const [kakaoMap, setKakaoMap] = useState();
-    const [marker, setMarker] = useState(null);
+    // 처음 보여줄 Kakao map의 중심좌표
+    const initLatLng = {
+        La: 37.57600923748876,
+        Ma: 126.9012721298886
+    };
 
-    useEffect(() => {
-        kakao.maps.load(() => {
-            const container = document.getElementById("map"); // 지도를 표시할 div
-            const options = {
-                center: new kakao.maps.LatLng(props.latLng.La, props.latLng.Ma), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
-            };
-            const map = new kakao.maps.Map(container, options); // 지도 생성
-            // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-            var zoomControl = new kakao.maps.ZoomControl();
-            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+    // 사용자가 위치를 설정했냐 확인하는 변수
+    const [state, setState] = useState(false);
 
-            setKakaoMap(map); // 생성된 지도를 상태로 저장
-        });
-    }, []);
+    // 카카오지도에서 선택한 좌표
+    const [myPos, setMyPos] = useState(null);
 
-    useEffect(() => {
-        if (kakaoMap) {
-            const clickHandler = (mouseEvent) => {
-                if (marker) {
-                    marker.setMap(null);
-                }
-                const latlng = mouseEvent.latLng;
-                const newMarker = new kakao.maps.Marker({
-                    position: latlng
-                });
-                // console.log(latlng);
+    // Kakao map에서 선택한 좌표의 주소
+    const [myAddr, setMyAddr] = useState("");
 
-                // 좌표를 이용해서 도로명 주소 받아오기
-                const geocoder = new kakao.maps.services.Geocoder();
-                geocoder.coord2Address(latlng.La, latlng.Ma, function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        // 도로명 주소가 없으면 지번 주소로 설정
-                        const detailAddr = !!result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-                        // 상위 컴포넌트에게 위치, 도로명 주소 넘겨주기
-                        props.propFunction(latlng, detailAddr);
-                    }
-                });
+    // kakao map에서 위치를 클릭할 시 호출되는 함수
+    const handleClickPosEvent = (position, detailAddr) => {
+        setMyPos(position);
+        setState(true);
+        setMyAddr(detailAddr);
+    }
 
-                setMarker(newMarker);
-                newMarker.setMap(kakaoMap);
-            };
-            kakao.maps.event.addListener(kakaoMap, "click", clickHandler);
-            return () => {
-                kakao.maps.event.removeListener(kakaoMap, "click", clickHandler);
-            };
-        }
-    }, [kakaoMap, marker]);
+    // finish버튼을 클릭시 Context에 저장된 user의 pos를 최신화한다.
+    const submitUserPos = () => {
+        handleInitUserPos(myPos, myAddr);
+    }
 
-    return (
-        <div id='map' style={{
-            width: '500px',
-            height: '500px'
-        }}></div>
-    )
+    return (<Box sx={{
+        m: 2, display: "flex", flexDirection: "column", alignItems: "center",
+        border: 1, borderRadius: '16px', py: 2
+    }}>
+        <Typography component="h1" variant="h5" sx={{my: 3}}>
+            Deliverus를 시작할 위치 설정!
+        </Typography>
+        <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng}/>
+        <Box sx={{width: "100%", my: 3}}>
 
+            <Stepper alternativeLabel activeStep={1}>
+                <Step completed={state}>
+                    <StepLabel>지도를 클릭하세요!</StepLabel>
+                </Step>
+            </Stepper>
+            {state && (
+                <Box align="end" sx={{display: "flex", justifyContent: "space-between"}}>
+                        <Typography sx={{mt: 2, mb: 1}}>
+                            선택된 위치 : {myAddr}
+                        </Typography>
+                    <Button
+                        onClick={submitUserPos}>Finish</Button>
+                </Box>)
+            }
+        </Box>
+
+    </Box>)
 }
+
+export default PositionSetting;
