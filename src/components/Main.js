@@ -3,13 +3,19 @@ import MainContents from "./mainContents/MainContents";
 import SignPage from "./partials/SignPage";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./store/UserContext";
+import ChangeUserPos from "./ChangeUserPos";
 
 const Main = () => {
   const context = useContext(UserContext);
-  const { isLoggedIn } = context.userState;
+  const { userPos, isLoggedIn } = context.userState;
+
 
   if (isLoggedIn) {
-    return <MainContents />;
+    if (userPos == null) {
+      return <ChangeUserPos />;
+    } else {
+      return <MainContents/>;
+    }
   } else {
     return <SignPage />;
   }
