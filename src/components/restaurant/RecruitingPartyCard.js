@@ -10,6 +10,7 @@ import {useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
+import KakaoMapStore from './KakaoMapStore';
 import image from "../../images/chicken/bhc.png";
 import Stack from "@mui/material/Stack";
 
@@ -18,19 +19,25 @@ const recruitingPartyInfo = [
         title: "상암초 앞에서 BHC에서 치킨 시킬 분!",
         distance: "상암 294m",
         member: "2 / 4",
-        store: "BHC 상도점"
+        store: "BHC 상도점",
+        lat: 37.580117710636884,
+        lng: 126.88161333838656
     },
     {
         title: "족발/보쌈 같이 드실 분 구합니다.",
         distance: "상암 120m",
         member: "1 / 4",
-        store: "원할머니 보쌈"
+        store: "원할머니 보쌈",
+        lat: 37.577945308047376,
+        lng: 126.88988091398227
     },
     {
         title: "MBC 앞에서 맘터 같이 받으실 분",
         distance: "상암 182m",
         member: "3 / 4",
-        store: "맘스터치"
+        store: "맘스터치",
+        lat: 37.58095023875007,
+        lng: 126.89194679503199
     }
 ];
 
@@ -42,10 +49,14 @@ const RecruitingPartyCard = () => {
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
     const [open, setOpen] = useState(false);
     const [clickedStore, SetClickedStore] = useState("");
+    const [clickedStorelat, setClickedStoreLat] = useState(0);
+    const [clickedStorelng, setClickedStoreLng] = useState(0);
 
-    const handleClickOpen = (store, e) => {
+    const handleClickOpen = (store, lat, lng, e) => {
         e.preventDefault();
         SetClickedStore(store);
+        setClickedStoreLat(lat);
+        setClickedStoreLng(lng);
         setOpen(true);
     };
 
@@ -82,7 +93,7 @@ const RecruitingPartyCard = () => {
                         <Typography variant="body2" style={{fontSize: "16px"}}>
                             {item.distance}
                         </Typography>
-                        <Button size="small" onClick={(e) => {handleClickOpen(item.store, e)}} style={{fontSize: "16px"}}>
+                        <Button size="small" onClick={(e) => {handleClickOpen(item.store, item.lat, item.lng, e)}} style={{fontSize: "16px"}}>
                             참여하기</Button>
                     </CardActions>
                 </Box>
@@ -104,7 +115,10 @@ const RecruitingPartyCard = () => {
                 </DialogContent >
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
-                    <h5>카카오 지도</h5>
+                    <KakaoMapStore 
+                    lat={clickedStorelat}
+                    lng={clickedStorelng}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>딜리버스 참가하기</Button>

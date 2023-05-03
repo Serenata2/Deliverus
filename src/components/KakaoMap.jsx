@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 const { kakao } = window;
 
-export default function Map() {
+export default function KakoMap() {
 
     const [kakaoMap, setKakaoMap] = useState();
     const [marker, setMarker] = useState(null);
