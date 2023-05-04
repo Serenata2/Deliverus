@@ -6,6 +6,7 @@ export const API = {
     REGISTER: `${BASE_URL}/api/member/register`,
     LOGIN: `${BASE_URL}/api/member/login`,
     LOGOUT: `${BASE_URL}/api/member/logout`,
-    RESTAURANT_CATEGORY: `${BASE_URL}/api/restaurant/category`,
+    RESTAURANT_LIST: `${BASE_URL}/api/restaurant/list`,
+    RESTAURANT_INFORMATION: `${BASE_URL}/api/restaurant/info`,
     RESTAURANT_ALL: `${BASE_URL}/api/restaurant/all`,
 }
