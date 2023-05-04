@@ -63,12 +63,8 @@ const LogIn = ({ togglePage }) => {
       console.log("Login Success", result);
       handleLogIn(result.userId);
     } catch (error) {
-      // 아이디가 존재하지 않는 에러
-      if (error.name === "NoUserError") {
-        alert(error.message);
-      }
-      // 비밀번호가 틀린 에러
-      else if (error.name === "WrongPasswordError") {
+      // 로그인 시도 거부 에러 처리
+      if (error.name === "LoginError") {
         alert(error.message);
       } else {
         // alert(error.message);

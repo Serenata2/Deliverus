@@ -95,12 +95,8 @@ const Register = ({ togglePage }) => {
       console.log("Registration Success", result);
       togglePage();
     } catch (error) {
-      // 아이디가 존재하지 않는 에러
-      if (error.name === "NoUserError") {
-        alert(error.message);
-      }
-      // 비밀번호가 틀린 에러
-      else if (error.name === "WrongPasswordError") {
+      // 중복된 아이디, 닉네임 입력 에러 처리
+      if (error.name === "DuplicationError") {
         alert(error.message);
       } else {
         alert(error.message);
