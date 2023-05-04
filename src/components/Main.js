@@ -3,7 +3,7 @@ import MainContents from "./mainContents/MainContents";
 import SignPage from "./partials/SignPage";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./store/UserContext";
-import PositionSetting from "./PositionSetting";
+import PositionSetting from "./postionSetting/PositionSetting";
 
 const Main = () => {
   const context = useContext(UserContext);

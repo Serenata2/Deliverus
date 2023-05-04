@@ -1,18 +1,28 @@
 import { Link } from "react-router-dom";
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { UserContext } from "../store/UserContext";
 import { RestaurantCard, storeInfo } from '../partials/restaurantList/RestaurantList';
 import RecruitingPartyCard from '../restaurant/RecruitingPartyCard';
+import RecommendationList from "../recommendation/RecommendationList";
 import styles from './MainContents.module.css'
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
-import {Box, Button} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 
 const MainContents = () => {
   const context = useContext(UserContext);
   const { userState, handleChangeUserPos } = context;
   const { username, userPosAddr } = userState;
 
+  // 딥러닝 기반 AI가 추천해주는 Top 5 음식
+  const [ recommendList, setRecommendList ] = useState(null);
+
+
+    useEffect(() => {
+        setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
+    }, []);
+
+  console.log(recommendList);
   // 모든 가게 정보를 받아오는 API
   const restaurantAllTest = (event) => {
     event.preventDefault();
@@ -44,10 +54,11 @@ const MainContents = () => {
         <button onClick={restaurantAllTest}>모든 가게 정보 확인</button>
       <h2>안녕하세요 {username}님!</h2>
         <Box sx={{display: "flex", justifyContent: "flex-start"}}>
-            <h5>📌{userPosAddr}</h5>
+            <h4>📌 {userPosAddr}</h4>
             <Button
                 onClick={handleChangeUserPos}>Change</Button>
         </Box>
+        { recommendList &&< RecommendationList list={recommendList}/>}
       <div>
         <div className={styles.mainContents_subTitle}>
           <h3>
@@ -74,7 +85,6 @@ const MainContents = () => {
           );
         }
       })}
-
     </div>
   );
 };

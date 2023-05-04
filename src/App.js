@@ -7,7 +7,7 @@ import NotFound from "./components/partials/NotFound";
 import Restaurant from "./components/restaurant/Restaurant";
 import RestaurantList from './components/partials/restaurantList/RestaurantList';
 import { UserContext } from "./components/store/UserContext";
-import RestaurantImfo from "./components/restaurant/RestaurantImfo";
+import RestaurantInfo from "./components/restaurant/RestaurantInfo";
 
 function App() {
   const context = useContext(UserContext);
@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/restaurant/list" element={<RestaurantList />} />
-          <Route path="/restaurant/imformation" element={<RestaurantImfo />} />
+          <Route path="/restaurant/imformation" element={<RestaurantInfo />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

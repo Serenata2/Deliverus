@@ -1,11 +1,12 @@
 import React, {Fragment, useContext, useState} from 'react';
 import PositionSettingMap from "./PositionSettingMap"
-import {Box, Button} from "@mui/material";
+import {Box, Button, Snackbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import {UserContext} from "./store/UserContext";
+import {UserContext} from "../store/UserContext";
+import RecommendationList from "../recommendation/RecommendationList";
 
 function PositionSetting() {
     const context = useContext(UserContext);
@@ -46,24 +47,23 @@ function PositionSetting() {
             Deliverus를 시작할 위치 설정!
         </Typography>
         <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng}/>
-        <Box sx={{width: "100%", my: 3}}>
+        <Box sx={{width: "100%", mt: 3}}>
 
             <Stepper alternativeLabel activeStep={1}>
                 <Step completed={state}>
                     <StepLabel>지도를 클릭하세요!</StepLabel>
                 </Step>
             </Stepper>
-            {state && (
-                <Box align="end" sx={{display: "flex", justifyContent: "space-between"}}>
-                        <Typography sx={{mt: 2, mb: 1}}>
-                            선택된 위치 : {myAddr}
-                        </Typography>
-                    <Button
-                        onClick={submitUserPos}>Finish</Button>
-                </Box>)
-            }
         </Box>
-
+        <Button size="medium" disabled={!state} variant="contained" onClick={submitUserPos}
+         sx={{px: 10, mt: 3}}>Finish</Button>
+        <Snackbar
+            anchorOrigin={{ vertical: 'bottom',
+                horizontal: 'left'}}
+            open={state}
+            message="위치가 설정되었습니다!"
+            key='Finish'
+        />
     </Box>)
 }
 

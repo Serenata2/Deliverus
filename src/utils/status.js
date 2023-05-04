@@ -16,22 +16,10 @@ const handleRegisterResponse = (statusNum) => {
     const error = new Error();
 
     switch (statusNum) {
-      // 로그인 시간이 만료된 에러 처리
-      case 404:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
-
-      // 아이디가 존재하지 않는 에러 처리
-      case 500:
-        error.message = "아이디가 존재하지 않습니다.";
-        error.name = "NoUserError";
-        break;
-
-      // 비밀번호가 틀린 에러 처리
-      case 501:
-        error.message = "비밀번호가 틀렸습니다.";
-        error.name = "WrongPasswordError";
+      // 중복된 아이디, 닉네임 입력 에러 처리
+      case 406:
+        error.message = "중복된 아이디, 닉네임이 존재합니다";
+        error.name = "DuplicationError";
         break;
 
       // 기타 에러 처리
@@ -53,22 +41,10 @@ const handleLogInResponse = (statusNum) => {
     const error = new Error("Error occurred.");
 
     switch (statusNum) {
-      // 로그인 시간이 만료된 에러 처리
+      // 로그인 시도 거부 에러 처리
       case 404:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
-
-      // 회원가입 때 아이디가 중복되는 에러 처리
-      case 500:
-        error.message = "입력한 아이디는 이미 존재합니다.";
-        error.name = "IdDuplicationError";
-        break;
-
-      // 회원가입 때 Nickname이 중복되는 에러 처리
-      case 501:
-        error.message = "입력한 닉네임은 이미 존재합니다.";
-        error.name = "NicknameDuplicationError";
+        error.message = "로그인이 거부되었습니다.";
+        error.name = "LoginError";
         break;
 
       // 기타 에러 처리
@@ -90,8 +66,13 @@ const handleRestaurantResponse = (statusNum) => {
     const error = new Error("Error occurred.");
 
     switch (statusNum) {
+      // 요청한 것에 대한 데이터가 벗을 때 에러 처리
+      case 204:
+        error.message = "요청한 데이터가 없습니다.";
+        error.name = "NoDataError";
+
       // 로그인 시간이 만료된 에러 처리
-      case 404:
+      case 401:
         error.message = "로그인 시간이 만료되었습니다.";
         error.name = "LoginExpirationError";
         break;
