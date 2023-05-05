@@ -1,0 +1,34 @@
+.list_body {
+    max-width: 750px;
+    margin: auto;
+}
+
+.list_category_wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.list_category {
+    border: 1px solid lightgrey;
+    padding: 8px 18px;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.list_category:hover {
+    background-color: lightgrey;
+}
+
+.list_location_txt {
+    margin-left: 15px;
+    font-size: 23px;
+    font-weight: 400;
+    text-align: center;
+    align-items: center;
+}
+
+.list_location_wrapper {
+    margin-bottom: 25px;
+}

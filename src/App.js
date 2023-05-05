@@ -8,6 +8,8 @@ import Restaurant from "./components/restaurant/Restaurant";
 import RestaurantList from './components/partials/restaurantList/RestaurantList';
 import { UserContext } from "./components/store/UserContext";
 import RestaurantInfo from "./components/restaurant/RestaurantInfo";
+import PartyRoomCreation from "./components/partyRoom/PartyRoomCreation";
+import DeliverusList from './components/DeliverusList/DeliverusList';
 
 function App() {
   const context = useContext(UserContext);
@@ -31,7 +33,9 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/restaurant/list" element={<RestaurantList />} />
-          <Route path="/restaurant/imformation" element={<RestaurantInfo />} />
+          <Route path="/restaurant/information" element={<RestaurantInfo />} />
+          <Route path="/party/list" element={<DeliverusList />} />
+          <Route path="/party/creation" element={<PartyRoomCreation />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

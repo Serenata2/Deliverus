@@ -1,4 +1,4 @@
-import {Fragment, useContext, useEffect, useState} from "react";
+import React, {Fragment, useContext, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from 'mui-image';
@@ -9,6 +9,7 @@ import MenuCard from "./MenuCard";
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
+import {Link} from "react-router-dom";
 
 export const RecruitingParty = () => {
     return (<Fragment>
@@ -16,12 +17,6 @@ export const RecruitingParty = () => {
             현재 모집 중인 딜리버스
         </Typography>
         <RecruitingPartyCard/>
-        <Button
-            fullWidth
-            variant="contained"
-            sx={{mt: 3, mb: 2}}
-            onClick={() => alert("내가 딜리버스 모집하기가 클릭되었습니다.")}
-        >내가 딜리버스 모집하기</Button>
     </Fragment>);
 }
 
@@ -30,11 +25,11 @@ export const RecruitingParty = () => {
 const RestaurantInfo = ({restaurantName}) => {
     const { handleLogOut } = useContext(UserContext);
     const [restaurant, setRestaurant] = useState({
-        name: "string",
         address: "string",
-        phoneNumber: "string",
         category: "string",
-        rating: 0,
+        intro : "string",
+        latitude: 0,
+        longitude: 0,
         menu: {
             menu: [
                 {
@@ -42,12 +37,15 @@ const RestaurantInfo = ({restaurantName}) => {
                     "price": 0
                 }
             ]
-        }
+        },
+        name: "",
+        phoneNumber: "string",
+        rating: 0
     });
 
     // 처음 페이지에 들어갈 때, prop에 있는 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
-        const data = { restaurant_id: 1};
+        const data = { restaurant_id: 15};
         fetch(`${API.RESTAURANT_INFORMATION}`, {
             method: "POST",
             headers: {
@@ -78,10 +76,23 @@ const RestaurantInfo = ({restaurantName}) => {
     }, []);
 
     // 이미지를 src/images 디렉토리에서 가져옵니다.
-    // 향후 이미지를 카테고리 별로 S3에 저장해서 모듈화 해야겠습니다. ex) require(`../../images/restaurant/${category}/${restaurantName}.png)`
-    const image = require("../../images/chicken/bhc.png");
+    // 향후 이미지를 카테고리 별로 S3에 저장해서 모듈화 해야겠습니다.
+    let image = null;
+    if (!restaurant.name) {
+        image = require(`../../images/delivery-cat.png`);
+    } else {
+        try{
+            const category = restaurant.category.replace("/", ",");
+            const name = restaurant.name;
 
-    console.log("res : ", restaurant);
+            image = require(`../../images/${category}/${name}.png`);
+        } catch(e){
+            console.log(e);
+            image = require(`../../images/delivery-cat.png`);
+        }
+    }
+
+    //console.log("res : ", restaurant);
     const restaurantDescript = (<Box sx={{
         my: 2, display: "flex", flexDirection: "column", alignItems: "center", border: 1, borderRadius: '16px', py: 2
     }}>
@@ -95,7 +106,7 @@ const RestaurantInfo = ({restaurantName}) => {
             {restaurant.name}
         </Typography>
         <Typography component="h6" variant="h6">
-            가게 설명 텍스트
+            {restaurant.intro}
         </Typography></Box>);
 
     // 가게 메뉴 정보 받아오기
@@ -124,6 +135,13 @@ const RestaurantInfo = ({restaurantName}) => {
             }}>
                 {restaurantDescript}
                 <RecruitingParty/>
+                <Link to="/party/creation" state={{restaurantInfo : restaurant}}>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        sx={{mt: 3, mb: 2}}
+                    >내가 딜리버스 모집하기</Button>
+                </Link>
                 {restaurantMenu}
             </Box>
         </>);

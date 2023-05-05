@@ -11,14 +11,42 @@ import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
-import image from "../../images/chicken/bhc.png";
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Stack from "@mui/material/Stack";
-import {API} from "../../utils/config";
-import {UserContext} from "../store/UserContext";
+
+const recruitingPartyInfo = [
+    {
+        title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
+        distance: "상암 294m",
+        member: "2 / 4",
+        store: "BBQ 상암점",
+        lat: 37.580117710636884,
+        lng: 126.88161333838656,
+        category : "치킨"
+    },
+    {
+        title: "족발/보쌈 같이 드실 분 구합니다.",
+        distance: "상암 120m",
+        member: "1 / 4",
+        store: "제주족발",
+        lat: 37.577945308047376,
+        lng: 126.88988091398227,
+        category : "족발,보쌈"
+    },
+    {
+        title: "MBC 앞에서 디저트 같이 받으실 분",
+        distance: "상암 182m",
+        member: "3 / 4",
+        store: "하밀 베이글",
+        lat: 37.58095023875007,
+        lng: 126.89194679503199,
+        category : "카페,디저트"
+    }
+];
 
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 const RecruitingPartyCard = ({ partyCard }) => {
-    const { handleLogOut } = useContext(UserContext);
+    // const { handleLogOut } = useContext(UserContext);
 
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
     const [open, setOpen] = useState(false);
@@ -43,39 +71,21 @@ const RecruitingPartyCard = ({ partyCard }) => {
         }
     });
 
-    const handleClickOpen = (id, e) => {
-        // storeId로 API 호출
-        const data = { restaurant_id: id };
-        fetch(`${API.RESTAURANT_INFORMATION}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(data)
-        })
-            .then((respones) => {
-                return respones.json();
-            })
-            .then((data) => {
-                console.log("Respones Data from Restaurant Info API : ", data);
-                setRestaurant(data);
-                SetClickedStore(data.name);
-                setClickedStoreLat(data.latitude);
-                setClickedStoreLng(data.longitude);
-            })
-            .catch((error) => {
-                // 로그인 만료 에러인 경우 로그아웃 실행
-                if (error.name === "LoginExpirationError") {
-                    handleLogOut();
-                }
-                // 요청한 것에 대한 데이터가 벗을 때 에러 처리
-                else if(error.name === "NoDataError") {
-                    alert("error.message");
-                }
-                console.log(`${error.name} : ${error.message}`);
-            });
+    const handleClickOpen = (_partyInfo, e) => {
         e.preventDefault();
+        console.log("handle : ", _partyInfo);
+        try {
+            const category = _partyInfo.category.replace("/", ",");
+            const name = _partyInfo.store;
+
+            console.log(category);
+            console.log(name);
+            setImage(require(`../../images/${category}/${name}.png`));
+        } catch (e) {
+            console.log(e);
+            setImage(require(`../../images/delivery-cat.png`));
+        }
+        setPartyInfo(_partyInfo)
         setOpen(true);
     };
 
@@ -83,35 +93,51 @@ const RecruitingPartyCard = ({ partyCard }) => {
         setOpen(false);
     };
 
-    const image = require("../../images/chicken/bhc.png");
+    const [image, setImage] = useState(null);
+
+    // 참여하기 버튼 클릭시 해당 파티방에 대한 정보를 받아옵니다.
+    const [partyInfo, setPartyInfo] = useState({
+        title: "",
+        distance: "",
+        member: "",
+        store: "",
+        lat: 0,
+        lng: 0,
+        category : ""
+    });
+    //console.log(partyInfo);
 
     return (
         <Stack spacing={3}>
-            <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
-            <CardContent sx={{my: "auto", px: 0, pl: 1}}>
-                <Avatar>U</Avatar>
-            </CardContent>
-            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
-                <CardContent sx={{ml: 3}}>
-                    <Typography variant="h5" component="div" sx={{ mb: 1.5}}>
-                        {partyCard.title}
-                    </Typography>
-                    <Typography fontSize='0.7rem' variant="body2">
-                        {partyCard.name}
-                    </Typography>
+        {recruitingPartyInfo.map((item, idx) => {
+        return (
+                <Card key={idx} variant="outlined" sx={{display: "flex", p: 1.5}}>
+                <CardContent sx={{my: "auto", px: 0, pl: 1}}>
+                    <AccountCircle />
                 </CardContent>
-                <CardActions align="center" sx={{flexDirection: "column"}}>
-                    <Typography fontSize='0.7rem' variant="h5" component="div" sx={{mb: 0.5}} style={{fontSize: "16px"}}>
-                        {partyCard.member}
-                    </Typography>
-                    <Typography variant="body2" style={{fontSize: "16px"}}>
-                        {partyCard.distance}
-                    </Typography>
-                    <Button size="small" onClick={(e) => {handleClickOpen(partyCard.storeId, e)}} style={{fontSize: "16px"}}>
-                        참여하기</Button>
-                </CardActions>
-            </Box>
-            </Card>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
+                    <CardContent sx={{ml: 3}}>
+                        <Typography variant="h5" component="div" sx={{ mb: 1.5}}>
+                            {item.title}
+                        </Typography>
+                        <Typography fontSize='0.7rem' variant="body2">
+                            {item.store}
+                        </Typography>
+                    </CardContent>
+                    <CardActions align="center" sx={{flexDirection: "column"}}>
+                        <Typography fontSize='0.7rem' variant="h5" component="div" sx={{mb: 0.5}} style={{fontSize: "16px"}}>
+                            {item.member}
+                        </Typography>
+                        <Typography variant="body2" style={{fontSize: "16px"}}>
+                            {item.distance}
+                        </Typography>
+                        <Button size="small" onClick={(e) => {handleClickOpen(item, e)}} style={{fontSize: "16px"}}>
+                            참여하기</Button>
+                    </CardActions>
+                </Box>
+                </Card>
+        );
+        })}
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm">
                 <DialogTitle>가게 정보 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
@@ -122,14 +148,14 @@ const RecruitingPartyCard = ({ partyCard }) => {
                            duration={100}
                     />
                     <Typography align="center" component="h5" variant="h5">
-                        {clickedStore}
+                        {partyInfo.store}
                     </Typography>
                 </DialogContent >
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
                     <KakaoMapStore 
-                    lat={clickedStorelat}
-                    lng={clickedStorelng}
+                    lat={partyInfo.lat}
+                    lng={partyInfo.lng}
                     />
                 </DialogContent>
                 <DialogActions>
