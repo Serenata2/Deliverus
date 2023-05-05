@@ -3,16 +3,16 @@ import MainContents from "./mainContents/MainContents";
 import SignPage from "./partials/SignPage";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./store/UserContext";
-import PositionSetting from "./postionSetting/PositionSetting";
+import MyPositionSetting from "./postionSetting/MyPositionSetting";
 
 const Main = () => {
   const context = useContext(UserContext);
-  const { userPos, isLoggedIn } = context.userState;
+  const { userPosAddr, isLoggedIn } = context.userState;
 
 
   if (isLoggedIn) {
-    if (userPos == null) {
-      return <PositionSetting />;
+    if (userPosAddr === "") {
+      return <MyPositionSetting userLatLng={null} />;
     } else {
       return <MainContents/>;
     }

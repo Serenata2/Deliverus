@@ -84,7 +84,7 @@ const UserContextProvider = (props) => {
 
   // User의 Position값을 변경할 수 있도록 User의 Position을 초기화 해주는 함수
   const handleChangeUserPos = () => {
-    setUserState({...userState, userPos : null, userPosAddr: ""});
+    setUserState({...userState, userPosAddr: ""});
   }
 
   // 초기 값 설정

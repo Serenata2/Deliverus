@@ -12,7 +12,7 @@ import {Box, Button, Typography} from "@mui/material";
 const MainContents = () => {
   const context = useContext(UserContext);
   const { userState, handleChangeUserPos } = context;
-  const { username, userPosAddr } = userState;
+  const { username, userPosAddr, userPos } = userState;
 
   // 딥러닝 기반 AI가 추천해주는 Top 5 음식
   const [ recommendList, setRecommendList ] = useState(null);
@@ -22,7 +22,6 @@ const MainContents = () => {
         setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
     }, []);
 
-  console.log(recommendList);
   // 모든 가게 정보를 받아오는 API
   const restaurantAllTest = (event) => {
     event.preventDefault();
@@ -64,7 +63,7 @@ const MainContents = () => {
           <h3>
           👥 내 근처에서 모집중인 딜리버스 👥
           </h3>
-          <Link to="/restaurant/imformation">더보기</Link>
+          <Link to="/restaurant/information">더보기</Link>
         </div>  
           <RecruitingPartyCard />
         <div className={styles.mainContents_subTitle}>  
