@@ -17,12 +17,13 @@ const SignPage = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              marginTop: '300px'
           }}
       >
-          <Typography component="h1" variant="h5" sx={{ mt: 5 }}>
+          <Typography component="h1" variant="h5" sx={{ mt: 5, color: "#E42020", fontSize: '35px', fontWeight: '600'}}>
               Deliverus
           </Typography>
-          <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
+          <Typography component="h1" variant="h5" sx={{ mt: 3, fontSize: '35px', fontWeight: '500'}}>
               이웃과 배달비를 공유해보세요!
           </Typography>
       </Box>

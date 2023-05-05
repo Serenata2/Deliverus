@@ -118,6 +118,7 @@ const Register = ({ togglePage }) => {
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "sm",
+          mt: 30
         }}
       >
         <Typography component="h1" variant="h5">

@@ -88,7 +88,8 @@ const LogIn = ({ togglePage }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          maxWidth: 'sm'
+          maxWidth: 'sm',
+          mt: 30
         }}
       >
         <Typography component="h1" variant="h5">
