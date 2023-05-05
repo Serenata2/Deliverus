@@ -24,12 +24,12 @@ export default function RecommendationList(props) {
         return(
             <Fragment>
             <h3>📈 AI가 추천해주는 Top5 음식!</h3>
-            <Box align="center" sx={{display: "flex", alignItem: "row", justifyContent: "space-between", mb: 4}}>
+            <Box align="center" sx={{display: "flex", alignItem: "row", justifyContent: "space-between", m: 4}}>
                     {props.list.map((item, idx) => {
                         if(idx <=5) {
                             return (<Card key={idx}>
                                     <CardActionArea>
-                                        <Typography gutterBottom variant="h6" component="div" sx={{margin:1}}>
+                                        <Typography gutterBottom variant="h6" component="div" sx={{m: 1}}>
                                             {item}
                                         </Typography>
                                     </CardActionArea>

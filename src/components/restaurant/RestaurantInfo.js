@@ -45,7 +45,7 @@ const RestaurantInfo = ({restaurantName}) => {
 
     // 처음 페이지에 들어갈 때, prop에 있는 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
-        const data = { restaurant_id: 18};
+        const data = { restaurant_id: 15};
         fetch(`${API.RESTAURANT_INFORMATION}`, {
             method: "POST",
             headers: {

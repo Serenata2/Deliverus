@@ -68,7 +68,7 @@ function PartyRoomCreation() {
                 <Box sx={{width: "100%", mt: 3}}>
                     <Stepper activeStep={activeStep} sx={{mb : 5}}>
                         {labelSteps.map((label, inx) => {
-                            const stepProps: { completed?: boolean } = {};
+                            const stepProps = {};
                             return (
                                 <Step key={label} {...stepProps}>
                                     <StepLabel>{label}</StepLabel>

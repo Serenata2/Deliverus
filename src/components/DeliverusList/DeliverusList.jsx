@@ -10,9 +10,10 @@ import {useContext, useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
-import KakaoMapStore from './KakaoMapStore';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Stack from "@mui/material/Stack";
+import KakaoMapStore from '../restaurant/KakaoMapStore';
+import styles from './DeliverusList.module.css'
 
 const recruitingPartyInfo = [
     {
@@ -41,11 +42,166 @@ const recruitingPartyInfo = [
         lat: 37.58095023875007,
         lng: 126.89194679503199,
         category : "카페,디저트"
-    }
+    },
+    {
+      title: "신전 파티원 구합니다.",
+      distance: "상암 235m",
+      member: "3 / 4",
+      store: "신전떡볶이 상암점",
+      lat: 37.58095023875007,
+      lng: 126.89194679503199,
+      category : "분식"
+    },
+    {
+      title: "강서고 앞에서 노통 같이 받으실 분",
+      distance: "상암 219m",
+      member: "3 / 4",
+      store: "노랑통닭 상암점",
+      lat: 37.58095023875007,
+      lng: 126.89194679503199,
+      category : "치킨"
+    },
+    {
+      title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
+      distance: "상암 294m",
+      member: "2 / 4",
+      store: "BBQ 상암점",
+      lat: 37.580117710636884,
+      lng: 126.88161333838656,
+      category : "치킨"
+  },
+  {
+      title: "족발/보쌈 같이 드실 분 구합니다.",
+      distance: "상암 120m",
+      member: "1 / 4",
+      store: "제주족발",
+      lat: 37.577945308047376,
+      lng: 126.88988091398227,
+      category : "족발,보쌈"
+  },
+  {
+      title: "MBC 앞에서 디저트 같이 받으실 분",
+      distance: "상암 182m",
+      member: "3 / 4",
+      store: "하밀 베이글",
+      lat: 37.58095023875007,
+      lng: 126.89194679503199,
+      category : "카페,디저트"
+  },
+  {
+    title: "신전 파티원 구합니다.",
+    distance: "상암 235m",
+    member: "3 / 4",
+    store: "신전떡볶이 상암점",
+    lat: 37.58095023875007,
+    lng: 126.89194679503199,
+    category : "분식"
+  },
+  {
+    title: "강서고 앞에서 노통 같이 받으실 분",
+    distance: "상암 219m",
+    member: "3 / 4",
+    store: "노랑통닭 상암점",
+    lat: 37.58095023875007,
+    lng: 126.89194679503199,
+    category : "치킨"
+  },
+  {
+    title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
+    distance: "상암 294m",
+    member: "2 / 4",
+    store: "BBQ 상암점",
+    lat: 37.580117710636884,
+    lng: 126.88161333838656,
+    category : "치킨"
+},
+{
+    title: "족발/보쌈 같이 드실 분 구합니다.",
+    distance: "상암 120m",
+    member: "1 / 4",
+    store: "제주족발",
+    lat: 37.577945308047376,
+    lng: 126.88988091398227,
+    category : "족발,보쌈"
+},
+{
+    title: "MBC 앞에서 디저트 같이 받으실 분",
+    distance: "상암 182m",
+    member: "3 / 4",
+    store: "하밀 베이글",
+    lat: 37.58095023875007,
+    lng: 126.89194679503199,
+    category : "카페,디저트"
+},
+{
+  title: "신전 파티원 구합니다.",
+  distance: "상암 235m",
+  member: "3 / 4",
+  store: "신전떡볶이 상암점",
+  lat: 37.58095023875007,
+  lng: 126.89194679503199,
+  category : "분식"
+},
+{
+  title: "강서고 앞에서 노통 같이 받으실 분",
+  distance: "상암 219m",
+  member: "3 / 4",
+  store: "노랑통닭 상암점",
+  lat: 37.58095023875007,
+  lng: 126.89194679503199,
+  category : "치킨"
+},
+{
+  title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
+  distance: "상암 294m",
+  member: "2 / 4",
+  store: "BBQ 상암점",
+  lat: 37.580117710636884,
+  lng: 126.88161333838656,
+  category : "치킨"
+},
+{
+  title: "족발/보쌈 같이 드실 분 구합니다.",
+  distance: "상암 120m",
+  member: "1 / 4",
+  store: "제주족발",
+  lat: 37.577945308047376,
+  lng: 126.88988091398227,
+  category : "족발,보쌈"
+},
+{
+  title: "MBC 앞에서 디저트 같이 받으실 분",
+  distance: "상암 182m",
+  member: "3 / 4",
+  store: "하밀 베이글",
+  lat: 37.58095023875007,
+  lng: 126.89194679503199,
+  category : "카페,디저트"
+},
+{
+title: "신전 파티원 구합니다.",
+distance: "상암 235m",
+member: "3 / 4",
+store: "신전떡볶이 상암점",
+lat: 37.58095023875007,
+lng: 126.89194679503199,
+category : "분식"
+},
+{
+title: "강서고 앞에서 노통 같이 받으실 분",
+distance: "상암 219m",
+member: "3 / 4",
+store: "노랑통닭 상암점",
+lat: 37.58095023875007,
+lng: 126.89194679503199,
+category : "치킨"
+},
 ];
 
+const restaurantCategories = ["전체", "한식", "중식", "일식", "양식"];
+
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
-const RecruitingPartyCard = ({ partyCard }) => {
+const DeliverusList = ({ partyCard }) => {
     // const { handleLogOut } = useContext(UserContext);
 
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
@@ -108,6 +264,14 @@ const RecruitingPartyCard = ({ partyCard }) => {
     //console.log(partyInfo);
 
     return (
+      <div style={{ maxWidth: '800px', margin: 'auto'}}>
+          <div className={styles.list_category_wrapper}>
+            {restaurantCategories.map((items, idx) => {
+              return (
+                <div key={idx} className={styles.list_category}>{items}</div>
+              );
+            })}
+          </div>
         <Stack spacing={3}>
         {recruitingPartyInfo.map((item, idx) => {
         return (
@@ -153,7 +317,7 @@ const RecruitingPartyCard = ({ partyCard }) => {
                 </DialogContent >
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
-                    <KakaoMapStore 
+                    <KakaoMapStore
                     lat={partyInfo.lat}
                     lng={partyInfo.lng}
                     />
@@ -163,7 +327,8 @@ const RecruitingPartyCard = ({ partyCard }) => {
                 </DialogActions>
             </Dialog>
         </Stack>
+        </div>
     );
 }
 
-export default RecruitingPartyCard;
+export default DeliverusList;

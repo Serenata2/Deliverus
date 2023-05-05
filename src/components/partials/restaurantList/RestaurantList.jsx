@@ -11,6 +11,7 @@ import React from 'react'
 import Rating from '@mui/material/Rating';
 import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useNavigate } from 'react-router-dom';
 
 const restaurantCategories = ["전체", "한식", "중식", "일식", "양식"];
 
@@ -48,6 +49,10 @@ export default function RestaurantList() {
 }
 
 export function RestaurantCard ({ name, rating }) {
+  const navigate = useNavigate();
+  const handleClickStoreInfo = () => {
+    navigate('/restaurant/information')
+  }
     return (
         <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
             <CardContent sx={{my: "auto", px: 0, pl: 1}}>
@@ -64,7 +69,7 @@ export function RestaurantCard ({ name, rating }) {
                     </Typography>
                 </CardContent>
                 <CardActions align="center" sx={{ flexDirection: "column"}}>
-                    <Button  size="small" onClick={() => alert("가게 정보 페이지로 이동")}>
+                    <Button  size="small" onClick={handleClickStoreInfo}>
                         둘러보기</Button>
                 </CardActions>
             </Box>
@@ -88,10 +93,10 @@ function BasicRating({rating}) {
 
 export const storeInfo = [
     {
-      "name": "푸차이",
+      "name": "BBQ 상암점",
       "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
       "phoneNumber": "02-3151-9988",
-      "category": "Chinese",
+      "category": "치킨",
       "rating": 4.5,
       "menu": {
         "menu": [

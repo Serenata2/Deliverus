@@ -8,6 +8,17 @@ import styles from './MainContents.module.css'
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {Box, Button, Typography} from "@mui/material";
+import { RecruitingParty } from '../restaurant/RestaurantInfo';
+
+const recruitingPartyInfo = [
+  {
+      title: "푸라닭에서 치킨 시킬 분!",
+      distance: "상암 294m",
+      name: "푸라닭 상암점",
+      member: "2 / 4",
+      storeId: 13
+  },
+];
 
 const MainContents = () => {
   const context = useContext(UserContext);
@@ -57,15 +68,23 @@ const MainContents = () => {
             <Button
                 onClick={handleChangeUserPos}>Change</Button>
         </Box>
-        { recommendList &&< RecommendationList list={recommendList}/>}
+        { recommendList && <RecommendationList list={recommendList}/>}
       <div>
         <div className={styles.mainContents_subTitle}>
           <h3>
           👥 내 근처에서 모집중인 딜리버스 👥
           </h3>
-          <Link to="/restaurant/information">더보기</Link>
+          <Link to="/party/list">더보기</Link>
         </div>  
-          <RecruitingPartyCard />
+          {recruitingPartyInfo.map((item, idx) => {
+            return (
+              <>
+                <RecruitingPartyCard 
+                partyCard={item}
+                />
+              </>
+            );
+          })}
         <div className={styles.mainContents_subTitle}>  
           <h3>
           💪 내가 직접 딜리버스 모집하기 💪
