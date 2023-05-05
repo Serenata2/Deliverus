@@ -11,33 +11,36 @@ import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
-import image from "../../images/chicken/bhc.png";
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Stack from "@mui/material/Stack";
 
 const recruitingPartyInfo = [
     {
-        title: "상암초 앞에서 BHC에서 치킨 시킬 분!",
+        title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
         distance: "상암 294m",
         member: "2 / 4",
-        store: "BHC 상도점",
+        store: "BBQ 상암점",
         lat: 37.580117710636884,
-        lng: 126.88161333838656
+        lng: 126.88161333838656,
+        category : "치킨"
     },
     {
         title: "족발/보쌈 같이 드실 분 구합니다.",
         distance: "상암 120m",
         member: "1 / 4",
-        store: "원할머니 보쌈",
+        store: "제주족발",
         lat: 37.577945308047376,
-        lng: 126.88988091398227
+        lng: 126.88988091398227,
+        category : "족발,보쌈"
     },
     {
-        title: "MBC 앞에서 맘터 같이 받으실 분",
+        title: "MBC 앞에서 디저트 같이 받으실 분",
         distance: "상암 182m",
         member: "3 / 4",
-        store: "맘스터치",
+        store: "하밀 베이글",
         lat: 37.58095023875007,
-        lng: 126.89194679503199
+        lng: 126.89194679503199,
+        category : "카페,디저트"
     }
 ];
 
@@ -52,11 +55,21 @@ const RecruitingPartyCard = () => {
     const [clickedStorelat, setClickedStoreLat] = useState(0);
     const [clickedStorelng, setClickedStoreLng] = useState(0);
 
-    const handleClickOpen = (store, lat, lng, e) => {
+    const handleClickOpen = (_partyInfo, e) => {
         e.preventDefault();
-        SetClickedStore(store);
-        setClickedStoreLat(lat);
-        setClickedStoreLng(lng);
+        console.log("handle : ", _partyInfo);
+        try {
+            const category = _partyInfo.category.replace("/", ",");
+            const name = _partyInfo.store;
+
+            console.log(category);
+            console.log(name);
+            setImage(require(`../../images/${category}/${name}.png`));
+        } catch (e) {
+            console.log(e);
+            setImage(require(`../../images/delivery-cat.png`));
+        }
+        setPartyInfo(_partyInfo)
         setOpen(true);
     };
 
@@ -64,18 +77,27 @@ const RecruitingPartyCard = () => {
         setOpen(false);
     };
 
-    const image = require("../../images/chicken/bhc.png");
+    const [image, setImage] = useState(null);
 
-    const [partyInfo, setPartyInfo] = useState(recruitingPartyInfo);
-    console.log(partyInfo);
+    // 참여하기 버튼 클릭시 해당 파티방에 대한 정보를 받아옵니다.
+    const [partyInfo, setPartyInfo] = useState({
+        title: "",
+        distance: "",
+        member: "",
+        store: "",
+        lat: 0,
+        lng: 0,
+        category : ""
+    });
+    //console.log(partyInfo);
 
     return (
         <Stack spacing={3}>
-        {partyInfo.map((item, idx) => {
+        {recruitingPartyInfo.map((item, idx) => {
         return (
                 <Card key={idx} variant="outlined" sx={{display: "flex", p: 1.5}}>
                 <CardContent sx={{my: "auto", px: 0, pl: 1}}>
-                    <Avatar>U</Avatar>
+                    <AccountCircle />
                 </CardContent>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
                     <CardContent sx={{ml: 3}}>
@@ -93,7 +115,7 @@ const RecruitingPartyCard = () => {
                         <Typography variant="body2" style={{fontSize: "16px"}}>
                             {item.distance}
                         </Typography>
-                        <Button size="small" onClick={(e) => {handleClickOpen(item.store, item.lat, item.lng, e)}} style={{fontSize: "16px"}}>
+                        <Button size="small" onClick={(e) => {handleClickOpen(item, e)}} style={{fontSize: "16px"}}>
                             참여하기</Button>
                     </CardActions>
                 </Box>
@@ -110,14 +132,14 @@ const RecruitingPartyCard = () => {
                            duration={100}
                     />
                     <Typography align="center" component="h5" variant="h5">
-                        {clickedStore}
+                        {partyInfo.store}
                     </Typography>
                 </DialogContent >
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
                     <KakaoMapStore 
-                    lat={clickedStorelat}
-                    lng={clickedStorelng}
+                    lat={partyInfo.lat}
+                    lng={partyInfo.lng}
                     />
                 </DialogContent>
                 <DialogActions>

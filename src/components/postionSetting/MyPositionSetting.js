@@ -6,17 +6,20 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import {UserContext} from "../store/UserContext";
-import RecommendationList from "../recommendation/RecommendationList";
 
-function PositionSetting() {
+function MyPositionSetting() {
     const context = useContext(UserContext);
+    const { userPos } = context.userState;
     const { handleInitUserPos } = context;
 
     // 처음 보여줄 Kakao map의 중심좌표
-    const initLatLng = {
-        La: 37.57600923748876,
-        Ma: 126.9012721298886
-    };
+    // userState의 userPos가 null이 아니라면 그 값으로 초기화
+    const initLatLng = (userPos === null) ? ({
+        lat: 37.57600923748876,
+        lng: 126.9012721298886}) : ({
+        lat : userPos.lat,
+        lng : userPos.lng
+    });
 
     // 사용자가 위치를 설정했냐 확인하는 변수
     const [state, setState] = useState(false);
@@ -67,4 +70,4 @@ function PositionSetting() {
     </Box>)
 }
 
-export default PositionSetting;
+export default MyPositionSetting;
