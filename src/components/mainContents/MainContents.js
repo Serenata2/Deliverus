@@ -8,6 +8,24 @@ import styles from './MainContents.module.css'
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {Box, Button, Typography} from "@mui/material";
+import { RecruitingParty } from '../restaurant/RestaurantInfo';
+
+const recruitingPartyInfo = [
+  {
+      title: "푸라닭에서 치킨 시킬 분!",
+      distance: "상암 294m",
+      name: "푸라닭 상암점",
+      member: "2 / 4",
+      storeId: 13
+  },
+  {
+      title: "같이 커피 드실 분 구합니다. 6번 출구 앞 픽업",
+      distance: "상암 294m",
+      name: '일디오 커피',
+      member: "2 / 4",
+      storeId: 35
+  }
+];
 
 const MainContents = () => {
   const context = useContext(UserContext);
@@ -58,7 +76,7 @@ const MainContents = () => {
             <Button
                 onClick={handleChangeUserPos}>Change</Button>
         </Box>
-        { recommendList &&< RecommendationList list={recommendList}/>}
+        { recommendList && <RecommendationList list={recommendList}/>}
       <div>
         <div className={styles.mainContents_subTitle}>
           <h3>
@@ -66,7 +84,15 @@ const MainContents = () => {
           </h3>
           <Link to="/restaurant/imformation">더보기</Link>
         </div>  
-          <RecruitingPartyCard />
+          {recruitingPartyInfo.map((item, idx) => {
+            return (
+              <>
+                <RecruitingPartyCard 
+                partyCard={item}
+                />
+              </>
+            );
+          })}
         <div className={styles.mainContents_subTitle}>  
           <h3>
           💪 내가 직접 딜리버스 모집하기 💪
