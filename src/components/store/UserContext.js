@@ -28,7 +28,6 @@ const UserContextProvider = (props) => {
     }
   });
 
-  /**  */
   //   useEffect(() => {
   //     const userInfo = sessionStorage.getItem("userInfo");
   //     if (!userInfo) {
@@ -60,7 +59,7 @@ const UserContextProvider = (props) => {
         credentials: "include",
       }).then((respones) => {
         navigate("/");
-        setUserState({ ...userState, username: "", isLoggedIn: false, userPos : null });
+        setUserState({ ...userState, username: "", isLoggedIn: false, userPos : null , userPosAddr : ""});
       });
     } catch (error) {
       console.log("Error in Logout : ", error);
