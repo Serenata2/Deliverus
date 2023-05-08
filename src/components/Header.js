@@ -48,19 +48,21 @@ const Header = () => {
                   Deliverus
                 </Link>
                 <div style={{margin: "0 0 0 100px"}}>
-                <Link
-                  to="/"
-                  style={{
-                    textDecoration: "none",
-                    background:"black",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    fontSize: "22px"
-                  }}
-                >
-                  홈
-                </Link>
-                <Link
+                {isLoggedIn && (
+                  <>
+                    <Link
+                    to="/"
+                    style={{
+                      textDecoration: "none",
+                      background:"black",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      fontSize: "22px"
+                    }}
+                    >
+                    홈
+                    </Link>
+                  <Link
                   to="/"
                   style={{
                     textDecoration: "none",
@@ -71,10 +73,10 @@ const Header = () => {
                     fontWeight: 200,
                     marginLeft: "50px"
                   }}
-                >
-                  방 만들기
-                </Link>
-                <Link
+                  >
+                    방 만들기
+                  </Link>
+                  <Link
                   to="/"
                   style={{
                     textDecoration: "none",
@@ -85,9 +87,11 @@ const Header = () => {
                     fontWeight: 200,
                     marginLeft: "30px"
                   }}
-                >
-                  마이페이지
-                </Link>
+                  >
+                    마이페이지
+                  </Link>
+                  </>
+                )}
                 </div>
                 </div>
               </Typography>

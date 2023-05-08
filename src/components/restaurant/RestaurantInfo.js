@@ -131,7 +131,7 @@ const RestaurantInfo = ({restaurantName}) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-start",
-                maxWidth: 'md'
+                maxWidth: '850px'
             }}>
                 {restaurantDescript}
                 <RecruitingParty/>

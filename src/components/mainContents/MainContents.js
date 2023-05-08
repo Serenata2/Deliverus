@@ -60,13 +60,13 @@ const MainContents = () => {
 
   return (
     <div className={styles.mainContents_body}>
-        <Link to="/map">카카오 지도</Link>
-        <button onClick={restaurantAllTest}>모든 가게 정보 확인</button>
+        {/* <Link to="/map">카카오 지도</Link>
+        <button onClick={restaurantAllTest}>모든 가게 정보 확인</button> */}
       <h2>안녕하세요 {username}님!</h2>
         <Box sx={{display: "flex", justifyContent: "flex-start"}}>
             <h4>📌 {userPosAddr}</h4>
             <Button
-                onClick={handleChangeUserPos}>Change</Button>
+                onClick={handleChangeUserPos} sx={{ml: 1.5}}>위치 바꾸기</Button>
         </Box>
         { recommendList && <RecommendationList list={recommendList}/>}
       <div>
