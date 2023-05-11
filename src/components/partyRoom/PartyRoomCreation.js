@@ -9,14 +9,42 @@ import StepLabel from "@mui/material/StepLabel";
 import PartyNameSetting from "./PartyNameSetting";
 import MenuSelecting from "./MenuSelecting";
 import PartyPositionSetting from "./PartyPositionSetting";
+import Paper from "@mui/material/Paper";
+import KakaoMapStore from "../restaurant/KakaoMapStore";
+import PositionSettingMap from "../postionSetting/PositionSettingMap";
 
+// 파티방을 만든 결과(위치, 이름, 등)를 마지막으로 보여주는 컴포넌트입니다.
+function PartyRoomCrateResult() {
+    const isPosSelected = (value) => {
+
+    }
+    return (
+            <Paper elevation={3} sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}}>
+                <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                    파티방 이름 : BBQ 시키실 분!
+                </Typography>
+                <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                    정원 : 4
+                </Typography>
+                <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                    파티방 유지 시간 : 60분
+                </Typography>
+                <KakaoMapStore
+                    lat={37.57600923748876}
+                    lng={126.9012721298886}
+                />
+                <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                    메뉴 : ~~~
+                </Typography>
+            </Paper>
+    );
+}
+
+// 파티방을 만드는 컴포넌트입니다.
 function PartyRoomCreation() {
-
     // 파티방을 만들기
     const location = useLocation();
     const restaurantInfo = {...location.state.restaurantInfo};
-
-    //console.log(restaurantInfo.menu.menu);
 
     // 현재 진행중인 단계
     const [activeStep, setActiveStep] = useState(0);
@@ -34,7 +62,8 @@ function PartyRoomCreation() {
     // 진행 단계마다 보여줄 컴포넌트
     const componentSteps = [<PartyNameSetting/>,
         <PartyPositionSetting propFunction={isPosSelected}/>,
-        <MenuSelecting menuList={restaurantInfo.menu.menu}/>];
+        <MenuSelecting menuList={restaurantInfo.menu.menu}/>,
+        <PartyRoomCrateResult/>];
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -66,7 +95,7 @@ function PartyRoomCreation() {
                 </Typography>
                 {componentSteps[activeStep]}
                 <Box sx={{width: "100%", mt: 3}}>
-                    <Stepper activeStep={activeStep} sx={{mb : 5}}>
+                    <Stepper activeStep={activeStep} sx={{mb: 5}}>
                         {labelSteps.map((label, inx) => {
                             const stepProps = {};
                             return (
@@ -77,23 +106,32 @@ function PartyRoomCreation() {
                         })}
                     </Stepper>
                     {activeStep === labelSteps.length ? (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', pt: 2, alignItems: "center"}}>
-                                <Box sx={{ flex: '1 1 auto' }} />
-                                <Button onClick={handleFinish} sx={{px: 5, mt: 3}}>🚩 Deliverus 파티방 생성하기</Button>
-                            </Box>
+                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
+                            <Box sx={{display: 'flex', pt: 2}}/>
+                            <Button
+                                color="inherit"
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{mr: 1}}
+                            >
+                                Back
+                            </Button>
+                            <Box sx={{flex: '1 1 auto'}}/>
+                            <Button onClick={handleFinish}>🚩 Deliverus 파티방 생성하기</Button>
+                        </Box>
                     ) : (
                         <Fragment>
-                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                            <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
                                 <Button
                                     color="inherit"
                                     disabled={activeStep === 0}
                                     onClick={handleBack}
-                                    sx={{ mr: 1 }}
+                                    sx={{mr: 1}}
                                 >
                                     Back
                                 </Button>
-                                <Box sx={{ flex: '1 1 auto' }} />
-                                <Button onClick={handleNext} disabled={(activeStep === 1 ) && !state}>
+                                <Box sx={{flex: '1 1 auto'}}/>
+                                <Button onClick={handleNext} disabled={(activeStep === 1) && !state}>
                                     {activeStep === labelSteps.length - 1 ? 'Finish' : 'Next'}
                                 </Button>
                             </Box>

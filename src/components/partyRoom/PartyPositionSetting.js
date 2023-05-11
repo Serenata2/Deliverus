@@ -4,7 +4,7 @@ import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {UserContext} from "../store/UserContext";
 
-function PartyPositionSetting(prop) {
+function PartyPositionSetting(props) {
     const context = useContext(UserContext);
     const { userPos } = context.userState;
 
@@ -16,6 +16,9 @@ function PartyPositionSetting(prop) {
         lat : userPos.lat,
         lng : userPos.lng
     });
+
+    // 원의 반경, 단위는 m
+    const radius = 500;
 
 
     // 사용자가 위치를 설정했냐 확인하는 변수
@@ -32,7 +35,7 @@ function PartyPositionSetting(prop) {
     const handleClickPosEvent = (position, detailAddr) => {
         setPartyPos(position);
         setPartyAddr(detailAddr);
-        prop.propFunction(true);
+        props.propFunction(true);
     }
 
     return (<Box sx={{
@@ -41,7 +44,7 @@ function PartyPositionSetting(prop) {
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             픽업할 위치를 설정해 주세요!
         </Typography>
-        <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng}/>
+        <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng} radius={radius}/>
     </Box>)
 }
 

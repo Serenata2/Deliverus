@@ -4,19 +4,50 @@ import Typography from "@mui/material/Typography";
 import Image from 'mui-image';
 import Button from "@mui/material/Button";
 import Stack from '@mui/material/Stack';
-import RecruitingPartyCard from "./RecruitingPartyCard";
+import RecruitingPartyList from "./RecruitingPartyList";
 import MenuCard from "./MenuCard";
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
 import {Link} from "react-router-dom";
+import RecruitingPartyCard from "./RecruitingPartyCard";
+
+const recruitingPartyList = [
+    {
+        title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
+        distance: "상암 294m",
+        member: "2 / 4",
+        store: "BBQ 상암점",
+        lat: 37.580117710636884,
+        lng: 126.88161333838656,
+        category : "치킨"
+    },
+    {
+        title: "족발/보쌈 같이 드실 분 구합니다.",
+        distance: "상암 120m",
+        member: "1 / 4",
+        store: "제주족발",
+        lat: 37.577945308047376,
+        lng: 126.88988091398227,
+        category : "족발,보쌈"
+    },
+    {
+        title: "MBC 앞에서 디저트 같이 받으실 분",
+        distance: "상암 182m",
+        member: "3 / 4",
+        store: "하밀 베이글",
+        lat: 37.58095023875007,
+        lng: 126.89194679503199,
+        category : "카페,디저트"
+    }
+];
 
 export const RecruitingParty = () => {
     return (<Fragment>
         <Typography component="h6" variant="h6" sx={{mb: 1}}>
             현재 모집 중인 딜리버스
         </Typography>
-        <RecruitingPartyCard/>
+        <RecruitingPartyList/>
     </Fragment>);
 }
 
@@ -134,7 +165,7 @@ const RestaurantInfo = ({restaurantName}) => {
                 maxWidth: '850px'
             }}>
                 {restaurantDescript}
-                <RecruitingParty/>
+                <RecruitingPartyList partyList={recruitingPartyList}/>
                 <Link to="/party/creation" state={{restaurantInfo : restaurant}}>
                     <Button
                         fullWidth
