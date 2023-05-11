@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useState} from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button";
@@ -7,7 +7,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import React from 'react'
-// import * as React from 'react';
 import Rating from '@mui/material/Rating';
 import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
