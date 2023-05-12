@@ -1,4 +1,3 @@
-// 가게 정보에 대한 Card
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
@@ -8,10 +7,17 @@ import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
 import Stack from "@mui/material/Stack";
 import RecruitingPartyCard from "./RecruitingPartyCard";
+import Slide from '@mui/material/Slide';
+
+// Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 // prop으로 파티방 정보 리스트를 받습니다.
 const RecruitingPartyList = (prop) => {
+    // 파티방 정보 리스트
     const recruitingPartyList = prop.partyList
 
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
@@ -36,7 +42,6 @@ const RecruitingPartyList = (prop) => {
 
     const handleClickOpen = (_partyInfo, e) => {
         e.preventDefault();
-        console.log("handle : ", _partyInfo);
         try {
             const category = _partyInfo.category.replace("/", ",");
             const name = _partyInfo.store;
@@ -72,7 +77,12 @@ const RecruitingPartyList = (prop) => {
                 <RecruitingPartyCard key={idx} propFunction={handleClickOpen} partyInfo={item}/>
         );
         })}
-            <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm">
+            <Dialog open={open}
+                    onClose={handleClose}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    fullWidth={true}
+                    maxWidth="sm">
                 <DialogTitle>가게 정보 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
                     <Image src={image}
