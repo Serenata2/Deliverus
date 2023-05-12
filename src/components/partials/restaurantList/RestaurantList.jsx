@@ -10,14 +10,15 @@ import React from 'react'
 import Rating from '@mui/material/Rating';
 import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const restaurantCategories = ["전체", "한식", "중식", "일식", "양식"];
+const restaurantCategories = ["전체", "한식", "중식", "일식", "양식", "치킨"];
 
 export default function RestaurantList() {
   
     // 가게 정보(나중에 백엔드에서 받아와서 state로 관리할 거임.)
     const [RestInfo, setRestInof] = useState(storeInfo);
+    const { state } = useLocation();
 
     return (
         <div className={styles.list_body}>
@@ -33,11 +34,12 @@ export default function RestaurantList() {
             <span className={styles.list_location_txt}>서울시 상암동</span>
           </div>
           <div className={styles.list_card}>
-          {RestInfo.map((item, idx) => {
+          {state.map((item, idx) => {
             return (
               <RestaurantCard
               name={item.name}
               rating={item.rating}
+              id={item.restaurant_id}
               key={idx}
                />
             );

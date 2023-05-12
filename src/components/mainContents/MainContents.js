@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {UserContext} from "../store/UserContext";
 import {RestaurantCard, storeInfo} from '../partials/restaurantList/RestaurantList';
@@ -33,6 +33,14 @@ const MainContents = () => {
 
     // 가게 정보 리스트(state로 관리)
     const [restInfoList, setRestInfoList] = useState(null);
+    const navigate = useNavigate();
+
+    // Restaurant List로 이동
+    const navToRestaurantList = () => {
+        navigate(`/restaurant/list`, {
+            state: restInfoList
+        })
+    }
 
     console.log("info : " ,restInfoList);
     useEffect(() => {
@@ -88,7 +96,7 @@ const MainContents = () => {
                     <h3>
                         💪 내가 직접 딜리버스 모집하기 💪
                     </h3>
-                    <Link to="/restaurant/list">더보기</Link>
+                    <h4 className={styles.show_more} onClick={navToRestaurantList}>더보기</h4>
                 </div>
             </div>
             <Stack spacing={3}>

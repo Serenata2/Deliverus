@@ -8,3 +8,9 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.show_more {
+    cursor: pointer;
+    text-decoration : underline;
+    font-weight: 500;
+}
