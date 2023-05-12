@@ -9,7 +9,7 @@ import MenuCard from "./MenuCard";
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import RecruitingPartyCard from "./RecruitingPartyCard";
 
 const recruitingPartyList = [
@@ -55,6 +55,7 @@ export const RecruitingParty = () => {
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
 const RestaurantInfo = ({restaurantName}) => {
     const { handleLogOut } = useContext(UserContext);
+    const { id } = useParams();
     const [restaurant, setRestaurant] = useState({
         address: "string",
         category: "string",
@@ -76,7 +77,7 @@ const RestaurantInfo = ({restaurantName}) => {
 
     // 처음 페이지에 들어갈 때, prop에 있는 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
-        const data = { restaurant_id: 15};
+        const data = { restaurant_id: id};
         fetch(`${API.RESTAURANT_INFORMATION}`, {
             method: "POST",
             headers: {

@@ -47,10 +47,10 @@ export default function RestaurantList() {
     );
 }
 
-export function RestaurantCard ({ name, rating }) {
+export function RestaurantCard ({ name, rating, id }) {
   const navigate = useNavigate();
   const handleClickStoreInfo = () => {
-    navigate('/restaurant/information')
+    navigate(`/restaurant/information/${id}`);
   }
     return (
         <Card variant="outlined" sx={{display: "flex", p: 1.5}}>

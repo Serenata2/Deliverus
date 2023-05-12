@@ -98,6 +98,7 @@ const MainContents = () => {
                         <RestaurantCard
                             name={items.name}
                             rating={items.rating}
+                            id={items.restaurant_id}
                             key={idx}
                         />
                     );
