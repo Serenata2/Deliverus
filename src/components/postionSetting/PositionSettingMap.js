@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 const {kakao} = window;
 
+// 위치를 선택할 때 사용되는 카카오맵 컴포넌트입니다.
 export default function PositionSettingMap(props) {
 
     const [kakaoMap, setKakaoMap] = useState();
@@ -19,9 +20,25 @@ export default function PositionSettingMap(props) {
             var zoomControl = new kakao.maps.ZoomControl();
             map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-            setKakaoMap(map); // 생성된 지도를 상태로 저장
+            // 지도에 표시할 원을 생성합니다
+            // TODO : circle의 center를 가게의 위치로 바꿔야 할 것입니다.
+            if (props.radius) {
+                var circle = new kakao.maps.Circle({
+                    center: new kakao.maps.LatLng(props.latLng.lat, props.latLng.lng),  // 원의 중심좌표 입니다
+                    radius: props.radius, // 미터 단위의 원의 반지름입니다
+                    strokeWeight: 5, // 선의 두께입니다
+                    strokeColor: '#75B8FA', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'dashed', // 선의 스타일 입니다
+                    fillColor: '#CFE7FF', // 채우기 색깔입니다
+                    fillOpacity: 0.4  // 채우기 불투명도 입니다
+                });
 
-            console.log(infowindow);
+                // 지도에 원을 표시합니다
+                circle.setMap(map);
+            }
+
+            setKakaoMap(map); // 생성된 지도를 상태로 저장
         });
     }, []);
 
@@ -56,7 +73,9 @@ export default function PositionSettingMap(props) {
                             lng : latlng.La
                         }
                         // 상위 컴포넌트에게 위치, 도로명 주소 넘겨주기
-                        props.propFunction(myLatlng, detailAddr);
+                        if(props.propFunction) {
+                            props.propFunction(myLatlng, detailAddr);
+                        }
                     }
 
                     setMarker(newMarker);
