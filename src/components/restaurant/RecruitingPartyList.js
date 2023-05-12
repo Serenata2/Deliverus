@@ -1,16 +1,11 @@
 // 가게 정보에 대한 Card
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import Stack from "@mui/material/Stack";
 import RecruitingPartyCard from "./RecruitingPartyCard";
 
@@ -21,9 +16,6 @@ const RecruitingPartyList = (prop) => {
 
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
     const [open, setOpen] = useState(false);
-    const [clickedStore, SetClickedStore] = useState("");
-    const [clickedStorelat, setClickedStoreLat] = useState(0);
-    const [clickedStorelng, setClickedStoreLng] = useState(0);
     const [restaurant, setRestaurant] = useState({
         name: "string",
         address: "string",
