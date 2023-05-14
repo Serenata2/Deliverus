@@ -20,7 +20,8 @@ const recruitingPartyList = [
         store: "BBQ 상암점",
         lat: 37.580117710636884,
         lng: 126.88161333838656,
-        category : "치킨"
+        category : "치킨",
+        restaurantId : 1
     },
     {
         title: "족발/보쌈 같이 드실 분 구합니다.",
@@ -29,7 +30,8 @@ const recruitingPartyList = [
         store: "제주족발",
         lat: 37.577945308047376,
         lng: 126.88988091398227,
-        category : "족발,보쌈"
+        category : "족발,보쌈",
+        restaurantId : 2
     },
     {
         title: "MBC 앞에서 디저트 같이 받으실 분",
@@ -38,22 +40,14 @@ const recruitingPartyList = [
         store: "하밀 베이글",
         lat: 37.58095023875007,
         lng: 126.89194679503199,
-        category : "카페,디저트"
+        category : "카페,디저트",
+        restaurantId : 3
     }
 ];
 
-export const RecruitingParty = () => {
-    return (<Fragment>
-        <Typography component="h6" variant="h6" sx={{mb: 1}}>
-            현재 모집 중인 딜리버스
-        </Typography>
-        <RecruitingPartyList/>
-    </Fragment>);
-}
-
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
-const RestaurantInfo = ({restaurantName}) => {
+const RestaurantInfo = () => {
     const { handleLogOut } = useContext(UserContext);
     const { id } = useParams();
     const [restaurant, setRestaurant] = useState({
@@ -75,9 +69,9 @@ const RestaurantInfo = ({restaurantName}) => {
         rating: 0
     });
 
-    // 처음 페이지에 들어갈 때, prop에 있는 가게의 ID를 가지고 서버로부터 가게 정보 받기
+    // 처음 페이지에 들어갈 때, 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
-        const data = { restaurant_id: id};
+        const data = { restaurantId: id};
         fetch(`${API.RESTAURANT_INFORMATION}`, {
             method: "POST",
             headers: {
@@ -99,7 +93,7 @@ const RestaurantInfo = ({restaurantName}) => {
                 if (error.name === "LoginExpirationError") {
                     handleLogOut();
                 }
-                // 요청한 것에 대한 데이터가 벗을 때 에러 처리
+                // 요청한 것에 대한 데이터가 없을 때 에러 처리
                 else if(error.name === "NoDataError") {
                     alert("error.message");
                 }
@@ -124,7 +118,6 @@ const RestaurantInfo = ({restaurantName}) => {
         }
     }
 
-    //console.log("res : ", restaurant);
     const restaurantDescript = (<Box sx={{
         my: 2, display: "flex", flexDirection: "column", alignItems: "center", border: 1, borderRadius: '16px', py: 2
     }}>
@@ -167,7 +160,7 @@ const RestaurantInfo = ({restaurantName}) => {
             }}>
                 {restaurantDescript}
                 <RecruitingPartyList partyList={recruitingPartyList}/>
-                <Link to="/party/creation" state={{restaurantInfo : restaurant}}>
+                <Link to="/party/creation" state={{restaurantInfo : restaurant, resId : id}}>
                     <Button
                         fullWidth
                         variant="contained"
