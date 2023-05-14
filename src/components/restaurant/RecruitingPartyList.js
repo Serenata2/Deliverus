@@ -8,6 +8,7 @@ import KakaoMapStore from './KakaoMapStore';
 import Stack from "@mui/material/Stack";
 import RecruitingPartyCard from "./RecruitingPartyCard";
 import Slide from '@mui/material/Slide';
+import {Link, useNavigate} from "react-router-dom";
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -15,31 +16,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
-// prop으로 파티방 정보 리스트를 받습니다.
-const RecruitingPartyList = (prop) => {
+// prop으로 파티방 정보 리스트, 메뉴 리스트를 받습니다.
+    const RecruitingPartyList = (props) => {
+    const navigate = useNavigate();
+
     // 파티방 정보 리스트
-    const recruitingPartyList = prop.partyList
+    const recruitingPartyList = props.partyList;
 
     // 딜리버스 방 참가를 위한 Dialog를 보여주는 여부를 담은 변수
     const [open, setOpen] = useState(false);
-    const [restaurant, setRestaurant] = useState({
-        name: "string",
-        address: "string",
-        phoneNumber: "string",
-        category: "string",
-        rating: 0,
-        latitude: 0,
-        longitude: 0,
-        menu: {
-            menu: [
-                {
-                    "menuName": "string",
-                    "price": 0
-                }
-            ]
-        }
-    });
+    const [restaurantId, setRestaurantId] = useState(0);
 
+    // 파티방 카드에서 '참가하기' 버튼을 눌렸을 때 실행되는 함수
     const handleClickOpen = (_partyInfo, e) => {
         e.preventDefault();
         try {
@@ -49,13 +37,22 @@ const RecruitingPartyList = (prop) => {
         } catch (e) {
             setImage(require(`../../images/delivery-cat.png`));
         }
-        setPartyInfo(_partyInfo)
+        setPartyInfo(_partyInfo);
+        setRestaurantId(_partyInfo.restaurantId);
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleEnterMenuSelecting = () => {
+        navigate("/party/enter", {
+            state: restaurantId
+        })
+        setOpen(false);
+    }
+
 
     const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
 
@@ -67,7 +64,8 @@ const RecruitingPartyList = (prop) => {
         store: "",
         lat: 0,
         lng: 0,
-        category : ""
+        category : "",
+        restaurantId : 0
     });
 
     return (
@@ -103,7 +101,7 @@ const RecruitingPartyList = (prop) => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>딜리버스 참가하기</Button>
+                    <Button onClick={handleEnterMenuSelecting}>딜리버스 참가하기</Button>
                 </DialogActions>
             </Dialog>
         </Stack>
