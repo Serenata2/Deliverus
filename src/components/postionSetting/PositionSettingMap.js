@@ -12,7 +12,7 @@ export default function PositionSettingMap(props) {
         kakao.maps.load(() => {
             const container = document.getElementById("map"); // 지도를 표시할 div
             const options = {
-                center: new kakao.maps.LatLng(props.latLng.lat, props.latLng.lng), // 지도의 중심좌표
+                center: new kakao.maps.LatLng(props.initLatLng.lat, props.initLatLng.lng), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
             const map = new kakao.maps.Map(container, options); // 지도 생성
@@ -20,11 +20,10 @@ export default function PositionSettingMap(props) {
             var zoomControl = new kakao.maps.ZoomControl();
             map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-            // 지도에 표시할 원을 생성합니다
-            // TODO : circle의 center를 가게의 위치로 바꿔야 할 것입니다.
+            // 지도에 표시할 원을 생성합니다. 원의 중심은 가게 위치입니다.
             if (props.radius) {
                 var circle = new kakao.maps.Circle({
-                    center: new kakao.maps.LatLng(props.latLng.lat, props.latLng.lng),  // 원의 중심좌표 입니다
+                    center: new kakao.maps.LatLng(props.resLatLng.lat, props.resLatLng.lng),  // 원의 중심좌표 입니다
                     radius: props.radius, // 미터 단위의 원의 반지름입니다
                     strokeWeight: 5, // 선의 두께입니다
                     strokeColor: '#75B8FA', // 선의 색깔입니다

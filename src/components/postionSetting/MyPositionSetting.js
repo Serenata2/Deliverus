@@ -49,7 +49,7 @@ function MyPositionSetting() {
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             Deliverus를 시작할 위치 설정!
         </Typography>
-        <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng}/>
+        <PositionSettingMap propFunction={handleClickPosEvent} initLatLng={initLatLng}/>
         <Box sx={{width: "100%", mt: 3}}>
 
             <Stepper alternativeLabel activeStep={1}>
