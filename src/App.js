@@ -10,7 +10,7 @@ import RestaurantInfo from "./components/restaurant/RestaurantInfo";
 import PartyRoomCreation from "./components/partyRoom/partyRoomCreate/PartyRoomCreation";
 import DeliverusList from './components/DeliverusList/DeliverusList';
 import RestaurantList from './components/partials/restaurantList/RestaurantList';
-import EachMenuSelecting from "./components/partyRoom/partyRoomEnter/EachMenuSelecting";
+import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/PersonalMenuSelecting";
 
 function App() {
   const context = useContext(UserContext);
@@ -37,7 +37,7 @@ function App() {
           <Route path="/restaurant/information/:id" element={<RestaurantInfo />} />
           <Route path="/party/list" element={<DeliverusList />} />
           <Route path="/party/creation" element={<PartyRoomCreation />} />
-          <Route path="/party/enter" element={<EachMenuSelecting />} />
+          <Route path="/party/enter" element={<PersonalMenuSelecting />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
