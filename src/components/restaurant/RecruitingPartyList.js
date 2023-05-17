@@ -32,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         e.preventDefault();
         try {
             const category = _partyInfo.category.replace("/", ",");
-            const name = _partyInfo.store;
+            const name = _partyInfo.restaurantName;
             setImage(require(`../../images/${category}/${name}.png`));
         } catch (e) {
             setImage(require(`../../images/delivery-cat.png`));
@@ -48,25 +48,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
     const handleEnterMenuSelecting = () => {
         navigate("/party/enter", {
-            state: restaurantId
+            state: {
+                resId : restaurantId,
+                partyId : partyInfo.partyId
+            }
         })
         setOpen(false);
     }
 
-
-    const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
-
     // 참여하기 버튼 클릭시 해당 파티방에 대한 정보를 받아옵니다.
     const [partyInfo, setPartyInfo] = useState({
-        title: "",
-        distance: "",
-        member: "",
-        store: "",
-        lat: 0,
-        lng: 0,
-        category : "",
-        restaurantId : 0
+        category: "",
+        latitude: 0,
+        longitude: 0,
+        restaurantName : "",
+        restaurantId: 0
     });
+
+    const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
 
     return (
         <Stack spacing={3}>
@@ -90,14 +89,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                            duration={100}
                     />
                     <Typography align="center" component="h5" variant="h5">
-                        {partyInfo.store}
+                        {partyInfo.partyName}
                     </Typography>
                 </DialogContent >
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
                     <KakaoMapStore 
-                    lat={partyInfo.lat}
-                    lng={partyInfo.lng}
+                    lat={partyInfo.latitude}
+                    lng={partyInfo.longitude}
                     />
                 </DialogContent>
                 <DialogActions>
