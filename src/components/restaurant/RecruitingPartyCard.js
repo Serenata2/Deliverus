@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 // 모듈화를 진행한 컴포넌트입니다.
 // 하나의 파티방의 정보를 담은 컴포넌트입니다,
 function RecruitingPartyCard(props) {
-    const recruitingPartyInfo = props.partyInfo;
+    const recruitPartyInfo = props.partyInfo;
     return (
         <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
             <CardContent sx={{my: "auto", px: 0, pl: 1}}>
@@ -21,20 +21,20 @@ function RecruitingPartyCard(props) {
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
                 <CardContent sx={{ml: 3}}>
                     <Typography variant="h5" component="div" sx={{ mb: 1.5}}>
-                        {recruitingPartyInfo.title}
+                        {recruitPartyInfo.partyName}
                     </Typography>
                     <Typography fontSize='0.7rem' variant="body2">
-                        {recruitingPartyInfo.store}
+                        {recruitPartyInfo.restaurantName}
                     </Typography>
                 </CardContent>
                 <CardActions align="center" sx={{flexDirection: "column"}}>
                     <Typography fontSize='0.7rem' variant="h5" component="div" sx={{mb: 0.5}} style={{fontSize: "16px"}}>
-                        {recruitingPartyInfo.member}
+                        {recruitPartyInfo.currentMemberNum}/{recruitPartyInfo.memberNum}
                     </Typography>
                     <Typography variant="body2" style={{fontSize: "16px"}}>
-                        {recruitingPartyInfo.distance}
+                        {recruitPartyInfo.distance}
                     </Typography>
-                    <Button size="small" onClick={(e) => {props.propFunction(recruitingPartyInfo, e)}} style={{fontSize: "16px"}}>
+                    <Button size="small" onClick={(e) => {props.propFunction(recruitPartyInfo, e)}} style={{fontSize: "16px"}}>
                         참여하기</Button>
                 </CardActions>
             </Box>
