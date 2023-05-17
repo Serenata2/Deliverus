@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import React, {Fragment, useContext, useState} from "react";
@@ -19,6 +19,7 @@ function PartyRoomCreation() {
     const context = useContext(UserContext);
     const {userState} = context;
     const {username, userPos} = userState;
+    const navigate = useNavigate();
 
     // 파티방을 만들기
     const location = useLocation();
@@ -120,7 +121,7 @@ function PartyRoomCreation() {
                 }
                 console.log(`${error.name} : ${error.message}`);
             });
-        setActiveStep(0);
+        navigate("/");
     };
 
     return (
