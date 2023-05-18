@@ -12,44 +12,14 @@ import {UserContext} from "../store/UserContext";
 import {Link, useParams} from "react-router-dom";
 import RecruitingPartyCard from "./RecruitingPartyCard";
 
-const recruitingPartyList = [
-    {
-        title: "상암초 앞에서 BBQ에서 치킨 시킬 분!",
-        distance: "상암 294m",
-        member: "2 / 4",
-        store: "BBQ 상암점",
-        lat: 37.580117710636884,
-        lng: 126.88161333838656,
-        category : "치킨",
-        restaurantId : 1
-    },
-    {
-        title: "족발/보쌈 같이 드실 분 구합니다.",
-        distance: "상암 120m",
-        member: "1 / 4",
-        store: "제주족발",
-        lat: 37.577945308047376,
-        lng: 126.88988091398227,
-        category : "족발,보쌈",
-        restaurantId : 2
-    },
-    {
-        title: "MBC 앞에서 디저트 같이 받으실 분",
-        distance: "상암 182m",
-        member: "3 / 4",
-        store: "하밀 베이글",
-        lat: 37.58095023875007,
-        lng: 126.89194679503199,
-        category : "카페,디저트",
-        restaurantId : 3
-    }
-];
-
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
 const RestaurantInfo = () => {
-    const { handleLogOut } = useContext(UserContext);
+    const { userState, handleLogOut } = useContext(UserContext);
+    const {userPos} = userState;
     const { id } = useParams();
+
+    // 가게 정보를 담은 변수
     const [restaurant, setRestaurant] = useState({
         address: "string",
         category: "string",
@@ -69,9 +39,13 @@ const RestaurantInfo = () => {
         rating: 0
     });
 
-    // 처음 페이지에 들어갈 때, 가게의 ID를 가지고 서버로부터 가게 정보 받기
+    // 해당 가게에 대해서 모집 중인 딜리버스 파티방 정보를 담은 변수
+    const [recruitingPartyList, setRecruitingPartyList] = useState(null);
+
     useEffect(() => {
         const data = { restaurantId: id};
+
+        // 처음 페이지에 들어갈 때, 가게의 ID를 가지고 서버로부터 가게 정보 받기
         fetch(`${API.RESTAURANT_INFORMATION}`, {
             method: "POST",
             headers: {
@@ -98,6 +72,35 @@ const RestaurantInfo = () => {
                     alert("error.message");
                 }
                 console.log(`${error.name} : ${error.message}`);
+            });
+
+        // 처음 페이지에 들어갈 때, 해당 가게에 대해 모집중인 파티방 리스트 가져오기
+        fetch(`${API.PARTY_RESTAURANT}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                id : id,
+                latitude: userPos.lat,
+                longitude: userPos.lng
+            })
+        })
+            .then((respones) => {
+                status.handlePartyResponse(respones.status);
+                return respones.json();
+            })
+            .then((data) => {
+                console.log("Respones Data from PARTY RESTAURANT API : ", data);
+                setRecruitingPartyList(data);
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    handleLogOut();
+                }
+                console.log(`PARTY RESTAURANT API -> ${error.name} : ${error.message}`);
             });
     }, []);
 
@@ -159,7 +162,7 @@ const RestaurantInfo = () => {
                 maxWidth: '850px'
             }}>
                 {restaurantDescript}
-                <RecruitingPartyList partyList={recruitingPartyList}/>
+                {recruitingPartyList && <RecruitingPartyList partyList={recruitingPartyList}/>}
                 <Link to="/party/creation" state={{restaurantInfo : restaurant, resId : id}}>
                     <Button
                         fullWidth
