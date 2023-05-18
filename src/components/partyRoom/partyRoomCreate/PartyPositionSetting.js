@@ -1,25 +1,25 @@
 import React, { useContext, useState} from 'react';
-import PositionSettingMap from "../postionSetting/PositionSettingMap"
+import PositionSettingMap from "../../postionSetting/PositionSettingMap"
 import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {UserContext} from "../store/UserContext";
+import {UserContext} from "../../store/UserContext";
+import TextField from "@mui/material/TextField";
 
 function PartyPositionSetting(props) {
-    const context = useContext(UserContext);
-    const { userPos } = context.userState;
-
     // 처음 보여줄 Kakao map의 중심좌표
     // userState의 userPos가 null이 아니라면 그 값으로 초기화
-    const initLatLng = (userPos === null) ? ({
+    const initLatLng = (props.userPos === null) ? ({
         lat: 37.57600923748876,
         lng: 126.9012721298886}) : ({
-        lat : userPos.lat,
-        lng : userPos.lng
+        lat : props.userPos.lat,
+        lng : props.userPos.lng
     });
+
+    // 상세 픽업 장소를 담은 변수입니다.
+    const [detailPos, setDetailPos] = useState("");
 
     // 원의 반경, 단위는 m
     const radius = 500;
-
 
     // 사용자가 위치를 설정했냐 확인하는 변수
     const [state, setState] = useState(false);
@@ -35,7 +35,12 @@ function PartyPositionSetting(props) {
     const handleClickPosEvent = (position, detailAddr) => {
         setPartyPos(position);
         setPartyAddr(detailAddr);
-        props.propFunction(true);
+        props.propFunction(detailAddr, position, true);
+    }
+
+    const handleDetailPosInput = (event) => {
+        setDetailPos(event.target.value);
+        props.setDetailPos(event.target.value);
     }
 
     return (<Box sx={{
@@ -44,7 +49,17 @@ function PartyPositionSetting(props) {
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             픽업할 위치를 설정해 주세요!
         </Typography>
-        <PositionSettingMap propFunction={handleClickPosEvent} latLng={initLatLng} radius={radius}/>
+        <PositionSettingMap propFunction={handleClickPosEvent}
+                            initLatLng={initLatLng}
+                            resLatLng={props.resPos}
+                            radius={radius}/>
+        <TextField id="standard-basic"
+                   label="상세 위치를 기술해 주세요"
+                   variant="standard"
+                   required
+                   value={detailPos}
+                   onChange={handleDetailPosInput}
+                   sx={{mb: 5, width: "80%"}}/>
     </Box>)
 }
 

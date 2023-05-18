@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import React, {Fragment, useState} from "react";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import MenuCard from "../restaurant/MenuCard";
+import MenuCard from "../../restaurant/MenuCard";
 import Grid from "@mui/material/Grid";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
@@ -11,19 +11,16 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 // 가게의 메뉴를 선택하는 컴포넌트입니다.
 // 하나의 가게에 대한 메뉴 배열을 prop으로 받습니다.
-function MenuSelecting(prop) {
+function MenuSelecting(props) {
     // 가게 메뉴 정보 받아오기
-    const MenuList = prop.menuList
-
-    // 각 메뉴에 대한 수량을 담은 리스트
-    const [countList, setCountList] = useState(new Array(MenuList.length).fill(0));
+    const menuList = props.menuList
 
     const restaurantMenu = (<Fragment>
         <Typography component="h6" variant="h6" sx={{mb: 1}}>
             메뉴를 선택해 보세요
         </Typography>
         <Stack spacing={3} sx={{width : "80%"}}>
-            {MenuList.map((item, index) => {
+            {menuList.map((item, index) => {
                 return (<Grid container direction="row"
                               justifyContent="center"
                               alignItems="center"
@@ -36,20 +33,20 @@ function MenuSelecting(prop) {
                             <Button
                                 aria-label="reduce"
                                 onClick={() => {
-                                    const tempList = [...countList];
-                                    tempList[index] = Math.max(countList[index] - 1, 0);
-                                    setCountList(tempList);
+                                    const tempList = [...props.countList];
+                                    tempList[index] = Math.max(props.countList[index] - 1, 0);
+                                    props.setCountList(tempList);
                                 }}
                             >
                                 <RemoveIcon fontSize="small" />
                             </Button>
-                            <Button disableRipple={true}>{countList[index]}</Button>
+                            <Button disableRipple={true}>{props.countList[index]}</Button>
                             <Button
                                 aria-label="increase"
                                 onClick={() => {
-                                    const tempList = [...countList];
+                                    const tempList = [...props.countList];
                                     tempList[index] += 1;
-                                    setCountList(tempList);
+                                    props.setCountList(tempList);
                                 }}
                             >
                                 <AddIcon fontSize="small" />

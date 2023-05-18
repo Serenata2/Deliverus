@@ -7,21 +7,8 @@ import RecommendationList from "../recommendation/RecommendationList";
 import styles from './MainContents.module.css'
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
-import {Box, Button, Typography} from "@mui/material";
-import {RecruitingParty} from '../restaurant/RestaurantInfo';
+import {Box, Button} from "@mui/material";
 import Stack from "@mui/material/Stack";
-
-const recruitingPartyInfo = [
-    {
-        title: "푸라닭에서 치킨 시킬 분!",
-        distance: "상암 294m",
-        name: "푸라닭 상암점",
-        member: "2 / 4",
-        lat: 37.580117710636884,
-        lng: 126.88161333838656,
-        category : "치킨"
-    },
-];
 
 const MainContents = () => {
     const context = useContext(UserContext);
@@ -33,6 +20,9 @@ const MainContents = () => {
 
     // 가게 정보 리스트(state로 관리)
     const [restInfoList, setRestInfoList] = useState(null);
+
+    // 인접 파티방 정보 리스트
+    const [recruitingPartyList, setRecruitingPartyList] = useState(null);
     const navigate = useNavigate();
 
     // Restaurant List로 이동
@@ -42,9 +32,36 @@ const MainContents = () => {
         })
     }
 
-    console.log("info : " ,restInfoList);
     useEffect(() => {
         setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
+
+        // 처음 화면이 띄워졌을 때 모든 인접 파티방 리스트를 받아옵니다.
+        fetch(`${API.PARTY_LOCATION}`, {
+            method : "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                latitude: userPos.lat,
+                longitude: userPos.lng
+            })
+        })
+            .then((respones) => {
+                status.handlePartyResponse(respones.status);
+                return respones.json();
+            })
+            .then((data) => {
+                console.log("Respones Data from PARTY LIST API : ", data);
+                setRecruitingPartyList(data);
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    console.log(`${error.name} : ${error.message}`);
+                }
+                console.log(`${error.name} : ${error.message}`);
+            });
 
         // 처음 화면이 띄워졌을 때 모든 가게 리스트를 받아옵니다.
         fetch(`${API.RESTAURANT_LIST}`, {
@@ -54,8 +71,8 @@ const MainContents = () => {
             },
             credentials: "include",
             body: JSON.stringify({
-                latitude: userPos.latitude,
-                longitude: userPos.longitude
+                latitude: userPos.lat,
+                longitude: userPos.lng
             })
         })
             .then((respones) => {
@@ -63,7 +80,7 @@ const MainContents = () => {
                 return respones.json();
             })
             .then((data) => {
-                console.log("Respones Data from Restaurant All API : ", data);
+                console.log("Respones Data from Restaurant LIST API : ", data);
                 setRestInfoList(data);
             })
             .catch((error) => {
@@ -91,7 +108,7 @@ const MainContents = () => {
                     </h3>
                     <Link to="/party/list">더보기</Link>
                 </div>
-                <RecruitingPartyList partyList={recruitingPartyInfo}/>
+                {recruitingPartyList && <RecruitingPartyList partyList={recruitingPartyList}/>}
                 <div className={styles.mainContents_subTitle}>
                     <h3>
                         💪 내가 직접 딜리버스 모집하기 💪
