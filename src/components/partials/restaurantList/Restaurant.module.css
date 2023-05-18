@@ -3,10 +3,25 @@
     margin: auto;
 }
 
+.list_all {
+    border: 1px solid lightgrey;
+    padding: 8px 18px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.list_all:hover {
+    background-color: lightgrey;
+}
+
 .list_category_wrapper {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    padding: 30px;
+    padding: 10px 30px 30px 30px;
 }
 
 .list_category {
@@ -15,6 +30,7 @@
     font-size: 20px;
     border-radius: 8px;
     cursor: pointer;
+    margin: 8px;
 }
 
 .list_category:hover {

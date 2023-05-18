@@ -35,6 +35,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/restaurant/list" element={<RestaurantList />} />
+          <Route path="/restaurant/:category" element={<RestaurantList />} />
           <Route path="/restaurant/information/:id" element={<RestaurantInfo />} />
           <Route path="/party/list" element={<DeliverusList />} />
           <Route path="/party/creation" element={<PartyRoomCreation />} />
