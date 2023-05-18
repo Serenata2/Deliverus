@@ -12,20 +12,25 @@ import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const restaurantCategories = ["전체", "한식", "중식", "일식", "양식", "치킨"];
+const restaurantCategories = ["한식", "분식", "치킨", "아시안/양식", "족발/보쌈", "돈까스/일식", "카페/디저트", "찜탕", "패스트푸드", "피자"];
 
 export default function RestaurantList() {
   
     // 가게 정보(나중에 백엔드에서 받아와서 state로 관리할 거임.)
-    const [RestInfo, setRestInof] = useState(storeInfo);
     const { state } = useLocation();
+    const [currentCategories, setCurrentCategories] = useState('all');
+    const handleCategories = (e) => {
+      const category = e.target.textContent;
+      setCurrentCategories(category);
+    }
 
     return (
         <div className={styles.list_body}>
+          <div className={styles.list_all} onClick={e=>setCurrentCategories('all')}>전체</div>
           <div className={styles.list_category_wrapper}>
             {restaurantCategories.map((items, idx) => {
               return (
-                <div key={idx} className={styles.list_category}>{items}</div>
+                <div key={idx} className={styles.list_category} onClick={handleCategories}>{items}</div>
               );
             })}
           </div>
@@ -35,15 +40,22 @@ export default function RestaurantList() {
           </div>
           <div className={styles.list_card}>
           {state.map((item, idx) => {
+            console.log(item.category);
+          if (
+            currentCategories === 'all' ||
+            currentCategories === item.category
+          ) {
             return (
               <RestaurantCard
-              name={item.name}
-              rating={item.rating}
-              id={item.restaurant_id}
-              key={idx}
-               />
+                name={item.name}
+                rating={item.rating}
+                id={item.restaurant_id}
+                key={idx}
+              />
             );
-          })}
+          }
+          return null;
+        })}
           </div>
         </div>
     );
@@ -65,8 +77,10 @@ export function RestaurantCard ({ name, rating, id }) {
                         {name}
                     </Typography>
                     <Typography fontSize='0.7rem' variant="body2">
-                        <BasicRating 
-                        rating={rating}/>
+                        {/* <BasicRating 
+                        rating={rating}/> */}
+                        ⭐
+                        {rating}
                     </Typography>
                 </CardContent>
                 <CardActions align="center" sx={{ flexDirection: "column"}}>
@@ -82,535 +96,11 @@ function BasicRating({rating}) {
   
     return (
       <Box
-        sx={{
-          '& > legend': { mt: 1 },
-        }}
-      >
+      sx={{
+      '& > legend': { mt: 1 },
+      }}>
         <Typography component="legend">별점</Typography>
         <Rating name="read-only" value={rating} readOnly />
       </Box>
     );
   }
-
-export const storeInfo = [
-    {
-      "name": "BBQ 상암점",
-      "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
-      "phoneNumber": "02-3151-9988",
-      "category": "치킨",
-      "rating": 4.5,
-      "menu": {
-        "menu": [
-          {
-            "menuName": "유니짜장",
-            "price": 8000
-          },
-          {
-            "menuName": "삼선짬뽕",
-            "price": 10000
-          },
-          {
-            "menuName": "간짜장",
-            "price": 10000
-          },
-          {
-            "menuName": "수제 군만두",
-            "price": 10000
-          }
-        ]
-      }
-    },
-    {
-        "name": "개미집 상암점",
-        "address": "서울 마포구 월드컵북로 396 누리꿈스퀘어 공동제작센터 2층",
-        "phoneNumber": "02-3152-0418",
-        "category": "Korean",
-        "rating": 4.0,
-        "menu": {
-          "menu": [
-            {
-              "menuName": "낙지볶음",
-              "price": 11000
-            },
-            {
-              "menuName": "낙곱새 볶음",
-              "price": 13000
-            },
-            {
-              "menuName": "낙곱 볶음",
-              "price": 10000
-            },
-          ]
-        }
-      },
-      {
-        "name": "김영섭 초밥",
-        "address": "서울 마포구 월드컵북로 352-18",
-        "phoneNumber": "02-3152-0900",
-        "category": "Japanese",
-        "rating": 5.0,
-        "menu": {
-          "menu": [
-            {
-              "menuName": "김영섭 초밥",
-              "price": 21900
-            },
-            {
-              "menuName": "모둠초밥",
-              "price": 26000
-            },
-            {
-              "menuName": "특선초밥",
-              "price": 32000
-            },
-            {
-              "menuName": "달인 SET",
-              "price": 48000
-            }
-          ]
-        }
-      },
-      {
-        "name": "뚜띠쿠치나 상암점",
-        "address": "서울 마포구 월드컵북로 400 한국영상자료원 1층 A111호",
-        "phoneNumber": "0507-1335-0242",
-        "category": "Western",
-        "rating": 3.0,
-        "menu": {
-          "menu": [
-            {
-              "menuName": "고르곤졸라 피자",
-              "price": 17900
-            },
-            {
-              "menuName": "시그니처 안심 스테이크",
-              "price": 35000
-            },
-            {
-              "menuName": "크림 파스타",
-              "price": 18000
-            },
-            {
-              "menuName": "닭가슴살 샐러드",
-              "price": 15000
-            }
-          ]
-        }
-      },
-      {
-        "name": "푸차이",
-        "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
-        "phoneNumber": "02-3151-9988",
-        "category": "Chinese",
-        "rating": 4.5,
-        "menu": {
-          "menu": [
-            {
-              "menuName": "유니짜장",
-              "price": 8000
-            },
-            {
-              "menuName": "삼선짬뽕",
-              "price": 10000
-            },
-            {
-              "menuName": "간짜장",
-              "price": 10000
-            },
-            {
-              "menuName": "수제 군만두",
-              "price": 10000
-            }
-          ]
-        }
-      },
-      {
-          "name": "개미집 상암점",
-          "address": "서울 마포구 월드컵북로 396 누리꿈스퀘어 공동제작센터 2층",
-          "phoneNumber": "02-3152-0418",
-          "category": "Korean",
-          "rating": 4.0,
-          "menu": {
-            "menu": [
-              {
-                "menuName": "낙지볶음",
-                "price": 11000
-              },
-              {
-                "menuName": "낙곱새 볶음",
-                "price": 13000
-              },
-              {
-                "menuName": "낙곱 볶음",
-                "price": 10000
-              },
-            ]
-          }
-        },
-        {
-          "name": "김영섭 초밥",
-          "address": "서울 마포구 월드컵북로 352-18",
-          "phoneNumber": "02-3152-0900",
-          "category": "Japanese",
-          "rating": 5.0,
-          "menu": {
-            "menu": [
-              {
-                "menuName": "김영섭 초밥",
-                "price": 21900
-              },
-              {
-                "menuName": "모둠초밥",
-                "price": 26000
-              },
-              {
-                "menuName": "특선초밥",
-                "price": 32000
-              },
-              {
-                "menuName": "달인 SET",
-                "price": 48000
-              }
-            ]
-          }
-        },
-        {
-          "name": "뚜띠쿠치나 상암점",
-          "address": "서울 마포구 월드컵북로 400 한국영상자료원 1층 A111호",
-          "phoneNumber": "0507-1335-0242",
-          "category": "Western",
-          "rating": 3.0,
-          "menu": {
-            "menu": [
-              {
-                "menuName": "고르곤졸라 피자",
-                "price": 17900
-              },
-              {
-                "menuName": "시그니처 안심 스테이크",
-                "price": 35000
-              },
-              {
-                "menuName": "크림 파스타",
-                "price": 18000
-              },
-              {
-                "menuName": "닭가슴살 샐러드",
-                "price": 15000
-              }
-            ]
-          }
-        },
-        {
-          "name": "푸차이",
-          "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
-          "phoneNumber": "02-3151-9988",
-          "category": "Chinese",
-          "rating": 4.5,
-          "menu": {
-            "menu": [
-              {
-                "menuName": "유니짜장",
-                "price": 8000
-              },
-              {
-                "menuName": "삼선짬뽕",
-                "price": 10000
-              },
-              {
-                "menuName": "간짜장",
-                "price": 10000
-              },
-              {
-                "menuName": "수제 군만두",
-                "price": 10000
-              }
-            ]
-          }
-        },
-        {
-            "name": "개미집 상암점",
-            "address": "서울 마포구 월드컵북로 396 누리꿈스퀘어 공동제작센터 2층",
-            "phoneNumber": "02-3152-0418",
-            "category": "Korean",
-            "rating": 4.0,
-            "menu": {
-              "menu": [
-                {
-                  "menuName": "낙지볶음",
-                  "price": 11000
-                },
-                {
-                  "menuName": "낙곱새 볶음",
-                  "price": 13000
-                },
-                {
-                  "menuName": "낙곱 볶음",
-                  "price": 10000
-                },
-              ]
-            }
-          },
-          {
-            "name": "김영섭 초밥",
-            "address": "서울 마포구 월드컵북로 352-18",
-            "phoneNumber": "02-3152-0900",
-            "category": "Japanese",
-            "rating": 5.0,
-            "menu": {
-              "menu": [
-                {
-                  "menuName": "김영섭 초밥",
-                  "price": 21900
-                },
-                {
-                  "menuName": "모둠초밥",
-                  "price": 26000
-                },
-                {
-                  "menuName": "특선초밥",
-                  "price": 32000
-                },
-                {
-                  "menuName": "달인 SET",
-                  "price": 48000
-                }
-              ]
-            }
-          },
-          {
-            "name": "뚜띠쿠치나 상암점",
-            "address": "서울 마포구 월드컵북로 400 한국영상자료원 1층 A111호",
-            "phoneNumber": "0507-1335-0242",
-            "category": "Western",
-            "rating": 3.0,
-            "menu": {
-              "menu": [
-                {
-                  "menuName": "고르곤졸라 피자",
-                  "price": 17900
-                },
-                {
-                  "menuName": "시그니처 안심 스테이크",
-                  "price": 35000
-                },
-                {
-                  "menuName": "크림 파스타",
-                  "price": 18000
-                },
-                {
-                  "menuName": "닭가슴살 샐러드",
-                  "price": 15000
-                }
-              ]
-            }
-          },
-          {
-            "name": "푸차이",
-            "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
-            "phoneNumber": "02-3151-9988",
-            "category": "Chinese",
-            "rating": 4.5,
-            "menu": {
-              "menu": [
-                {
-                  "menuName": "유니짜장",
-                  "price": 8000
-                },
-                {
-                  "menuName": "삼선짬뽕",
-                  "price": 10000
-                },
-                {
-                  "menuName": "간짜장",
-                  "price": 10000
-                },
-                {
-                  "menuName": "수제 군만두",
-                  "price": 10000
-                }
-              ]
-            }
-          },
-          {
-              "name": "개미집 상암점",
-              "address": "서울 마포구 월드컵북로 396 누리꿈스퀘어 공동제작센터 2층",
-              "phoneNumber": "02-3152-0418",
-              "category": "Korean",
-              "rating": 4.0,
-              "menu": {
-                "menu": [
-                  {
-                    "menuName": "낙지볶음",
-                    "price": 11000
-                  },
-                  {
-                    "menuName": "낙곱새 볶음",
-                    "price": 13000
-                  },
-                  {
-                    "menuName": "낙곱 볶음",
-                    "price": 10000
-                  },
-                ]
-              }
-            },
-            {
-              "name": "김영섭 초밥",
-              "address": "서울 마포구 월드컵북로 352-18",
-              "phoneNumber": "02-3152-0900",
-              "category": "Japanese",
-              "rating": 5.0,
-              "menu": {
-                "menu": [
-                  {
-                    "menuName": "김영섭 초밥",
-                    "price": 21900
-                  },
-                  {
-                    "menuName": "모둠초밥",
-                    "price": 26000
-                  },
-                  {
-                    "menuName": "특선초밥",
-                    "price": 32000
-                  },
-                  {
-                    "menuName": "달인 SET",
-                    "price": 48000
-                  }
-                ]
-              }
-            },
-            {
-              "name": "뚜띠쿠치나 상암점",
-              "address": "서울 마포구 월드컵북로 400 한국영상자료원 1층 A111호",
-              "phoneNumber": "0507-1335-0242",
-              "category": "Western",
-              "rating": 3.0,
-              "menu": {
-                "menu": [
-                  {
-                    "menuName": "고르곤졸라 피자",
-                    "price": 17900
-                  },
-                  {
-                    "menuName": "시그니처 안심 스테이크",
-                    "price": 35000
-                  },
-                  {
-                    "menuName": "크림 파스타",
-                    "price": 18000
-                  },
-                  {
-                    "menuName": "닭가슴살 샐러드",
-                    "price": 15000
-                  }
-                ]
-              }
-            },
-            {
-              "name": "푸차이",
-              "address": "서울 마포구 성암로 189 중소기업DMC타워 2층",
-              "phoneNumber": "02-3151-9988",
-              "category": "Chinese",
-              "rating": 4.5,
-              "menu": {
-                "menu": [
-                  {
-                    "menuName": "유니짜장",
-                    "price": 8000
-                  },
-                  {
-                    "menuName": "삼선짬뽕",
-                    "price": 10000
-                  },
-                  {
-                    "menuName": "간짜장",
-                    "price": 10000
-                  },
-                  {
-                    "menuName": "수제 군만두",
-                    "price": 10000
-                  }
-                ]
-              }
-            },
-            {
-                "name": "개미집 상암점",
-                "address": "서울 마포구 월드컵북로 396 누리꿈스퀘어 공동제작센터 2층",
-                "phoneNumber": "02-3152-0418",
-                "category": "Korean",
-                "rating": 4.0,
-                "menu": {
-                  "menu": [
-                    {
-                      "menuName": "낙지볶음",
-                      "price": 11000
-                    },
-                    {
-                      "menuName": "낙곱새 볶음",
-                      "price": 13000
-                    },
-                    {
-                      "menuName": "낙곱 볶음",
-                      "price": 10000
-                    },
-                  ]
-                }
-              },
-              {
-                "name": "김영섭 초밥",
-                "address": "서울 마포구 월드컵북로 352-18",
-                "phoneNumber": "02-3152-0900",
-                "category": "Japanese",
-                "rating": 5.0,
-                "menu": {
-                  "menu": [
-                    {
-                      "menuName": "김영섭 초밥",
-                      "price": 21900
-                    },
-                    {
-                      "menuName": "모둠초밥",
-                      "price": 26000
-                    },
-                    {
-                      "menuName": "특선초밥",
-                      "price": 32000
-                    },
-                    {
-                      "menuName": "달인 SET",
-                      "price": 48000
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "뚜띠쿠치나 상암점",
-                "address": "서울 마포구 월드컵북로 400 한국영상자료원 1층 A111호",
-                "phoneNumber": "0507-1335-0242",
-                "category": "Western",
-                "rating": 3.0,
-                "menu": {
-                  "menu": [
-                    {
-                      "menuName": "고르곤졸라 피자",
-                      "price": 17900
-                    },
-                    {
-                      "menuName": "시그니처 안심 스테이크",
-                      "price": 35000
-                    },
-                    {
-                      "menuName": "크림 파스타",
-                      "price": 18000
-                    },
-                    {
-                      "menuName": "닭가슴살 샐러드",
-                      "price": 15000
-                    }
-                  ]
-                }
-              }
-  ]
