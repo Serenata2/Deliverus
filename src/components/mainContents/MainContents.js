@@ -9,6 +9,7 @@ import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {Box, Button} from "@mui/material";
 import Stack from "@mui/material/Stack";
+import {useQuery} from "@tanstack/react-query";
 
 const MainContents = () => {
     const context = useContext(UserContext);
@@ -31,6 +32,42 @@ const MainContents = () => {
             state: restInfoList
         })
     }
+
+    // // react-query 예제 테스트
+    // const {isLoading, error, queryData} = useQuery(["paryList"], () => {
+    //      fetch(`${API.PARTY_ALL}`, {
+    //         method : "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         credentials: "include",
+    //         body: JSON.stringify({
+    //             latitude: userPos.lat,
+    //             longitude: userPos.lng
+    //         })
+    //     })
+    //         .then((respones) => {
+    //             status.handlePartyResponse(respones.status);
+    //             return respones.json();
+    //         })
+    //         .then((data) => {
+    //             console.log("Respones Query Data from PARTY LIST API : ", data);
+    //             return data;
+    //         })
+    //         .catch((error) => {
+    //             // 로그인 만료 에러인 경우 로그아웃 실행
+    //             if (error.name === "LoginExpirationError") {
+    //                 console.log(`${error.name} : ${error.message}`);
+    //             }
+    //             console.log(`${error.name} : ${error.message}`);
+    //             return error;
+    //         });
+    // }, {
+    //     refetchOnWindowFocus : true,
+    //     refetchInterval: 5000,
+    //     refetchIntervalInBackground: true,
+    //     retry : 0
+    // })
 
     useEffect(() => {
         setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
@@ -94,6 +131,7 @@ const MainContents = () => {
 
     return (
         <div className={styles.mainContents_body}>
+            <Link to="/myPage/chat">채팅방</Link>
             <h2>안녕하세요 {username}님!</h2>
             <Box sx={{display: "flex", justifyContent: "flex-start"}}>
                 <h4>📌 {userPosAddr}</h4>
