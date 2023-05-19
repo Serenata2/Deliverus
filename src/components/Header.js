@@ -32,7 +32,7 @@ const Header = () => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ flexGrow: 1, fontWeight: 700 }}
+                sx={{ flexGrow: 1, fontWeight: 100, fontFamily: "var(--font-family-DoHyeon)"}}
               >
                 <div style={{display: "flex"}}>
                 <Link

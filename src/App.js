@@ -29,7 +29,7 @@ function App() {
   // });
 
   return (
-    <>
+    <div className='App'>
       <Header />
       <main>
         <Routes>
@@ -46,7 +46,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-    </>
+    </div>
   );
 }
 
