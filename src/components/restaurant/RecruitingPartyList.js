@@ -69,7 +69,7 @@ const RecruitingPartyList = (props) => {
     const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
 
     return (
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{ fontFamily: 'BMDOHYEON' }}>
             {recruitingPartyList.map((item, idx) => {
                 return (
                     <RecruitingPartyCard key={idx} propFunction={handleClickOpen} partyInfo={item}/>

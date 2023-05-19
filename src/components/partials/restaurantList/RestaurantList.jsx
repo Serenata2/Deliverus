@@ -50,6 +50,8 @@ export default function RestaurantList() {
                 name={item.name}
                 rating={item.rating}
                 id={item.restaurant_id}
+                category={item.category}
+                intro={item.intro}
                 key={idx}
               />
             );
@@ -61,24 +63,39 @@ export default function RestaurantList() {
     );
 }
 
-export function RestaurantCard ({ name, rating, id }) {
+export function RestaurantCard ({ name, rating, id, category, intro }) {
   const navigate = useNavigate();
   const handleClickStoreInfo = () => {
     navigate(`/restaurant/information/${id}`);
   }
+  let image = null;
+  if (!name) {
+      image = require(`../../../images/delivery-cat.png`);
+  } else {
+      try{
+          const currentCategory = category.replace("/", ",");
+          console.log(`../../../images/${currentCategory}/${name}.png`);
+          image = require(`../../../images/${currentCategory}/${name}.png`);
+      } catch(e){
+          console.log(e);
+          image = require(`../../../images/delivery-cat.png`);
+      }
+  }
     return (
-        <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
+        <Card variant="outlined" sx={{ display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
             <CardContent sx={{my: "auto", px: 0, pl: 1}}>
-                <Avatar>U</Avatar>
+                {/* <Avatar>U</Avatar> */}
+                <img src={image} alt='음식점 사진' style={{width: '120px', height: '120px'}} />
             </CardContent>
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1, ml: 2.5}}>
                 <CardContent>
                     <Typography variant="h5" component="div">
                         {name}
                     </Typography>
-                    <Typography fontSize='0.7rem' variant="body2">
-                        {/* <BasicRating 
-                        rating={rating}/> */}
+                    <Typography variant="p" component="div" mt={1.5}>
+                        {intro}
+                    </Typography>
+                    <Typography fontSize='1.0rem' variant="body2" mt={4}>
                         ⭐
                         {rating}
                     </Typography>
@@ -91,16 +108,3 @@ export function RestaurantCard ({ name, rating, id }) {
         </Card>
     );
 } 
-
-function BasicRating({rating}) {
-  
-    return (
-      <Box
-      sx={{
-      '& > legend': { mt: 1 },
-      }}>
-        <Typography component="legend">별점</Typography>
-        <Rating name="read-only" value={rating} readOnly />
-      </Box>
-    );
-  }

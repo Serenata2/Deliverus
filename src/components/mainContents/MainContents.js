@@ -116,7 +116,7 @@ const MainContents = () => {
                     <h4 className={styles.show_more} onClick={navToRestaurantList}>더보기</h4>
                 </div>
             </div>
-            <Stack spacing={3}>
+            <Stack>
             {restInfoList && restInfoList.map((items, idx) => {
                 if (idx < 5) {
                     return (
@@ -124,6 +124,8 @@ const MainContents = () => {
                             name={items.name}
                             rating={items.rating}
                             id={items.restaurant_id}
+                            category={items.category}
+                            intro={items.intro}
                             key={idx}
                         />
                     );
