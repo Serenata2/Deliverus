@@ -7,7 +7,7 @@ import {
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./store/UserContext";
 
@@ -77,7 +77,7 @@ const Header = () => {
                     방 만들기
                   </Link>
                   <Link
-                  to="/"
+                  to="/party/myPartyRoom"
                   style={{
                     textDecoration: "none",
                     background:"black",

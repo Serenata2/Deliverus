@@ -19,7 +19,7 @@ function PartyPositionSetting(props) {
     const [detailPos, setDetailPos] = useState("");
 
     // 원의 반경, 단위는 m
-    const radius = 500;
+    const radius = 3000;
 
     // 사용자가 위치를 설정했냐 확인하는 변수
     const [state, setState] = useState(false);

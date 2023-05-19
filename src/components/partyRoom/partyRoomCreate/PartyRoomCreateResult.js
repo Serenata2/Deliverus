@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import MenuCard from "../../restaurant/MenuCard";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import {Box} from "@mui/material";
 
 // 파티방을 만들 때 설정 사항들을 최종적으로 보여주는 컴퍼넌트입니다.
 function PartyRoomCrateResult(props) {
@@ -24,10 +25,12 @@ function PartyRoomCrateResult(props) {
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 도로명 주소 : {props.partyInfo.pickUpAddress}
             </Typography>
-            <KakaoMapStore
-                lat={props.partyInfo.latitude}
-                lng={props.partyInfo.longitude}
-            />
+            <Box sx={{width :"55vh", height: "55vh"}}>
+                <KakaoMapStore
+                    lat={props.partyInfo.latitude}
+                    lng={props.partyInfo.longitude}
+                />
+            </Box>
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 상세 주소 : {props.detailPos}
             </Typography>
