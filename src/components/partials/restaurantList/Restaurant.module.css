@@ -4,7 +4,7 @@
 }
 
 .list_all {
-    border: 1px solid lightgrey;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     padding: 8px 18px;
     font-size: 20px;
     text-align: center;
@@ -14,7 +14,8 @@
 }
 
 .list_all:hover {
-    background-color: lightgrey;
+    background-color: #E42020;
+    color: white;
 }
 
 .list_category_wrapper {
@@ -25,7 +26,7 @@
 }
 
 .list_category {
-    border: 1px solid lightgrey;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     padding: 8px 18px;
     font-size: 20px;
     border-radius: 8px;
@@ -34,7 +35,8 @@
 }
 
 .list_category:hover {
-    background-color: lightgrey;
+    background-color: #E42020;
+    color: white;
 }
 
 .list_location_txt {

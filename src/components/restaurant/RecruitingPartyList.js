@@ -19,6 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 // prop으로 파티방 정보 리스트, 메뉴 리스트를 받습니다.
 const RecruitingPartyList = (props) => {
     const navigate = useNavigate();
+    console.log(props);
 
     // 파티방 정보 리스트
     const recruitingPartyList = props.partyList;
@@ -68,7 +69,7 @@ const RecruitingPartyList = (props) => {
     const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
 
     return (
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{ fontFamily: 'BMDOHYEON' }}>
             {recruitingPartyList.map((item, idx) => {
                 return (
                     <RecruitingPartyCard key={idx} propFunction={handleClickOpen} partyInfo={item}/>
