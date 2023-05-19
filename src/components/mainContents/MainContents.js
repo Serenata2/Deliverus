@@ -36,7 +36,7 @@ const MainContents = () => {
         setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
 
         // 처음 화면이 띄워졌을 때 모든 인접 파티방 리스트를 받아옵니다.
-        fetch(`${API.PARTY_LOCATION}`, {
+        fetch(`${API.PARTY_ALL}`, {
             method : "POST",
             headers: {
                 "Content-Type": "application/json",

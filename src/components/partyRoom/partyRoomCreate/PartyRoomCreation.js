@@ -80,7 +80,7 @@ function PartyRoomCreation() {
     };
 
     const handleSubmit = () => {
-        alert("모든 작업 끝!");
+        alert("파티방 생성!");
         const finalPartyInfo = {...partyInfo};
         finalPartyInfo.host = username;
         // pickUpAddress 프러퍼티에서 '|' 문자을 이용해 픽업장소의 도로명 주소와 상세 설명을 나눕니다.

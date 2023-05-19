@@ -11,6 +11,7 @@ import PartyRoomCreation from "./components/partyRoom/partyRoomCreate/PartyRoomC
 import DeliverusList from './components/DeliverusList/DeliverusList';
 import RestaurantList from './components/partials/restaurantList/RestaurantList';
 import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/PersonalMenuSelecting";
+import MyPartyRoom from "./components/partyRoom/mainPartyRoom/MyPartyRoom";
 
 function App() {
   const context = useContext(UserContext);
@@ -39,6 +40,7 @@ function App() {
           <Route path="/party/list" element={<DeliverusList />} />
           <Route path="/party/creation" element={<PartyRoomCreation />} />
           <Route path="/party/enter" element={<PersonalMenuSelecting />} />
+          <Route path="/party/myPartyRoom" element={<MyPartyRoom />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

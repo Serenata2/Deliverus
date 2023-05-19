@@ -19,8 +19,8 @@ export default function KakaoMapStore({ lat, lng }) {
         
     return (
     <div id='map' style={{
-        width: '582px',
-        height: '270px'
+        width: '100%',
+        height: "100%"
     }}></div>
     );
 }

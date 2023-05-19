@@ -20,8 +20,6 @@ function PersonalMenuSelecting() {
     const restaurantId = location.state.resId;
     const partyId = location.state.partyId;
 
-    console.log("party id : ", partyId);
-
     // 서버로부터 가게 정보를 받을 변수
     const [restaurant, setRestaurant] = useState({
         menu: {
@@ -37,7 +35,6 @@ function PersonalMenuSelecting() {
 
     // 각 메뉴에 대한 수량을 담은 리스트
     const [countList, setCountList] = useState([0]);
-
 
     // 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
@@ -73,8 +70,6 @@ function PersonalMenuSelecting() {
     }, []);
 
     const handleNext = () => {
-        alert("파티방 화면으로 이동!");
-
         // 사용자가 선택한 메뉴에 대한 정보 담기
         const orderList = [];
         restaurant.menu.menu.map((item, index) => {
@@ -116,6 +111,8 @@ function PersonalMenuSelecting() {
                     handleLogOut();
                 }
                 console.log(`${error.name} : ${error.message}`);
+                // 마지막으로 메인 화면으로 이동
+                navigate("/");
             });
     };
 

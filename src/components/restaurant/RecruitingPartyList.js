@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
 import Dialog from "@mui/material/Dialog";
-import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import {Box, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Image from "mui-image";
 import KakaoMapStore from './KakaoMapStore';
 import Stack from "@mui/material/Stack";
@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 // 해당 가게 주문을 위해 모집 중인 파티방을 보여주는 컴포넌트입니다.
 // prop으로 파티방 정보 리스트, 메뉴 리스트를 받습니다.
-    const RecruitingPartyList = (props) => {
+const RecruitingPartyList = (props) => {
     const navigate = useNavigate();
 
     // 파티방 정보 리스트
@@ -49,8 +49,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     const handleEnterMenuSelecting = () => {
         navigate("/party/enter", {
             state: {
-                resId : restaurantId,
-                partyId : partyInfo.partyId
+                resId: restaurantId,
+                partyId: partyInfo.partyId
             }
         })
         setOpen(false);
@@ -61,7 +61,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         category: "",
         latitude: 0,
         longitude: 0,
-        restaurantName : "",
+        restaurantName: "",
         restaurantId: 0
     });
 
@@ -69,11 +69,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
     return (
         <Stack spacing={3}>
-        {recruitingPartyList.map((item, idx) => {
-        return (
-                <RecruitingPartyCard key={idx} propFunction={handleClickOpen} partyInfo={item}/>
-        );
-        })}
+            {recruitingPartyList.map((item, idx) => {
+                return (
+                    <RecruitingPartyCard key={idx} propFunction={handleClickOpen} partyInfo={item}/>
+                );
+            })}
             <Dialog open={open}
                     onClose={handleClose}
                     TransitionComponent={Transition}
@@ -81,7 +81,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                     fullWidth={true}
                     maxWidth="sm">
                 <DialogTitle>가게 정보 확인</DialogTitle>
-                <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
+                <DialogContent sx={{border: 1, borderRadius: '16px', mx: 1}}>
                     <Image src={image}
                            height="150px"
                            widht="150px"
@@ -91,13 +91,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                     <Typography align="center" component="h5" variant="h5">
                         {partyInfo.partyName}
                     </Typography>
-                </DialogContent >
+                </DialogContent>
                 <DialogTitle>픽업 위치 확인</DialogTitle>
-                <DialogContent sx={{border: 1, borderRadius: '16px', mx:1}}>
-                    <KakaoMapStore 
-                    lat={partyInfo.latitude}
-                    lng={partyInfo.longitude}
-                    />
+                <DialogContent sx={{border: 1, borderRadius: '16px', mx: 1, p:0}}>
+                    <Box sx={{width :"100%", height: "500px"}}>
+                        <KakaoMapStore
+                            lat={partyInfo.latitude}
+                            lng={partyInfo.longitude}
+                        />
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEnterMenuSelecting}>딜리버스 참가하기</Button>

@@ -8,15 +8,22 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
+import {useContext} from "react";
+import {UserContext} from "../store/UserContext";
+import LetterAvatar from "../ui/LetterAvatar";
 
 // 모듈화를 진행한 컴포넌트입니다.
 // 하나의 파티방의 정보를 담은 컴포넌트입니다,
 function RecruitingPartyCard(props) {
+    const context = useContext(UserContext);
+    const {userState} = context;
+    const {username} = userState;
+
     const recruitPartyInfo = props.partyInfo;
     return (
         <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
             <CardContent sx={{my: "auto", px: 0, pl: 1}}>
-                <AccountCircle />
+                <LetterAvatar name={username}/>
             </CardContent>
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
                 <CardContent sx={{ml: 3}}>
@@ -32,7 +39,7 @@ function RecruitingPartyCard(props) {
                         {recruitPartyInfo.currentMemberNum}/{recruitPartyInfo.memberNum}
                     </Typography>
                     <Typography variant="body2" style={{fontSize: "16px"}}>
-                        {recruitPartyInfo.distance}
+                        {Math.round(recruitPartyInfo.distance)}m
                     </Typography>
                     <Button size="small" onClick={(e) => {props.propFunction(recruitPartyInfo, e)}} style={{fontSize: "16px"}}>
                         참여하기</Button>
