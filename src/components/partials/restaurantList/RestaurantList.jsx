@@ -74,7 +74,7 @@ export function RestaurantCard ({ name, rating, id, category, intro }) {
   } else {
       try{
           const currentCategory = category.replace("/", ",");
-          console.log(`../../../images/${currentCategory}/${name}.png`);
+          // console.log(`../../../images/${currentCategory}/${name}.png`);
           image = require(`../../../images/${currentCategory}/${name}.png`);
       } catch(e){
           console.log(e);
