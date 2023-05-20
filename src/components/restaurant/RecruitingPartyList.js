@@ -19,7 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 // prop으로 파티방 정보 리스트, 메뉴 리스트를 받습니다.
 const RecruitingPartyList = (props) => {
     const navigate = useNavigate();
-    console.log(props);
+    //console.log(props);
 
     // 파티방 정보 리스트
     const recruitingPartyList = props.partyList;

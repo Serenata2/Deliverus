@@ -1,14 +1,14 @@
 import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, {Fragment, useContext, useEffect, useState} from "react";
-import KakaoMapStore from "../../restaurant/KakaoMapStore";
-import {API} from "../../../utils/config";
-import * as status from "../../../utils/status";
-import {UserContext} from "../../store/UserContext";
+import KakaoMapStore from "../restaurant/KakaoMapStore";
+import {API} from "../../utils/config";
+import * as status from "../../utils/status";
+import {UserContext} from "../store/UserContext";
 import {useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from '@mui/material/CircularProgress';
-import LetterAvatar from "../../ui/LetterAvatar";
+import LetterAvatar from "../ui/LetterAvatar";
 
 // 두 개의 위도, 경도 사이의 거리를 미터 단위로 반환하는 함수
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -101,6 +101,7 @@ function MyPartyRoom() {
                 }
                 // 사용자가 속해있는 파티방이 없는 경우 main화면으로 이동
                 else {
+                    alert("속해 있는 파티방이 없습니다ㅠ");
                     navigate("/");
                 }
             })
