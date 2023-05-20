@@ -13,7 +13,7 @@ function ChatLog(props) {
     const chatLogList = props.list;
     const userName = props.name;
     return (
-        <List ref={scrollRef} sx={{height: "85vh", overflowY: "auto"}}>
+        <List ref={scrollRef} sx={{height: "75vh", overflowY: "auto"}}>
             {chatLogList.map((item, idx) => {
                 return (
                     <ListItem key={idx}>
