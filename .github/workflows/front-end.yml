@@ -21,6 +21,7 @@ jobs:
         run: |
           echo "REACT_APP_KAKAO_MAP_API_KEY=$REACT_APP_KAKAO_MAP_API_KEY" >> .env.production
           echo "REACT_APP_SERVER_IP=$REACT_APP_SERVER_IP" >> .env.production
+          echo "REACT_APP_CHAT_IP=$REACT_APP_CHAT_IP" >> .env.production
         env:
           REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
           REACT_APP_SERVER_IP: ${{ secrets.REACT_APP_SERVER_IP }}
