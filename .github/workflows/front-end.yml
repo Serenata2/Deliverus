@@ -24,6 +24,7 @@ jobs:
         env:
           REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
           REACT_APP_SERVER_IP: ${{ secrets.REACT_APP_SERVER_IP }}
+          REACT_APP_CHAT_IP: ${{ secrets.REACT_APP_CHAT_IP }}
 
       - name: Cache node modules      # node modules 캐싱
         uses: actions/cache@v3
