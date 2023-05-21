@@ -5,10 +5,21 @@ import KakaoMapStore from "../restaurant/KakaoMapStore";
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from '@mui/material/CircularProgress';
 import LetterAvatar from "../ui/LetterAvatar";
+
+// Get PARY API에서 내가 선택한 메뉴를 찾는 함수입니다.
+function findMyMenu(partyMembers, userName) {
+    partyMembers.forEach((element) => {
+        // partyMembers 중에서 내 이름을 찾기
+        if(element.nickname === userName) {
+            return element.order;
+        }
+    })
+    return null;
+}
 
 // 두 개의 위도, 경도 사이의 거리를 미터 단위로 반환하는 함수
 function calculateDistance(lat1, lon1, lat2, lon2) {
