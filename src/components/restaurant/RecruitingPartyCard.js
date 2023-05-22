@@ -23,7 +23,7 @@ function RecruitingPartyCard(props) {
     return (
         <Card variant="outlined" sx={{display: "flex", p: 1.5}}>
             <CardContent sx={{my: "auto", px: 0, pl: 1}}>
-                <LetterAvatar name={username}/>
+                <LetterAvatar name={props.partyInfo.host}/>
             </CardContent>
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 1}}>
                 <CardContent sx={{ml: 3}}>

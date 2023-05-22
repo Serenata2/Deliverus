@@ -10,7 +10,7 @@ import React from 'react'
 import Rating from '@mui/material/Rating';
 import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
 const restaurantCategories = ["한식", "분식", "치킨", "아시안/양식", "족발/보쌈", "돈까스/일식", "카페/디저트", "찜탕", "패스트푸드", "피자"];
 
@@ -18,7 +18,7 @@ export default function RestaurantList() {
   
     // 가게 정보(나중에 백엔드에서 받아와서 state로 관리할 거임.)
     const { state } = useLocation();
-    const [currentCategories, setCurrentCategories] = useState('all');
+    const [currentCategories, setCurrentCategories] = useState(state.category);
     const handleCategories = (e) => {
       const category = e.target.textContent;
       setCurrentCategories(category);
@@ -39,8 +39,8 @@ export default function RestaurantList() {
             <span className={styles.list_location_txt}>서울시 상암동</span>
           </div>
           <div className={styles.list_card}>
-          {state.map((item, idx) => {
-            console.log(item.category);
+          {state.restInfoList.map((item, idx) => {
+            //console.log(item.category);
           if (
             currentCategories === 'all' ||
             currentCategories === item.category
