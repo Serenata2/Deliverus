@@ -14,10 +14,24 @@ import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {Fragment} from "react";
 import ListSubheader from '@mui/material/ListSubheader';
+import {useNavigate} from "react-router-dom";
 
 export default function RecommendationList(props) {
     const iconList = [<LooksOneOutlinedIcon/>, <LooksTwoOutlinedIcon/>, <Looks3OutlinedIcon/>, <Looks4OutlinedIcon/>, <Looks5OutlinedIcon/>];
     const isMobile = useMediaQuery("(max-width: 1400px)");
+    const navigate = useNavigate();
+
+    // 추천 카테고리를 선택했을 때 callback 함수
+    const handleClick = (event) => {
+        event.preventDefault();
+        console.log(event.target.textContent);
+        navigate(`/restaurant/list`, {
+            state: {
+                restInfoList : props.restInfoList,
+                category : event.target.textContent
+            }
+        })
+    }
 
     // 모바일 화면인 경우
     if(isMobile) {
@@ -27,7 +41,7 @@ export default function RecommendationList(props) {
             <Box align="center" sx={{display: "flex", alignItem: "row", justifyContent: "space-between", m: 4}}>
                     {props.list.map((item, idx) => {
                         if(idx <=5) {
-                            return (<Card key={idx}>
+                            return (<Card key={idx} onClick={handleClick}>
                                     <CardActionArea>
                                         <Typography gutterBottom variant="h6" component="div" sx={{m: 1}}>
                                             {item}
@@ -55,7 +69,7 @@ export default function RecommendationList(props) {
             >
                 {props.list.map((item, idx) => {
                     if(idx <=5){
-                        return (<ListItem key={idx}>
+                        return (<ListItem onClick={handleClick} key={idx}>
                             <ListItemButton>
                                 <ListItemIcon>
                                     {iconList[idx]}

@@ -16,4 +16,5 @@ export const API = {
     PARTY_MEMBER : `${BASE_URL}/api/party/member`,
     PARTY_DELETE : `${BASE_URL}/api/party/member`,
     PARTY_RESTAURANT : `${BASE_URL}/api/party/restaurant`,
+    AI_RECOMMEND : `${BASE_URL}/api/recommend`,
 }

@@ -80,7 +80,6 @@ function PartyRoomCreation() {
     };
 
     const handleSubmit = () => {
-        alert("파티방 생성!");
         const finalPartyInfo = {...partyInfo};
         finalPartyInfo.host = username;
         // pickUpAddress 프러퍼티에서 '|' 문자을 이용해 픽업장소의 도로명 주소와 상세 설명을 나눕니다.
@@ -90,7 +89,7 @@ function PartyRoomCreation() {
         for (let i = 0; i < countList.length; i++) {
             if (countList[i] > 0) {
                 tempOrder.push({
-                    name: restaurantInfo.menu.menu[i].menuName,
+                    menuName: restaurantInfo.menu.menu[i].menuName,
                     price: restaurantInfo.menu.menu[i].price,
                     num: countList[i]
                 })
@@ -113,6 +112,8 @@ function PartyRoomCreation() {
             })
             .then((data) => {
                 console.log("Respones Data from PARTY API : ", data);
+                // MyPage에서 나의 파티방 페이지로 이동
+                navigate("/myPage/2");
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
@@ -120,8 +121,11 @@ function PartyRoomCreation() {
                     console.log(`${error.name} : ${error.message}`);
                 }
                 console.log(`${error.name} : ${error.message}`);
+
+                alert("파티방 생성이 거절되었습니다!");
+                //에러 시 메인페이지로 이동
+                navigate("/");
             });
-        navigate("/");
     };
 
     return (

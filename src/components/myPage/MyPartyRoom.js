@@ -5,10 +5,26 @@ import KakaoMapStore from "../restaurant/KakaoMapStore";
 import {API} from "../../utils/config";
 import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from '@mui/material/CircularProgress';
 import LetterAvatar from "../ui/LetterAvatar";
+import Grid from "@mui/material/Grid";
+import MenuCard from "../restaurant/MenuCard";
+import Stack from "@mui/material/Stack";
+
+// Get PARY API에서 내가 선택한 메뉴를 찾는 함수입니다.
+function findMyMenu(partyMembers, userName) {
+
+    // for문을 돌면서 내 이름과 같은 Member 찾기
+    for(let i = 0; i < partyMembers.length; i++) {
+        if(partyMembers[i].nickname === userName) {
+            return partyMembers[i].order;
+        }
+    }
+
+    return [{menuName: "", price: 0, num: 0}];
+}
 
 // 두 개의 위도, 경도 사이의 거리를 미터 단위로 반환하는 함수
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -38,7 +54,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 
-
 // 먼저 서버에게 사용자가 참여중인 파티방 id를 달라고 API 요청을 한다.
 // 파티방 id가 존재하면 그 id로 서버에게 파티방 정보를 달라고 합니다.
 function MyPartyRoom() {
@@ -53,6 +68,9 @@ function MyPartyRoom() {
 
     // 내가 속해 있는 파티방 정보를 가지고 있는 변수
     const [myPartyInfo, setMyPartyInfo] = useState(null);
+
+    // 내가 선택한 메뉴에 대한 정보를 가지고 있는 변수
+    const [myMenu, setMyMenu] = useState(null);
 
     const handleExitPartyRoom = () => {
         setMyPartyInfo(null);
@@ -130,6 +148,9 @@ function MyPartyRoom() {
                 })
                 .then((data) => {
                     console.log("Respones Data from PARTY API : ", data);
+                    const _myMenu = findMyMenu(data.partyMembers, username);
+                    console.log("reuslt : " , _myMenu);
+                    setMyMenu(_myMenu);
                     setMyPartyInfo(data);
                 })
                 .catch((error) => {
@@ -183,6 +204,25 @@ function MyPartyRoom() {
                     );
                 })}
             </Box>
+            <Stack spacing={3} sx={{width: "80%"}}>
+                {myMenu.map((item, index) => {
+                        return (<Grid container direction="row"
+                                      justifyContent="center"
+                                      alignItems="center"
+                                      key={index}>
+                            <Grid item xs={11}>
+                                <MenuCard key={index} menu={item}/>
+                            </Grid>
+                            <Grid item xs={1} sx={{pl: 1}}>
+                                <Button variant="outlined" disableRipple={true}>
+                                    {item.num}
+                                </Button>
+                            </Grid>
+                        </Grid>);
+                }
+                )}
+            </Stack>
+
             <Button
                 fullWidth
                 variant="contained"

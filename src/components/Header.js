@@ -77,7 +77,7 @@ const Header = () => {
                     방 만들기
                   </Link>
                   <Link
-                  to="myPage/myPartyRoom"
+                  to="/myPage/0"
                   style={{
                     textDecoration: "none",
                     background:"black",

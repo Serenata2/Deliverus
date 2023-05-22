@@ -14,7 +14,7 @@ function ChatLog(props) {
     const userName = props.name;
     return (
         <List ref={scrollRef} sx={{height: "75vh", overflowY: "auto"}}>
-            {chatLogList.map((item, idx) => {
+            {chatLogList.length !== 0 && chatLogList.map((item, idx) => {
                 return (
                     <ListItem key={idx}>
                         {userName === item.name ?
