@@ -75,7 +75,7 @@ function PersonalMenuSelecting() {
         restaurant.menu.menu.map((item, index) => {
             if(countList[index] > 0){
                 orderList.push({
-                    name : item.menuName,
+                    menuName : item.menuName,
                     price : item.price,
                     num : countList[index]
                 })
@@ -102,8 +102,8 @@ function PersonalMenuSelecting() {
             })
             .then((data) => {
                 console.log("Respones Data from Party Member API : ", data);
-                // 파티방 참가 API 호출 후 main 화면으로 이동
-                navigate("/");
+                // MyPage에서 나의 파티방 페이지로 이동
+                navigate("/myPage/2");
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
@@ -112,6 +112,7 @@ function PersonalMenuSelecting() {
                 }
                 console.log(`${error.name} : ${error.message}`);
                 // 마지막으로 메인 화면으로 이동
+                alert("파티방 입장이 거부되었습니다.");
                 navigate("/");
             });
     };
