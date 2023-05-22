@@ -1,7 +1,7 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link, Route, useNavigate} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {UserContext} from "../store/UserContext";
-import {RestaurantCard, storeInfo} from '../partials/restaurantList/RestaurantList';
+import RestaurantList, {RestaurantCard, storeInfo} from '../partials/restaurantList/RestaurantList';
 import RecruitingPartyList from '../restaurant/RecruitingPartyList';
 import RecommendationList from "../recommendation/RecommendationList";
 import styles from './MainContents.module.css'
@@ -13,7 +13,7 @@ import {useQuery} from "@tanstack/react-query";
 
 const MainContents = () => {
     const context = useContext(UserContext);
-    const {userState, handleChangeUserPos} = context;
+    const {userState, handleChangeUserPos, handleLogOut} = context;
     const {username, userPosAddr, userPos} = userState;
 
     // 딥러닝 기반 AI가 추천해주는 Top 5 음식
@@ -29,7 +29,10 @@ const MainContents = () => {
     // Restaurant List로 이동
     const navToRestaurantList = () => {
         navigate(`/restaurant/list`, {
-            state: restInfoList
+            state: {
+                restInfoList : restInfoList,
+                category : "all"
+            }
         })
     }
 
@@ -70,8 +73,6 @@ const MainContents = () => {
     // })
 
     useEffect(() => {
-        setRecommendList(["양식", "일식", "중식", "한식", "치킨"]);
-
         // 처음 화면이 띄워졌을 때 모든 인접 파티방 리스트를 받아옵니다.
         fetch(`${API.PARTY_ALL}`, {
             method : "POST",
@@ -96,6 +97,7 @@ const MainContents = () => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
                     console.log(`${error.name} : ${error.message}`);
+                    handleLogOut();
                 }
                 console.log(`${error.name} : ${error.message}`);
             });
@@ -124,21 +126,44 @@ const MainContents = () => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
                     console.log(`${error.name} : ${error.message}`);
+                    handleLogOut();
                 }
                 console.log(`${error.name} : ${error.message}`);
+            });
+
+        // AI 추천 카테고리를 서버로부터 가져옵니다.
+        fetch(`${API.AI_RECOMMEND}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+            .then((respones) => {
+                status.handleRecommendResponse(respones.status);
+                return respones.json();
+            })
+            .then((data) => {
+                console.log("Respones Data from RECOMMEND API : ", data);
+                setRecommendList([data.top1, data.top2, data.top3, data.top4, data.top5]);
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    handleLogOut();
+                }
+                console.log(`GET RECOMMEND API -> ${error.name} : ${error.message}`);
             });
     }, []);
 
     return (
         <div className={styles.mainContents_body}>
-            <Link to="/myPage/chat">채팅방</Link>
             <h2>안녕하세요 {username}님!</h2>
             <Box sx={{display: "flex", justifyContent: "flex-start"}}>
                 <h4>📌 {userPosAddr}</h4>
                 <Button
                     onClick={handleChangeUserPos} sx={{ml: 1.5}}>위치 바꾸기</Button>
             </Box>
-            {recommendList && <RecommendationList list={recommendList}/>}
+            {recommendList && <RecommendationList list={recommendList} restInfoList={restInfoList}/>}
             <div>
                 <div className={styles.mainContents_subTitle}>
                     <h3>
