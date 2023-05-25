@@ -60,13 +60,6 @@ function MyPositionSetting() {
         </Box>
         <Button size="medium" disabled={!state} variant="contained" onClick={submitUserPos}
          sx={{px: 10, mt: 3}}>Finish</Button>
-        <Snackbar
-            anchorOrigin={{ vertical: 'bottom',
-                horizontal: 'left'}}
-            open={state}
-            message="위치가 설정되었습니다!"
-            key='Finish'
-        />
     </Box>)
 }
 
