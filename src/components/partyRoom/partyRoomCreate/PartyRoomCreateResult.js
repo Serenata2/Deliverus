@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {Box} from "@mui/material";
 
+//
 // 파티방을 만들 때 설정 사항들을 최종적으로 보여주는 컴퍼넌트입니다.
 function PartyRoomCrateResult(props) {
     return (
