@@ -95,8 +95,8 @@ export default function PositionSettingMap(props) {
 
     return (
         <div id='map' style={{
-            width: '55vh',
-            height: '55vh'
+            width: '100%',
+            height: "100%"
         }}></div>
     )
 

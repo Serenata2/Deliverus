@@ -29,7 +29,7 @@ function MenuSelecting(props) {
                         <MenuCard key={index} menu={item}/>
                     </Grid>
                     <Grid item xs={1} sx={{pl : 1}}>
-                        <ButtonGroup>
+                        <ButtonGroup size="small">
                             <Button
                                 aria-label="reduce"
                                 onClick={() => {
