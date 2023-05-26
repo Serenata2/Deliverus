@@ -13,7 +13,6 @@ import {UserContext} from "../../store/UserContext";
 import PartyRoomCrateResult from "./PartyRoomCreateResult";
 import {API} from "../../../utils/config";
 import * as status from "../../../utils/status";
-import Paper from "@mui/material/Paper";
 
 // 파티방을 만드는 컴포넌트입니다.
 function PartyRoomCreation() {
@@ -114,7 +113,7 @@ function PartyRoomCreation() {
             .then((data) => {
                 console.log("Respones Data from PARTY API : ", data);
                 // MyPage에서 나의 파티방 페이지로 이동
-                navigate("/myPage/1");
+                navigate("/myPage/2");
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
@@ -138,18 +137,12 @@ function PartyRoomCreation() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minWidth: "md",
-                maxWidth: "md"
+                maxWidth: 'md'
             }}>
                 <Typography component="h1" variant="h4" sx={{my: 3}}>
                     Deliverus 파티방을 생성해 보세요!
                 </Typography>
-                <Paper elevation={1} sx={{
-                    display: "flex", flexDirection: "column", alignItems: "center", width: "100%",
-                    py: "10px"
-                }}>
-                    {componentSteps[activeStep]}
-                </Paper>
+                {componentSteps[activeStep]}
                 <Box sx={{width: "100%", mt: 3}}>
                     <Stepper activeStep={activeStep} sx={{mb: 5}}>
                         {labelSteps.map((label, inx) => {

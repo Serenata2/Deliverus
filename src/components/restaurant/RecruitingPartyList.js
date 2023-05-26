@@ -95,7 +95,7 @@ const RecruitingPartyList = (props) => {
                 </DialogContent>
                 <DialogTitle>픽업 위치 확인</DialogTitle>
                 <DialogContent sx={{border: 1, borderRadius: '16px', mx: 1, p:0}}>
-                    <Box sx={{width :"100%", height: "50vh"}}>
+                    <Box sx={{width :"100%", height: "500px"}}>
                         <KakaoMapStore
                             lat={partyInfo.latitude}
                             lng={partyInfo.longitude}

@@ -103,7 +103,7 @@ function PersonalMenuSelecting() {
             .then((data) => {
                 console.log("Respones Data from Party Member API : ", data);
                 // MyPage에서 나의 파티방 페이지로 이동
-                navigate("/myPage/1");
+                navigate("/myPage/2");
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행

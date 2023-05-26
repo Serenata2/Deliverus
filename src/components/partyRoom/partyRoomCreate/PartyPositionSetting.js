@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useState} from 'react';
+import React, { useContext, useState} from 'react';
 import PositionSettingMap from "../../postionSetting/PositionSettingMap"
 import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -10,10 +10,9 @@ function PartyPositionSetting(props) {
     // userState의 userPos가 null이 아니라면 그 값으로 초기화
     const initLatLng = (props.userPos === null) ? ({
         lat: 37.57600923748876,
-        lng: 126.9012721298886
-    }) : ({
-        lat: props.userPos.lat,
-        lng: props.userPos.lng
+        lng: 126.9012721298886}) : ({
+        lat : props.userPos.lat,
+        lng : props.userPos.lng
     });
 
     // 상세 픽업 장소를 담은 변수입니다.
@@ -44,16 +43,16 @@ function PartyPositionSetting(props) {
         props.setDetailPos(event.target.value);
     }
 
-    return (<Fragment>
+    return (<Box sx={{
+        m: 2, display: "flex", flexDirection: "column", alignItems: "center", py: 2
+    }}>
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             픽업할 위치를 설정해 주세요!
         </Typography>
-        <Box sx={{width: "80%", height: "50vh", border: 1}}>
-            <PositionSettingMap propFunction={handleClickPosEvent}
-                                initLatLng={initLatLng}
-                                resLatLng={props.resPos}
-                                radius={radius}/>
-        </Box>
+        <PositionSettingMap propFunction={handleClickPosEvent}
+                            initLatLng={initLatLng}
+                            resLatLng={props.resPos}
+                            radius={radius}/>
         <TextField id="standard-basic"
                    label="상세 위치를 기술해 주세요"
                    variant="standard"
@@ -61,7 +60,7 @@ function PartyPositionSetting(props) {
                    value={detailPos}
                    onChange={handleDetailPosInput}
                    sx={{mb: 5, width: "80%"}}/>
-    </Fragment>)
+    </Box>)
 }
 
 export default PartyPositionSetting;
