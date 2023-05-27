@@ -40,7 +40,7 @@ function PartyNameSetting(props) {
     // 파티방이 오픈되는 시간을 설정할 때 호출되는 함수
     const handleOpenTimeInput = (event) => {
         const tempPartyInfo = {...props.partyInfo};
-        tempPartyInfo.expireTime = (event.target.value);
+        tempPartyInfo.life = (event.target.value);
         props.setPartyInfo(tempPartyInfo);
     }
 

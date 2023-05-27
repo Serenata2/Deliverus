@@ -141,10 +141,41 @@ const handleRecommendResponse = (statusNum) => {
   }
 };
 
+/**
+ * Chat API 관련 Error 처리 함수
+ * @param statusNum Respond의 status 번호
+ */
+const handleChatResponse = (statusNum) => {
+  if (!checkStatus(statusNum)) {
+    const error = new Error("Error occurred.");
+
+    console.log(statusNum);
+    switch (statusNum) {
+        // 로그인 시간이 만료된 에러 처리
+      case 401:
+        error.message = "로그인 시간이 만료되었습니다.";
+        error.name = "LoginExpirationError";
+        break;
+
+      case 204:
+        error.message = "처음 연결한 경우입니다.";
+
+
+        // 기타 에러 처리
+      default:
+        error.message = `${statusNum} 오류`;
+        error.name = "UnkownError";
+    }
+
+    throw error;
+  }
+};
+
 export {
   handleLogInResponse,
   handleRegisterResponse,
   handleRestaurantResponse,
   handlePartyResponse,
-  handleRecommendResponse
+  handleRecommendResponse,
+  handleChatResponse
 };

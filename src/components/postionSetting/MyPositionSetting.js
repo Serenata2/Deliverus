@@ -49,7 +49,9 @@ function MyPositionSetting() {
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             Deliverus를 시작할 위치 설정!
         </Typography>
-        <PositionSettingMap propFunction={handleClickPosEvent} initLatLng={initLatLng}/>
+        <Box sx={{width :"100%", height: "55vh", minWidth: "md", maxWidth: "md", border: 1}}>
+            <PositionSettingMap propFunction={handleClickPosEvent} initLatLng={initLatLng}/>
+        </Box>
         <Box sx={{width: "100%", mt: 3}}>
 
             <Stepper alternativeLabel activeStep={1}>
@@ -60,13 +62,6 @@ function MyPositionSetting() {
         </Box>
         <Button size="medium" disabled={!state} variant="contained" onClick={submitUserPos}
          sx={{px: 10, mt: 3}}>Finish</Button>
-        <Snackbar
-            anchorOrigin={{ vertical: 'bottom',
-                horizontal: 'left'}}
-            open={state}
-            message="위치가 설정되었습니다!"
-            key='Finish'
-        />
     </Box>)
 }
 

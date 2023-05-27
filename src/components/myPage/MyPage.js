@@ -50,6 +50,7 @@ export default function MyPage() {
     const {userState, handleLogOut} = context;
     const {username} = userState;
 
+    // key값을 통해 페이지에서 어떤 컴포넌트를 보여줄 지 결정합니다.
     const { key } = useParams();
 
     const navigate = useNavigate();
@@ -108,19 +109,15 @@ export default function MyPage() {
                     value={value}
                     onChange={handleChange}
                     aria-label="Vertical tabs"
-                    sx={{borderRight: 1, borderColor: 'divider', width: "150px"}}
+                    sx={{borderRight: 1, borderColor: 'divider', width: "130px"}}
                 >
-                    <Tab label="내 정보" {...a11yProps(0)} />
-                    <Tab label="채팅방" {...a11yProps(1)} />
-                    <Tab label="내 파티방" {...a11yProps(2)} />
+                    <Tab label="채팅방" {...a11yProps(0)} />
+                    <Tab label="내 파티방" {...a11yProps(1)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <h3>개인 정보</h3>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
                     <Chat />
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={value} index={1}>
                     <MyPartyRoom />
                 </TabPanel>
             </Fragment>): (<CircularProgress/>)}
