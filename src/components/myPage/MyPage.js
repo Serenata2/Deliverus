@@ -12,6 +12,8 @@ import * as status from "../../utils/status";
 import {UserContext} from "../store/UserContext";
 import {useNavigate, useParams} from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import {createTheme} from "@mui/material";
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -32,6 +34,21 @@ function TabPanel(props) {
     );
 }
 
+function MobileTabPanel(props) {
+    const {children, value, index, ...other} = props;
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            {...other}
+        >
+            {value === index && (
+                children
+            )}
+        </div>
+    )
+}
+
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -50,8 +67,10 @@ export default function MyPage() {
     const {userState, handleLogOut} = context;
     const {username} = userState;
 
+    const isMobile = useMediaQuery("(max-width: 750px)");
+
     // key값을 통해 페이지에서 어떤 컴포넌트를 보여줄 지 결정합니다.
-    const { key } = useParams();
+    const {key} = useParams();
 
     const navigate = useNavigate();
 
@@ -98,29 +117,42 @@ export default function MyPage() {
             });
     }, []);
 
-    return (
-        <Box
-            sx={{flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: "100vh"}}
-        >
-            {myPartyId !== -1 ? (<Fragment>
+    return (isMobile ? <Fragment>
                 <Tabs
-                    orientation="vertical"
-                    variant="scrollable"
                     value={value}
                     onChange={handleChange}
-                    aria-label="Vertical tabs"
-                    sx={{borderRight: 1, borderColor: 'divider', width: "130px"}}
+                    centered
+                    sx={{bgcolor : '#fafafa'}}
                 >
-                    <Tab label="채팅방" {...a11yProps(0)} />
-                    <Tab label="내 파티방" {...a11yProps(1)} />
+                    <Tab label="내 파티방"/>
+                    <Tab label="내 채팅방"/>
                 </Tabs>
-                <TabPanel value={value} index={0}>
-                    <Chat />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <MyPartyRoom />
-                </TabPanel>
-            </Fragment>): (<CircularProgress/>)}
-        </Box>
+                <MobileTabPanel value={value} index={0}>
+                    <MyPartyRoom/>
+                </MobileTabPanel>
+                <MobileTabPanel value={value} index={1}>
+                    <Chat/>
+                </MobileTabPanel>
+            </Fragment> :
+            <Box sx={{flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: "100%"}}>
+                {myPartyId !== -1 ? (<Fragment>
+                    <Tabs
+                        orientation="vertical"
+                        variant="scrollable"
+                        value={value}
+                        onChange={handleChange}
+                        sx={{borderRight: 1, borderColor: 'divider', width: "130px"}}
+                    >
+                        <Tab label="내 파티방" {...a11yProps(0)} />
+                        <Tab label="내 채팅방" {...a11yProps(1)} />
+                    </Tabs>
+                    <TabPanel value={value} index={0}>
+                        <MyPartyRoom/>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <Chat/>
+                    </TabPanel>
+                </Fragment>) : (<CircularProgress/>)}
+            </Box>
     );
 }
