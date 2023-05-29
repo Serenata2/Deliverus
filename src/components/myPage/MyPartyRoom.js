@@ -89,6 +89,17 @@ function MyPartyRoom() {
     // 파티방의 가게 정보를 담은 리스트
     const [restInfo, setRestInfo] = useState(null);
 
+    // 결제 상태로 가도 괜찮은지 판단하는 함수
+    const meetMinOrderPrice= () => {
+        let totalOrderPrice = 0;
+        myPartyInfo.partyMembers.map((element, index) => {
+            for(let i = 0; i < element.order.length; i++){
+                totalOrderPrice += element.order[i].price * element.order[i].num;
+            }
+        })
+        return (totalOrderPrice >= myPartyInfo.minOrderPrice);
+    }
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -292,9 +303,6 @@ function MyPartyRoom() {
                 />
             </Box>
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
-                거리 : {calculateDistance(userPos.lat, userPos.lng, myPartyInfo.latitude, myPartyInfo.longitude)}m
-            </Typography>
-            <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 픽업 상세 위치 : {myPartyInfo.pickUpAddress.split("|")[1]}
             </Typography>
             <Box sx={{display: "flex"}}>
@@ -337,6 +345,12 @@ function MyPartyRoom() {
                 onClick={handleExitPartyRoom}
                 sx={{mt: 3, mb: 2}}
             >딜리버스 나가기</Button>
+            {username === myPartyInfo.host && <Button
+                fullWidth
+                variant="contained"
+                disabled={!meetMinOrderPrice}
+                sx={{mt: 3, mb: 2}}
+            >✅주문 시작하기</Button>}
         </Fragment>) : (<CircularProgress/>)}
         <Dialog open={open}
                 onClose={handleClose}
