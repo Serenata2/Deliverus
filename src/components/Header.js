@@ -42,10 +42,12 @@ const Header = () => {
     },
   });
 
+  // 모바일 환경에서 Drawer를 열고 닫는 함수
   const toggleDrawer = () => {
     setIsDrawerOpen((curr) => !curr);
   };
 
+  // 모바일 환경에서 Drawer에 들어가는 Component의 정보
   const drawerTab = [
     {
       icon: <HomeIcon />,
@@ -64,8 +66,8 @@ const Header = () => {
       component: (
         <Typography
           onClick={() => {
-            handleLogOut();
             toggleDrawer();
+            handleLogOut();
           }}
           sx={{
             fontWeight: 100,
@@ -78,6 +80,7 @@ const Header = () => {
     },
   ];
 
+  // 모바일 환경에서 Drawer에 들어가는 Box와 그 산하 List
   const list = () => (
     <Box sx={{ width: 180 }} role="presentation">
       <List
@@ -104,6 +107,8 @@ const Header = () => {
     </Box>
   );
 
+  // 실질적으로 렌더링 되는 컴포넌트입니다.
+  // 미디어 쿼리의 값에 따라 렌더링 되는 컴포넌트가 변경됩니다.
   const renderedComponent = matches ? (
     <header>
       <ThemeProvider theme={theme}>
@@ -196,52 +201,3 @@ const Header = () => {
 };
 
 export default Header;
-
-{
-  /* <Link
-                          to="/"
-                          style={{
-                            textDecoration: "none",
-                            background: "black",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            fontSize: "22px",
-                          }}
-                        >
-                          홈
-                        </Link> */
-}
-
-{
-  /* <Link
-                          to="/"
-                          style={{
-                            textDecoration: "none",
-                            background: "black",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            fontSize: "22px",
-                            fontWeight: 200,
-                            marginLeft: "50px",
-                          }}
-                        >
-                          방 만들기
-                        </Link> */
-}
-
-{
-  /* <Link
-                          to="/myPage/0"
-                          style={{
-                            textDecoration: "none",
-                            background: "black",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            fontSize: "22px",
-                            fontWeight: 200,
-                            marginLeft: "30px",
-                          }}
-                        >
-                          마이페이지
-                        </Link> */
-}
