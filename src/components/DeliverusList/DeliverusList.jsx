@@ -1,7 +1,6 @@
 // 가게 정보에 대한 Card
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
