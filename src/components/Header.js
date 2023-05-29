@@ -66,8 +66,8 @@ const Header = () => {
       component: (
         <Typography
           onClick={() => {
-            handleLogOut();
             toggleDrawer();
+            handleLogOut();
           }}
           sx={{
             fontWeight: 100,

@@ -22,6 +22,7 @@ import { Fragment } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-material-ui-carousel";
+import CarouselCard from "./CarouselCard";
 
 export default function RecommendationList(props) {
   const iconList = [
@@ -46,32 +47,8 @@ export default function RecommendationList(props) {
     });
   };
 
-  const testImg = require(`../../images/delivery-cat.png`);
-  const carouselCard = (text) => {
-    return (
-      <Card>
-        <CardActionArea>
-          <CardMedia component="img" height="100%" image={testImg} />
-          <CardContent>
-            <Typography>Chicken</Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    );
-  };
-
   // 모바일 화면인 경우
   if (isMobile) {
-    var items = [
-      {
-        name: "Random Name #1",
-        description: "Probably the most random thing you have ever seen!",
-      },
-      {
-        name: "Random Name #2",
-        description: "Hello World!",
-      },
-    ];
     return (
       <Fragment>
         <h3>📈 AI가 추천해주는 Top5 음식!</h3>
@@ -103,10 +80,16 @@ export default function RecommendationList(props) {
             }
           })}
         </Box> */}
-        <Carousel height={200}>
+        <Carousel height={230} duration={500} animation="slide">
           {props.list.map((item, idx) => {
+            const slashIdx = item.indexOf("/");
+            const title =
+              slashIdx == -1
+                ? item
+                : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
+            const carouselImg = require(`../../images/carousel/${title}.jpg`);
             if (idx <= 5) {
-              return carouselCard(item);
+              return <CarouselCard img={carouselImg} text={item} idx={idx} />;
             }
           })}
         </Carousel>
