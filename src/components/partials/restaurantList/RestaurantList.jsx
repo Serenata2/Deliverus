@@ -88,76 +88,89 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
 
     let ratingLabel = "Good";
     const ratingNum = Number(rating);
-    if(ratingNum < 3){
+    if (ratingNum < 3) {
         ratingLabel = "흐음~"
-    }
-    else if(ratingNum <= 3.5){
+    } else if (ratingNum <= 3.5) {
         ratingLabel = "Not Bad~"
-    }
-    else if(ratingNum <= 4){
+    } else if (ratingNum <= 4) {
         ratingLabel = "좋아요~"
-    }
-    else if(ratingNum <= 4.5){
+    } else if (ratingNum <= 4.5) {
         ratingLabel = "추천해요"
-    }
-    else if(ratingNum <= 5){
+    } else if (ratingNum <= 5) {
         ratingLabel = "인생식당"
     }
 
-    const restCardContent = <CardContent sx={{width: "90%"}}>
-        {!isMobile ?
-        <Typography fontSize="1.5rem" variant="h5" component="div">
-            {name}
-        </Typography> :
-            <Typography fontSize="1.3rem" variant="h5" component="div">
-                {name}
-            </Typography>}
-        {!isMobile &&
-            <Typography fontSize="1.1rem" variant="p" component="div" mt={1.5}
-             sx={{color: "#9e9e9e"}}>
-                {intro}
-            </Typography>}
-        {!isMobile ?
-            <Box sx={{display: "flex", flexDirection: "row", mt: 1}}>
-                <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
-                    ⭐
-                    {rating}
-                </Typography>
-                <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
-                    배달비 : {deliveryFee}원
-                </Typography>
-                <Typography fontSize='1.0rem' variant="body2">
-                    최소주문 : {minOrderPrice}원
-                </Typography>
-            </Box> : <Box sx={{display: "flex", flexDirection: "column", mt: 1}}>
-                <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
-                    ⭐
-                    {rating}
-                    <Chip icon={<FaceIcon />} size="small" label={ratingLabel} sx={{ml:2}}/>
-                </Typography>
-                <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
-                    배달비 : {deliveryFee}원
-                </Typography>
-                <Typography fontSize='1.0rem' variant="body2">
-                    최소주문 : {minOrderPrice}원
-                </Typography>
-            </Box>}
-    </CardContent>
-
-    return (
-        <Card variant="outlined"
-              sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
-            <CardContent sx={{px: 0, pl: 1}}>
-                <img src={image} alt='음식점 사진'
-                     style={{width: '120px', height: '120px', borderRadius: '16px', border: "1px solid"}}/>
-            </CardContent>
-            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width:"100%"}}>
-                {restCardContent}
-                <CardActions align="center" sx={{flexDirection: "column", width : "100px"}}>
-                    <Button size="small" onClick={handleClickStoreInfo}>
-                        둘러보기</Button>
-                </CardActions>
-            </Box>
-        </Card>
-    );
+    // pc화면
+    if (!isMobile) {
+        return (
+            <Card variant="outlined"
+                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
+                <CardContent sx={{px: 0, pl: 1}}>
+                    <img src={image} alt='음식점 사진'
+                         style={{width: '120px', height: '120px', borderRadius: '16px', border: "1px solid"}}/>
+                </CardContent>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: "100%"}}>
+                    <CardContent sx={{width: "90%"}}>
+                        <Typography fontSize="1.5rem" variant="h5" component="div">
+                            {name}
+                        </Typography>
+                        <Typography fontSize="1.1rem" variant="p" component="div" mt={1.5}
+                                    sx={{color: "#9e9e9e"}}>
+                            {intro}
+                        </Typography>
+                        <Box sx={{display: "flex", flexDirection: "row", mt: 1}}>
+                            <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
+                                ⭐
+                                {rating}
+                            </Typography>
+                            <Typography variant="body2" sx={{pr: 2}}>
+                                배달비 : {deliveryFee}원
+                            </Typography>
+                            <Typography variant="body2">
+                                최소주문 : {minOrderPrice}원
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                    <CardActions align="center" sx={{flexDirection: "column"}}>
+                        <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.7rem"}}>
+                            둘러보기</Button>
+                    </CardActions>
+                </Box>
+            </Card>
+        );
+    } else { // 모바일 화면
+        return (
+            <Card variant="outlined"
+                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
+                <CardContent sx={{px: 0, pl: 1}}>
+                    <img src={image} alt='음식점 사진'
+                         style={{width: '60px', height: '60px', borderRadius: '16px', border: "1px solid"}}/>
+                </CardContent>
+                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p:0, m:0}}>
+                    <CardContent>
+                        <Typography fontSize="1.3rem" variant="h5" component="div">
+                            {name}
+                        </Typography>
+                        <Box sx={{display: "flex", flexDirection: "column", mt: 1}}>
+                            <Typography variant="body2" sx={{pr: 1}}>
+                                ⭐
+                                {rating}
+                                <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
+                            </Typography>
+                            <Typography variant="body2" sx={{pr: 2}}>
+                                배달비 : {deliveryFee}원
+                            </Typography>
+                            <Typography variant="body2">
+                                최소주문 : {minOrderPrice}원
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                    <CardActions align="center" sx={{flexDirection: "column"}}>
+                        <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
+                            둘러보기</Button>
+                    </CardActions>
+                </Box>
+            </Card>
+        );
+    }
 } 
