@@ -125,13 +125,19 @@ function Chat() {
                 })
                 .then((data) => {
                     console.log("Respones Data from CHAT MESSAGE API : ", data);
+                    if (!data) {
+                        data.push({
+                            sender: username, time: "00:00",
+                            chat: `${username}님이 입장하셨습니다`, type: 0
+                        });
+                    }
                     setChatLog(prevState => [...prevState].concat(data));
-                    console.log("chat log ~~~~ : ", chatLog);
+
                     client = new StompJS.Client({
                         brokerURL: BASE_CHAT_URL,
                         connectHeaders: {
                             sender: username,
-                            channelId : Number(myPartyId)
+                            channelId: Number(myPartyId)
                         },
                         debug: function (str) {
                             console.log(str);
@@ -163,7 +169,6 @@ function Chat() {
                         // This is needed because this will be executed after a (re)connect
 
                         subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
-
                         console.log("subscribed!");
                     };
 
