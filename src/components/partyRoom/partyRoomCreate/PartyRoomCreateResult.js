@@ -1,4 +1,3 @@
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import KakaoMapStore from "../../restaurant/KakaoMapStore";
 import React, {Fragment} from "react";
@@ -8,7 +7,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import {Box} from "@mui/material";
 
-//
 // 파티방을 만들 때 설정 사항들을 최종적으로 보여주는 컴퍼넌트입니다.
 function PartyRoomCrateResult(props) {
     return (
@@ -20,7 +18,7 @@ function PartyRoomCrateResult(props) {
                 정원 : {props.partyInfo.memberNum}명
             </Typography>
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
-                파티방 유지 시간 : {props.partyInfo.expireTime}분
+                파티방 유지 시간 : {props.partyInfo.life}분
             </Typography>
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 도로명 주소 : {props.partyInfo.pickUpAddress}
