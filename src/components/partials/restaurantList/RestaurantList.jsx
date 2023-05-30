@@ -133,7 +133,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                         </Box>
                     </CardContent>
                     <CardActions align="center" sx={{flexDirection: "column"}}>
-                        <Button size="medium" onClick={handleClickStoreInfo} sx={{fontSize:"0.7rem"}}>
+                        <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.7rem"}}>
                             둘러보기</Button>
                     </CardActions>
                 </Box>
