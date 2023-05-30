@@ -12,12 +12,15 @@ import DeliverusList from "./components/DeliverusList/DeliverusList";
 import RestaurantList from "./components/partials/restaurantList/RestaurantList";
 import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/PersonalMenuSelecting";
 import MyPage from "./components/myPage/MyPage";
-import { createTheme } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function App() {
   const context = useContext(UserContext);
   const { isLoggedIn } = context;
   const navigate = useNavigate();
+
+  const isMobile = useMediaQuery("(max-width: 750px)");
 
   useEffect(() => {
     if (!isLoggedIn) navigate("/");
@@ -28,27 +31,45 @@ function App() {
   //   isLoggedIn: false,
   // });
 
+  let theme = createTheme({
+    typography: {
+      fontFamily: "BMDOHYEON",
+      fontSize: 16,
+    },
+  });
+
+  if (isMobile) {
+    theme = createTheme({
+      typography: {
+        fontFamily: "BMDOHYEON",
+        fontSize: 14,
+      },
+    });
+  }
+
   return (
-    <div className="App">
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/restaurant" element={<Restaurant />} />
-          <Route path="/restaurant/list" element={<RestaurantList />} />
-          <Route path="/restaurant/:category" element={<RestaurantList />} />
-          <Route
-            path="/restaurant/information/:id"
-            element={<RestaurantInfo />}
-          />
-          <Route path="/party/list" element={<DeliverusList />} />
-          <Route path="/party/creation" element={<PartyRoomCreation />} />
-          <Route path="/party/enter" element={<PersonalMenuSelecting />} />
-          <Route path="/myPage/:key" element={<MyPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Header />
+        <main>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/restaurant" element={<Restaurant />} />
+            <Route path="/restaurant/list" element={<RestaurantList />} />
+            <Route path="/restaurant/:category" element={<RestaurantList />} />
+            <Route
+              path="/restaurant/information/:id"
+              element={<RestaurantInfo />}
+            />
+            <Route path="/party/list" element={<DeliverusList />} />
+            <Route path="/party/creation" element={<PartyRoomCreation />} />
+            <Route path="/party/enter" element={<PersonalMenuSelecting />} />
+            <Route path="/myPage/:key" element={<MyPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 

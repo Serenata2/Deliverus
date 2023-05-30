@@ -197,13 +197,13 @@ const RestaurantInfo = () => {
       <Box
         component="main"
         sx={{
-          my: 4,
+          my: 8,
           mx: "auto",
           px: 4,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          maxWidth: "850px",
+          maxWidth: "800px",
         }}
       >
         {restaurantDescript}
@@ -214,7 +214,7 @@ const RestaurantInfo = () => {
           to="/party/creation"
           state={{ restaurantInfo: restaurant, resId: id }}
         >
-          <Button fullWidth variant="contained" sx={{ my: 2 }}>
+          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             내가 딜리버스 모집하기
           </Button>
         </Link>
