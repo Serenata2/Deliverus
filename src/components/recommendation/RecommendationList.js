@@ -89,7 +89,14 @@ export default function RecommendationList(props) {
                 : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
             const carouselImg = require(`../../images/carousel/${title}.jpg`);
             if (idx <= 5) {
-              return <CarouselCard img={carouselImg} text={item} idx={idx} />;
+              return (
+                <CarouselCard
+                  key={idx}
+                  img={carouselImg}
+                  text={item}
+                  idx={idx}
+                />
+              );
             }
           })}
         </Carousel>
