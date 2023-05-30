@@ -14,6 +14,7 @@ import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/Persona
 import MyPage from "./components/myPage/MyPage";
 import { createTheme, ThemeProvider } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { grey } from "@mui/material/colors";
 
 function App() {
   const context = useContext(UserContext);
@@ -31,21 +32,27 @@ function App() {
   //   isLoggedIn: false,
   // });
 
-  let theme = createTheme({
+  const body1FontSize = isMobile ? 16 : 14;
+  const body2FontSize = isMobile ? 14 : 13;
+
+  const theme = createTheme({
     typography: {
+      // fontFamily: "BMDOHYEON",
+      // fontSize: 14,
       fontFamily: "BMDOHYEON",
-      fontSize: 16,
+      body1: {
+        fontSize: body1FontSize,
+      },
+      body2: {
+        fontSize: body2FontSize,
+      },
+    },
+    palette: {
+      text: {
+        secondary: "grey",
+      },
     },
   });
-
-  if (isMobile) {
-    theme = createTheme({
-      typography: {
-        fontFamily: "BMDOHYEON",
-        fontSize: 14,
-      },
-    });
-  }
 
   return (
     <ThemeProvider theme={theme}>

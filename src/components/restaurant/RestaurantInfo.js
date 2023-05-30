@@ -11,7 +11,9 @@ import * as status from "../../utils/status";
 import { UserContext } from "../store/UserContext";
 import { Link, useParams } from "react-router-dom";
 import RecruitingPartyCard from "./RecruitingPartyCard";
-import { Divider, Rating } from "@mui/material";
+import { Divider, Rating, useMediaQuery } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import CallIcon from "@mui/icons-material/Call";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
@@ -19,6 +21,8 @@ const RestaurantInfo = () => {
   const { userState, handleLogOut } = useContext(UserContext);
   const { userPos } = userState;
   const { id } = useParams();
+
+  const isMobile = useMediaQuery("(max-width:750px)");
 
   // 가게 정보를 담은 변수
   const [restaurant, setRestaurant] = useState({
@@ -122,7 +126,38 @@ const RestaurantInfo = () => {
     }
   }
 
-  const restaurantDescript = (
+  const LabelBox = (props) => {
+    const label = props.label;
+    const detail = props.detail;
+    return (
+      <Grid
+        container
+        sx={{
+          alignItems: "center",
+          paddingY: "2px",
+        }}
+      >
+        <Grid item xs={4}>
+          {label}
+        </Grid>
+        <Grid item xs={8}>
+          <Typography
+            component="body2"
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+            }}
+          >
+            {detail}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  // 식당의 정보가 담긴 컴포넌트입니다.
+  // 첫번째 항의 컴포넌트가 모바일 컴포넌트입니다.
+  const restaurantDescript = isMobile ? (
     <Box
       sx={{
         display: "flex",
@@ -164,15 +199,78 @@ const RestaurantInfo = () => {
         {restaurant.intro}
       </Typography>
       <Divider sx={{ width: "100%", my: 1 }} />
-      <Typography component="h6" variant="h6">
-        {`최소 배달금액: 10000원`}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+        }}
+      >
+        <LabelBox label={"배달비"} detail={"4,500 원"} />
+        <LabelBox label={"최소배달비용"} detail={"12,500 원"} />
+        <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
+      </Box>
+      <Divider sx={{ width: "100%", my: 1 }} />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Image
+        src={image}
+        height="250px"
+        widht="250px"
+        fit="contain"
+        duration={1000}
+      />
+      <Typography component="h3" variant="h3" sx={{ mt: 2 }}>
+        {restaurant.name}
       </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          my: 1,
+        }}
+      >
+        <Rating
+          value={restaurant.rating}
+          precision={0.5}
+          readOnly
+          sx={{ mr: 1 }}
+          size="large"
+        />
+        <Typography
+          sx={{ color: "dimgray" }}
+        >{`${restaurant.rating} / 5.0`}</Typography>
+      </Box>
+      <Divider sx={{ width: "100%", my: 1 }} />
       <Typography component="h6" variant="h6">
-        {`배달팁: 4500원`}
+        {restaurant.intro}
       </Typography>
-      <Typography component="h6" variant="h6">
-        {`전화번호: ${restaurant.phoneNumber}`}
-      </Typography>
+      <Divider sx={{ width: "100%", my: 1 }} />
+      <Grid contianer sx={{ width: "100%" }}>
+        <Grid item>
+          <Typography component="h6" variant="h6">
+            {`배달팁: 4500원`}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography component="h6" variant="h6">
+            {`최소 배달금액: 10000원`}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography component="h6" variant="h6">
+            {`전화번호: ${restaurant.phoneNumber}`}
+          </Typography>
+        </Grid>
+      </Grid>
       <Divider sx={{ width: "100%", my: 1 }} />
     </Box>
   );
