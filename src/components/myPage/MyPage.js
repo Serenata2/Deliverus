@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import MyPartyRoom from "./MyPartyRoom";
 import Chat from "./chatting/Chat";
@@ -13,7 +12,7 @@ import {UserContext} from "../store/UserContext";
 import {useNavigate, useParams} from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {createTheme} from "@mui/material";
+import Backdrop from '@mui/material/Backdrop';
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -152,7 +151,12 @@ export default function MyPage() {
                     <TabPanel value={value} index={1}>
                         <Chat/>
                     </TabPanel>
-                </Fragment>) : (<CircularProgress/>)}
+                </Fragment>) : (<Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={true}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>)}
             </Box>
     );
 }

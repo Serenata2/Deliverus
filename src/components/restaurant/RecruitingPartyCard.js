@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import React, {useContext} from "react";
 import {UserContext} from "../store/UserContext";
 import LetterAvatar from "../ui/LetterAvatar";
+import {useNavigate} from "react-router-dom";
 
 // 모듈화를 진행한 컴포넌트입니다.
 // 하나의 파티방의 정보를 담은 컴포넌트입니다,
@@ -18,6 +19,7 @@ function RecruitingPartyCard(props) {
     const context = useContext(UserContext);
     const {userState} = context;
     const {username} = userState;
+    const navigate = useNavigate();
 
     const recruitPartyInfo = props.partyInfo;
     return (
