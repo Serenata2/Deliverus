@@ -1,17 +1,14 @@
 import {Box, DialogActions, DialogContent, DialogTitle, Divider, TableRow} from "@mui/material";
-import { Box, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import KakaoMapStore from "../restaurant/KakaoMapStore";
 import { API } from "../../utils/config";
 import * as status from "../../utils/status";
 import { UserContext } from "../store/UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from '@mui/material/CircularProgress';
 import HomeIcon from '@mui/icons-material/Home';
-import CircularProgress from "@mui/material/CircularProgress";
-import LetterAvatar from "../ui/LetterAvatar";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../restaurant/MenuCard";
 import Stack from "@mui/material/Stack";
