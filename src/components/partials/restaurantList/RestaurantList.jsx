@@ -12,6 +12,7 @@ import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Grid } from "@mui/material";
 
 const restaurantCategories = ["한식", "분식", "치킨", "아시안/양식", "족발/보쌈", "돈까스/일식", "카페/디저트", "찜탕", "패스트푸드", "피자"];
 
@@ -140,36 +141,53 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
         );
     } else { // 모바일 화면
         return (
+            // <Grid container>
+            //     <Grid item xs={4}></Grid>
+            //     <Grid item xs={4}></Grid>
+            //     <Grid item xs={4}></Grid>
+            // </Grid>
             <Card variant="outlined"
-                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
-                <CardContent sx={{px: 0, pl: 1}}>
-                    <img src={image} alt='음식점 사진'
-                         style={{width: '60px', height: '60px', borderRadius: '16px', border: "1px solid"}}/>
-                </CardContent>
-                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p:0, m:0}}>
-                    <CardContent>
-                        <Typography fontSize="1.3rem" variant="h5" component="div">
-                            {name}
-                        </Typography>
-                        <Box sx={{display: "flex", flexDirection: "column", mt: 1}}>
-                            <Typography variant="body2" sx={{pr: 1}}>
-                                ⭐
-                                {rating}
-                                <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
-                            </Typography>
-                            <Typography variant="body2" sx={{pr: 2}}>
-                                배달비 : {deliveryFee}원
-                            </Typography>
-                            <Typography variant="body2">
-                                최소주문 : {minOrderPrice}원
-                            </Typography>
+                  sx={{display: "flex", alignItems: "center", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
+                <Grid container alignItems={"center"} justifyContent={"center"}>
+                    <Grid item xs={3}>
+                        <CardContent sx={{px: 0, pl: 1}}>
+                            <img src={image} alt='음식점 사진'
+                                style={{width: '60px', height: '60px', borderRadius: '16px', border: "1px solid"}}/>
+                        </CardContent>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p:0, m:0}}>
+                            <CardContent>
+                                <Typography sx={{textOverflow: 'ellipsis'}} fontSize="1.3rem" variant="h5" component="div">
+                                    {name}
+                                </Typography>
+                                <Box sx={{display: "flex", flexDirection: "column"}}>
+                                    <Typography variant="body2" sx={{pr: 1, mb: 1}}>
+                                        ⭐
+                                        {rating}
+                                        <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
+                                    </Typography>
+                                    <Typography variant="body2" sx={{pr: 2}}>
+                                        배달비 : {deliveryFee}원
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        최소주문 : {minOrderPrice}원
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        {/* <CardActions align="center" sx={{flexDirection: "column"}}>
+                            <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
+                                둘러보기</Button>
+                        </CardActions> */}
                         </Box>
-                    </CardContent>
+                    </Grid>
+                    <Grid item xs={3}>
                     <CardActions align="center" sx={{flexDirection: "column"}}>
-                        <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
-                            둘러보기</Button>
-                    </CardActions>
-                </Box>
+                            <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
+                                둘러보기</Button>
+                        </CardActions>
+                    </Grid>
+                </Grid>
             </Card>
         );
     }
