@@ -165,13 +165,7 @@ const RestaurantInfo = () => {
         alignItems: "center",
       }}
     >
-      <Image
-        src={image}
-        height="250px"
-        widht="250px"
-        fit="contain"
-        duration={1000}
-      />
+      <Image src={image} width="100%" fit="contain" duration={1000} />
       <Typography component="h3" variant="h3" sx={{ mt: 2 }}>
         {restaurant.name}
       </Typography>
@@ -179,7 +173,7 @@ const RestaurantInfo = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",
+          alignItems: "end",
           my: 1,
         }}
       >
@@ -194,11 +188,15 @@ const RestaurantInfo = () => {
           sx={{ color: "dimgray" }}
         >{`${restaurant.rating} / 5.0`}</Typography>
       </Box>
-      <Divider sx={{ width: "100%", my: 1 }} />
+      <Divider sx={{ width: "100%", my: 1 }}>
+        <Typography sx={{ color: "text.secondary" }}>가게 소개</Typography>
+      </Divider>
       <Typography component="h6" variant="h6">
         {restaurant.intro}
       </Typography>
-      <Divider sx={{ width: "100%", my: 1 }} />
+      <Divider sx={{ width: "100%", my: 1 }}>
+        <Typography sx={{ color: "text.secondary" }}>배달 정보</Typography>
+      </Divider>
       <Box
         sx={{
           display: "flex",
@@ -210,7 +208,6 @@ const RestaurantInfo = () => {
         <LabelBox label={"최소배달비용"} detail={"12,500 원"} />
         <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
       </Box>
-      <Divider sx={{ width: "100%", my: 1 }} />
     </Box>
   ) : (
     <Box
@@ -223,7 +220,7 @@ const RestaurantInfo = () => {
       <Image
         src={image}
         height="250px"
-        widht="250px"
+        width="250px"
         fit="contain"
         duration={1000}
       />
@@ -271,7 +268,6 @@ const RestaurantInfo = () => {
           </Typography>
         </Grid>
       </Grid>
-      <Divider sx={{ width: "100%", my: 1 }} />
     </Box>
   );
 
