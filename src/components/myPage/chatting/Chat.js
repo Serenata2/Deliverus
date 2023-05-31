@@ -110,10 +110,10 @@ function Chat() {
         }
     }, []);
 
-    // 파티방 ID를 이용해서 구독을 합니다.
+    // 파티방 ID를 이용해서 구독을 하고, chatlog를 가져옵니다.
     useEffect(() => {
         if (myPartyId !== -1) {
-            fetch(`${API.CHAT_MESSAGE}?name=${username}`, {
+            fetch(`${API.CHAT_MESSAGE}?name=${username}&id=${myPartyId}`, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -125,7 +125,7 @@ function Chat() {
                 })
                 .then((data) => {
                     console.log("Respones Data from CHAT MESSAGE API : ", data);
-                    if (!data) {
+                    if (Array.isArray(data) && data.length === 0) {
                         data.push({
                             sender: username, time: "00:00",
                             chat: `${username}님이 입장하셨습니다`, type: 0
