@@ -152,11 +152,13 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                             {name}
                         </Typography>
                         <Box sx={{display: "flex", flexDirection: "column", mt: 1}}>
-                            <Typography variant="body2" sx={{pr: 1}}>
-                                ⭐
-                                {rating}
+                            <Box sx={{display: "flex", flexDirection: "row"}}>
+                                <Typography variant="body2" sx={{pr: 1}}>
+                                    ⭐
+                                    {rating}
+                                </Typography>
                                 <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
-                            </Typography>
+                            </Box>
                             <Typography variant="body2" sx={{pr: 2}}>
                                 배달비 : {deliveryFee}원
                             </Typography>
