@@ -1,17 +1,21 @@
 import {Box, DialogActions, DialogContent, DialogTitle, Divider, TableRow} from "@mui/material";
+import { Box, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import React, {Fragment, useContext, useEffect, useState} from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import KakaoMapStore from "../restaurant/KakaoMapStore";
-import {API} from "../../utils/config";
+import { API } from "../../utils/config";
 import * as status from "../../utils/status";
-import {UserContext} from "../store/UserContext";
-import {Link, useNavigate} from "react-router-dom";
+import { UserContext } from "../store/UserContext";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from '@mui/material/CircularProgress';
 import HomeIcon from '@mui/icons-material/Home';
+import CircularProgress from "@mui/material/CircularProgress";
+import LetterAvatar from "../ui/LetterAvatar";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../restaurant/MenuCard";
 import Stack from "@mui/material/Stack";
+import { useQuery } from "@tanstack/react-query";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import MenuSelecting from "../partyRoom/partyRoomCreate/MenuSelecting";
@@ -24,75 +28,77 @@ import Backdrop from "@mui/material/Backdrop";
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 // Get PARY API에서 내가 선택한 메뉴를 찾는 함수입니다.
 function findMyMenu(partyMembers, userName) {
-
-    // for문을 돌면서 내 이름과 같은 Member 찾기
-    for (let i = 0; i < partyMembers.length; i++) {
-        if (partyMembers[i].nickname === userName) {
-            return partyMembers[i].order;
-        }
+  // for문을 돌면서 내 이름과 같은 Member 찾기
+  for (let i = 0; i < partyMembers.length; i++) {
+    if (partyMembers[i].nickname === userName) {
+      return partyMembers[i].order;
     }
+  }
 
-    return [{menuName: "", price: 0, num: 0}];
+  return [{ menuName: "", price: 0, num: 0 }];
 }
 
 // 두 개의 위도, 경도 사이의 거리를 미터 단위로 반환하는 함수
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const earthRadius = 6371e3; // 지구의 반지름 (미터 단위)
-    const toRadians = (value) => (value * Math.PI) / 180; // 각도를 라디안으로 변환
+  const earthRadius = 6371e3; // 지구의 반지름 (미터 단위)
+  const toRadians = (value) => (value * Math.PI) / 180; // 각도를 라디안으로 변환
 
-    // 위도 및 경도를 라디안으로 변환
-    const radLat1 = toRadians(lat1);
-    const radLon1 = toRadians(lon1);
-    const radLat2 = toRadians(lat2);
-    const radLon2 = toRadians(lon2);
+  // 위도 및 경도를 라디안으로 변환
+  const radLat1 = toRadians(lat1);
+  const radLon1 = toRadians(lon1);
+  const radLat2 = toRadians(lat2);
+  const radLon2 = toRadians(lon2);
 
-    // 위도 및 경도의 차이 계산
-    const deltaLat = radLat2 - radLat1;
-    const deltaLon = radLon2 - radLon1;
+  // 위도 및 경도의 차이 계산
+  const deltaLat = radLat2 - radLat1;
+  const deltaLon = radLon2 - radLon1;
 
-    // Haversine 공식 적용
-    const a =
-        Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-        Math.cos(radLat1) * Math.cos(radLat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  // Haversine 공식 적용
+  const a =
+    Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+    Math.cos(radLat1) *
+      Math.cos(radLat2) *
+      Math.sin(deltaLon / 2) *
+      Math.sin(deltaLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    // 거리 계산 (미터 단위)
-    const distance = earthRadius * c;
+  // 거리 계산 (미터 단위)
+  const distance = earthRadius * c;
 
-    return Math.round(distance);
+  return Math.round(distance);
 }
 
 // 먼저 서버에게 사용자가 참여중인 파티방 id를 달라고 API 요청을 한다.
 // 파티방 id가 존재하면 그 id로 서버에게 파티방 정보를 달라고 합니다.
 function MyPartyRoom() {
-    const context = useContext(UserContext);
-    const {userState, handleLogOut} = context;
-    const {username, userPos} = userState;
+  const context = useContext(UserContext);
+  const { userState, handleLogOut } = context;
+  const { username, userPos } = userState;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    // 내가 속해 있는 파티방 ID를 가지고 있는 변수
-    const [myPartyId, setMyPartyId] = useState(-1);
+  // 내가 속해 있는 파티방 ID를 가지고 있는 변수
+  const [myPartyId, setMyPartyId] = useState(-1);
 
-    // 내가 속해 있는 파티방 정보를 가지고 있는 변수
-    const [myPartyInfo, setMyPartyInfo] = useState(null);
+  // 내가 속해 있는 파티방 정보를 가지고 있는 변수
+  const [myPartyInfo, setMyPartyInfo] = useState(null);
 
-    // 내가 선택한 메뉴에 대한 정보를 가지고 있는 변수
-    const [myMenu, setMyMenu] = useState(null);
+  // 내가 선택한 메뉴에 대한 정보를 가지고 있는 변수
+  const [myMenu, setMyMenu] = useState(null);
 
-    // 메뉴 변경을 위한 Dialog를 보여주는 여부를 담은 변수
-    const [open, setOpen] = useState(false);
+  // 메뉴 변경을 위한 Dialog를 보여주는 여부를 담은 변수
+  const [open, setOpen] = useState(false);
 
-    // 각 메뉴에 대한 수량을 담은 리스트
-    const [countList, setCountList] = useState(null);
+  // 각 메뉴에 대한 수량을 담은 리스트
+  const [countList, setCountList] = useState(null);
 
-    // 파티방의 가게 정보를 담은 리스트
-    const [restInfo, setRestInfo] = useState(null);
+  // 파티방의 가게 정보를 담은 리스트
+  const [restInfo, setRestInfo] = useState(null);
 
     // 결제 상태로 가도 괜찮은지 판단하는 함수
     const meetMinOrderPrice = () => {
@@ -105,45 +111,45 @@ function MyPartyRoom() {
         return (totalOrderPrice >= myPartyInfo.minOrderPrice);
     }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const handleOpen = () => {
-        setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
 
-        // 가게의 ID를 가지고 서버로부터 가게 정보 받기(특히 메뉴 정보)
-        const data = {restaurantId: myPartyInfo.restaurantId};
+    // 가게의 ID를 가지고 서버로부터 가게 정보 받기(특히 메뉴 정보)
+    const data = { restaurantId: myPartyInfo.restaurantId };
 
-        fetch(`${API.RESTAURANT_INFORMATION}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(data)
-        })
-            .then((respones) => {
-                status.handleRestaurantResponse(respones.status);
-                return respones.json();
-            })
-            .then((data) => {
-                console.log("Respones Data from Restaurant Info API : ", data);
-                setCountList(new Array(data.menu.menu.length).fill(0))
-                setRestInfo(data);
-            })
-            .catch((error) => {
-                // 로그인 만료 에러인 경우 로그아웃 실행
-                if (error.name === "LoginExpirationError") {
-                    handleLogOut();
-                }
-                // 요청한 것에 대한 데이터가 없을 때 에러 처리
-                else if (error.name === "NoDataError") {
-                    alert("error.message");
-                }
-                console.log(`${error.name} : ${error.message}`);
-            });
-    }
+    fetch(`${API.RESTAURANT_INFORMATION}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    })
+      .then((respones) => {
+        status.handleRestaurantResponse(respones.status);
+        return respones.json();
+      })
+      .then((data) => {
+        console.log("Respones Data from Restaurant Info API : ", data);
+        setCountList(new Array(data.menu.menu.length).fill(0));
+        setRestInfo(data);
+      })
+      .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+          handleLogOut();
+        }
+        // 요청한 것에 대한 데이터가 없을 때 에러 처리
+        else if (error.name === "NoDataError") {
+          alert("error.message");
+        }
+        console.log(`${error.name} : ${error.message}`);
+      });
+  };
 
     // 딜리버스 나가기 버튼 클릭시 호출되는 함수
     const handleExitPartyRoom = () => {
@@ -192,32 +198,31 @@ function MyPartyRoom() {
             order: orderList
         }
 
-        fetch(`${API.PARTY_ORDER}/${username}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(data)
-        })
-            .then((respones) => {
-                status.handlePartyResponse(respones.status);
-                return respones.text();
-            })
-            .then((data) => {
-                console.log("Respones Data from PARTY ORDER API : ", data);
-                setOpen(false);
-                alert("메뉴가 수정되었습니다!");
-            })
-            .catch((error) => {
-                // 로그인 만료 에러인 경우 로그아웃 실행
-                if (error.name === "LoginExpirationError") {
-                    handleLogOut();
-                }
-                console.log(`PARTY ORDER API -> ${error.name} : ${error.message}`);
-            });
-
-    }
+    fetch(`${API.PARTY_ORDER}/${username}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    })
+      .then((respones) => {
+        status.handlePartyResponse(respones.status);
+        return respones.text();
+      })
+      .then((data) => {
+        console.log("Respones Data from PARTY ORDER API : ", data);
+        setOpen(false);
+        alert("메뉴가 수정되었습니다!");
+      })
+      .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+          handleLogOut();
+        }
+        console.log(`PARTY ORDER API -> ${error.name} : ${error.message}`);
+      });
+  };
 
     // 사용자가 결제해야할 정보를 담은 배열을 반환합니다.
     const returnPaymentList = (partyInfo) => {
@@ -269,42 +274,164 @@ function MyPartyRoom() {
                 console.log(`PARTY ID API -> ${error.name} : ${error.message}`);
             });
     }, []);
-
-
-    // 파티방 ID로 부터 파티방의 정보를 받아옵니다.
-    useEffect(() => {
-        if (myPartyId !== -1) {
-            fetch(`${API.PARTY}?id=${myPartyId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-            })
-                .then((respones) => {
-                    status.handlePartyResponse(respones.status);
-                    return respones.json();
-                })
-                .then((data) => {
-                    console.log("Respones Data from PARTY API : ", data);
-                    const _myMenu = findMyMenu(data.partyMembers, username);
-                    setMyMenu(_myMenu);
-                    setMyPartyInfo(data);
-                })
-                .catch((error) => {
-                    // 로그인 만료 에러인 경우 로그아웃 실행
-                    if (error.name === "LoginExpirationError") {
-                        handleLogOut();
-                    }
-                    console.log(`GET PARTY API -> ${error.name} : ${error.message}`);
-                });
+  // 맨 처음에 username을 가지고 사용자가 속해있는 파티방의 ID를 GET 합니다.
+  useEffect(() => {
+    fetch(`${API.PARTY_ID}?name=${username}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((respones) => {
+        status.handlePartyResponse(respones.status);
+        return respones.text();
+      })
+      .then((data) => {
+        console.log("Respones Data from PARTY ID API : ", data);
+        // 사용자가 속해 있는 파티방이 있는 경우
+        if (Number(data) !== -1) {
+          setMyPartyId(data);
         }
-    }, [myPartyId])
+        // 사용자가 속해있는 파티방이 없는 경우 main화면으로 이동
+        else {
+          alert("속해 있는 파티방이 없습니다ㅠ");
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+          handleLogOut();
+        }
+        console.log(`PARTY ID API -> ${error.name} : ${error.message}`);
+      });
+  }, []);
 
+  // 파티방 ID로 부터 파티방의 정보를 받아옵니다.
+  useEffect(() => {
+    if (myPartyId !== -1) {
+      fetch(`${API.PARTY}?id=${myPartyId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+        .then((respones) => {
+          status.handlePartyResponse(respones.status);
+          return respones.json();
+        })
+        .then((data) => {
+          console.log("Respones Data from PARTY API : ", data);
+          const _myMenu = findMyMenu(data.partyMembers, username);
+          setMyMenu(_myMenu);
+          setMyPartyInfo(data);
+        })
+        .catch((error) => {
+          // 로그인 만료 에러인 경우 로그아웃 실행
+          if (error.name === "LoginExpirationError") {
+            handleLogOut();
+          }
+          console.log(`GET PARTY API -> ${error.name} : ${error.message}`);
+        });
+    }
+  }, [myPartyId]);
 
-    return (
-        <Box component="main" sx={{
+  const { isLoading, error, queryData } = useQuery(
+    ["partyInfo"],
+    () => {
+      fetch(`${API.PARTY}?id=${myPartyId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+        .then((respones) => {
+          status.handlePartyResponse(respones.status);
+          return respones.json();
+        })
+        .then((data) => {
+          console.log("Respones Query Data from PARTY API : ", data);
+          const _myMenu = findMyMenu(data.partyMembers, username);
+          console.log("reuslt : ", _myMenu);
+          setMyMenu(_myMenu);
+          setMyPartyInfo(data);
+        })
+        .catch((error) => {
+          // 로그인 만료 에러인 경우 로그아웃 실행
+          if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+          }
+          console.log(`${error.name} : ${error.message}`);
+          return error;
+        });
+    },
+    {
+      refetchOnWindowFocus: true,
+      refetchInterval: 5000,
+      refetchIntervalInBackground: true,
+      retry: 0,
+    }
+  );
+
+  // 방장이 결제하기 클릭시 로직 (미완성, state API 필요함함)
+
+  useEffect(() => {
+    const script1 = document.createElement("script");
+    script1.src = "https://code.jquery.com/jquery-1.12.4.min.js";
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement("script");
+    script2.src = "https://cdn.iamport.kr/js/iamport.payment-1.2.0.js";
+    script2.async = true;
+    document.body.appendChild(script2);
+
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
+  }, []);
+
+  const requestPay = () => {
+    let totalPrice = 0;
+    for (let i = 0; i < myMenu.length; i++) {
+      totalPrice += myMenu[i].price;
+    }
+
+    if (window.IMP) {
+      console.log(totalPrice);
+      window.IMP.init("imp33478261");
+      window.IMP.request_pay(
+        {
+          pg: "kakao",
+          pay_method: "kakaopay",
+          merchant_uid: "merchant_" + new Date().getTime(),
+          name: myPartyInfo.restaurantName,
+          amount: totalPrice, // 변경된 금액 (원하는 금액으로 수정)
+          buyer_email: "Iamport@chai.finance",
+          buyer_name: "포트원 기술지원팀",
+          buyer_tel: "010-1234-5678",
+          buyer_addr: "서울특별시 강남구 삼성동",
+          buyer_postcode: "123-456",
+        },
+        function (rsp) {
+          if (rsp.success) {
+            // 결제 성공 시 로직
+          } else {
+            alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+            console.log(myPartyInfo);
+          }
+        }
+      );
+    }
+  };
+
+  return (
+    <Box
+      component="main"
+      sx={{
         my: 8,
-        mx: 'auto',
+        mx: "auto",
         px: 4,
         display: "flex",
         flexDirection: "column",
@@ -422,6 +549,7 @@ function MyPartyRoom() {
                 fullWidth
                 variant="contained"
                 disabled={!meetMinOrderPrice}
+                onClick={requestPay}
                 sx={{mt: 3, mb: 2}}
             >✅{myPartyInfo.minOrderPrice.toLocaleString()}원 이상 주문할 수 있어요!</Button>}
         </Fragment>) : (<Backdrop

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import KakaoMapStore from "../../restaurant/KakaoMapStore";
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../../restaurant/MenuCard";
 import Button from "@mui/material/Button";

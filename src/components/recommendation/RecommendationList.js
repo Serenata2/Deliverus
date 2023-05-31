@@ -9,6 +9,14 @@ import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined";
 import Looks3OutlinedIcon from "@mui/icons-material/Looks3Outlined";
 import Looks4OutlinedIcon from "@mui/icons-material/Looks4Outlined";
 import Looks5OutlinedIcon from "@mui/icons-material/Looks5Outlined";
+import {
+  Box,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Fragment } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -81,7 +89,14 @@ export default function RecommendationList(props) {
                 : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
             const carouselImg = require(`../../images/carousel/${title}.jpg`);
             if (idx <= 5) {
-              return <CarouselCard key={idx} img={carouselImg} text={item} idx={idx} />;
+              return (
+                <CarouselCard
+                  key={idx}
+                  img={carouselImg}
+                  text={item}
+                  idx={idx}
+                />
+              );
             }
           })}
         </Carousel>
