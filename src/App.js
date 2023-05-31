@@ -14,6 +14,7 @@ import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/Persona
 import MyPage from "./components/myPage/MyPage";
 import {createTheme, ThemeProvider} from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Payment from './components/payment/Payment';
 
 function App() {
     const context = useContext(UserContext);
@@ -62,6 +63,7 @@ function App() {
                         <Route path="/party/creation" element={<PartyRoomCreation/>}/>
                         <Route path="/party/enter" element={<PersonalMenuSelecting/>}/>
                         <Route path="/myPage/:key" element={<MyPage/>}/>
+                        <Route path="/payment" element={<Payment/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </main>
