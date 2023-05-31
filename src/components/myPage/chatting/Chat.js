@@ -3,8 +3,6 @@ import {
     ListItemText, TextField, Button, Box
 } from "@mui/material";
 import {Fragment, useContext, useEffect, useState} from "react";
-import LetterAvatar from "../../ui/LetterAvatar";
-import ParticipantList from "./ParticipantList";
 import ChatLog from "./ChatLog";
 import * as StompJS from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
@@ -13,19 +11,11 @@ import {API, BASE_CHAT_URL} from "../../../utils/config";
 import * as status from "../../../utils/status";
 import {useNavigate} from "react-router-dom";
 
-let client;
+let client = null;
 let subscription;
 
 export function mySocketFactory() {
     return new SockJS(BASE_CHAT_URL);
-}
-
-// 현재 시간을 00:00 형태로 반환하는 함수
-export function currentTime() {
-    const date = new Date();
-    const hour = (date.getHours() < 10) ? "0" + date.getHours().toString() : date.getHours();
-    const minute = (date.getMinutes() < 10) ? "0" + date.getMinutes().toString() : date.getMinutes();
-    return `${hour}:${minute}`
 }
 
 function Chat() {
@@ -39,7 +29,7 @@ function Chat() {
     // 내가 속해 있는 파티방 ID를 가지고 있는 변수
     const [myPartyId, setMyPartyId] = useState(-1);
 
-    const partiList = ["Remy Sharp", "Alice"];
+    const [partyList, setPartyList] = useState(null);
 
     // 메세지 전송 시 호출되는 함수
     const handleSendMessage = (e) => {
@@ -49,8 +39,7 @@ function Chat() {
             const publishData = {
                 sender: username,
                 channelId: myPartyId,
-                chat: message,
-                time : currentTime()
+                chat: message
             }
 
             client.publish({
@@ -76,8 +65,8 @@ function Chat() {
         const data = JSON.parse(message.body);
 
         setChatLog(prevState => [...prevState, {
-            name: data.sender, time : data.time,
-            text: data.chat
+            sender: data.sender, time: data.time,
+            chat: data.chat, type: data.type
         }]);
     }
 
@@ -112,59 +101,6 @@ function Chat() {
                 }
                 console.log(`PARTY ID API -> ${error.name} : ${error.message}`);
             });
-    }, []);
-
-    // 파티방 ID를 이용해서 구독을 합니다.
-    useEffect(() => {
-        if (myPartyId !== -1) {
-            client = new StompJS.Client({
-                brokerURL: BASE_CHAT_URL,
-                connectHeaders: {},
-                debug: function (str) {
-                    console.log(str);
-                },
-                heartbeatIncoming: 4000,
-                heartbeatOutgoing: 4000,
-            });
-
-            // Fallback code
-            if (typeof WebSocket !== 'function') {
-                // For SockJS you need to set a factory that creates a new SockJS instance
-                // to be used for each (re)connect
-                client.webSocketFactory = mySocketFactory();
-            }
-
-            // Fallback code
-            if (typeof WebSocket !== 'function') {
-                // For SockJS you need to set a factory that creates a new SockJS instance
-                // to be used for each (re)connect
-                client.webSocketFactory = function () {
-                    // Note that the URL is different from the WebSocket URL
-                    return new SockJS('http://localhost:15674/stomp');
-                };
-            }
-
-            client.onConnect = function (frame) {
-                console.log(frame);
-                // Do something, all subscribes must be done is this callback
-                // This is needed because this will be executed after a (re)connect
-
-                subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
-
-                console.log("subscribed!");
-            };
-
-            client.onStompError = function (frame) {
-                // Will be invoked in case of error encountered at Broker
-                // Bad login/passcode typically will cause an error
-                // Complaint brokers will set `message` header with a brief message. Body may contain details.
-                // Compliant brokers will terminate the connection after any error
-                console.log('Broker reported error: ' + frame.headers['message']);
-                console.log('Additional details: ' + frame.body);
-            };
-
-            client.activate();
-        }
 
         return () => {
             // client가 생성되어 있다면 deactivate하기
@@ -172,45 +108,110 @@ function Chat() {
                 client.deactivate();
             }
         }
+    }, []);
+
+    // 파티방 ID를 이용해서 구독을 합니다.
+    useEffect(() => {
+        if (myPartyId !== -1) {
+            fetch(`${API.CHAT_MESSAGE}?name=${username}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            })
+                .then((respones) => {
+                    status.handleChatResponse(respones.status);
+                    return respones.json();
+                })
+                .then((data) => {
+                    console.log("Respones Data from CHAT MESSAGE API : ", data);
+                    if (!data) {
+                        data.push({
+                            sender: username, time: "00:00",
+                            chat: `${username}님이 입장하셨습니다`, type: 0
+                        });
+                    }
+                    setChatLog(prevState => [...prevState].concat(data));
+
+                    client = new StompJS.Client({
+                        brokerURL: BASE_CHAT_URL,
+                        connectHeaders: {
+                            sender: username,
+                            channelId: Number(myPartyId)
+                        },
+                        debug: function (str) {
+                            console.log(str);
+                        },
+                        heartbeatIncoming: 4000,
+                        heartbeatOutgoing: 4000,
+                    });
+
+                    // Fallback code
+                    if (typeof WebSocket !== 'function') {
+                        // For SockJS you need to set a factory that creates a new SockJS instance
+                        // to be used for each (re)connect
+                        client.webSocketFactory = mySocketFactory();
+                    }
+
+                    // Fallback code
+                    if (typeof WebSocket !== 'function') {
+                        // For SockJS you need to set a factory that creates a new SockJS instance
+                        // to be used for each (re)connect
+                        client.webSocketFactory = function () {
+                            // Note that the URL is different from the WebSocket URL
+                            return new SockJS('http://localhost:15674/stomp');
+                        };
+                    }
+
+                    client.onConnect = function (frame) {
+                        console.log(frame);
+                        // Do something, all subscribes must be done is this callback
+                        // This is needed because this will be executed after a (re)connect
+
+                        subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
+                        console.log("subscribed!");
+                    };
+
+                    client.onStompError = function (frame) {
+                        // Will be invoked in case of error encountered at Broker
+                        // Bad login/passcode typically will cause an error
+                        // Complaint brokers will set `message` header with a brief message. Body may contain details.
+                        // Compliant brokers will terminate the connection after any error
+                        console.log('Broker reported error: ' + frame.headers['message']);
+                        console.log('Additional details: ' + frame.body);
+                    };
+
+                    client.activate();
+                })
+                .catch((error) => {
+                    // 로그인 만료 에러인 경우 로그아웃 실행
+                    if (error.name === "LoginExpirationError") {
+                        handleLogOut();
+                    }
+                    console.log(`CHAT MESSAGE API -> ${error.name} : ${error.message}`);
+                });
+        }
     }, [myPartyId]);
+
 
     return (
         <Fragment>
-            <Grid container sx={{width: "100%", height: "100vh"}}>
-                <Grid item xs={3} sx={{border: "3px solid"}}>
-                    <List>
-                        <ListItemText primary="😁 Me" sx={{px: 1.5, color: "blue"}}/>
-                        <ListItem key="userName">
-                            <LetterAvatar name={username}/>
-                            <ListItemText primary={username} sx={{px: 1.5}}/>
-                        </ListItem>
-                    </List>
-                    <Divider sx={{border: 2}}/>
-                    <ParticipantList list={partiList}/>
-                </Grid>
-                <Grid item xs={9} sx={{border: "3px solid"}}>
-                    <ChatLog list={chatLog} name={username}/>
-                    <Divider sx={{border: 2}}/>
-                    <Box component="form">
-                        <Grid container style={{padding: '20px'}}>
-                            <Grid item xs={10}>
-                                <TextField
-                                    fullWidth
-                                    label="Message"
-                                    value={message}
-                                    onChange={handleKeyPress}
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Button type="submit" variant="contained" color="primary" sx={{mx: 5}}
-                                        onClick={handleSendMessage}>
-                                    Send
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Grid>
-            </Grid>
+            <Box sx={{bgcolor: "#ffebee"}}>
+                <ChatLog list={chatLog} name={username}/>
+                <Divider sx={{border: 2}}/>
+                <Box component="form" sx={{display: "flex", alignItem: "row", margin: "auto", padding: 3}}>
+                    <TextField
+                        fullWidth
+                        label="Message"
+                        value={message}
+                        onChange={handleKeyPress}
+                    />
+                    <Button type="submit" variant="contained" color="primary" sx={{ml: 2}}
+                            onClick={handleSendMessage}>
+                        Send
+                    </Button>
+                </Box>
+            </Box>
         </Fragment>
     );
 }

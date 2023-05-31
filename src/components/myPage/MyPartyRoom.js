@@ -1,4 +1,4 @@
-import {Box} from "@mui/material";
+import {Box, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, {Fragment, useContext, useEffect, useState} from "react";
 import KakaoMapStore from "../restaurant/KakaoMapStore";
@@ -12,14 +12,25 @@ import LetterAvatar from "../ui/LetterAvatar";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../restaurant/MenuCard";
 import Stack from "@mui/material/Stack";
+<<<<<<< HEAD
 import {useQuery} from "@tanstack/react-query";
+=======
+import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
+import MenuSelecting from "../partyRoom/partyRoomCreate/MenuSelecting";
+
+// Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+>>>>>>> eabe7d4b0fb56fdc1c36d2c4a9ad07d4394a714d
 
 // Get PARY API에서 내가 선택한 메뉴를 찾는 함수입니다.
 function findMyMenu(partyMembers, userName) {
 
     // for문을 돌면서 내 이름과 같은 Member 찾기
-    for(let i = 0; i < partyMembers.length; i++) {
-        if(partyMembers[i].nickname === userName) {
+    for (let i = 0; i < partyMembers.length; i++) {
+        if (partyMembers[i].nickname === userName) {
             return partyMembers[i].order;
         }
     }
@@ -73,10 +84,70 @@ function MyPartyRoom() {
     // 내가 선택한 메뉴에 대한 정보를 가지고 있는 변수
     const [myMenu, setMyMenu] = useState(null);
 
+    // 메뉴 변경을 위한 Dialog를 보여주는 여부를 담은 변수
+    const [open, setOpen] = useState(false);
+
+    // 각 메뉴에 대한 수량을 담은 리스트
+    const [countList, setCountList] = useState(null);
+
+    // 파티방의 가게 정보를 담은 리스트
+    const [restInfo, setRestInfo] = useState(null);
+
+    // 결제 상태로 가도 괜찮은지 판단하는 함수
+    const meetMinOrderPrice= () => {
+        let totalOrderPrice = 0;
+        myPartyInfo.partyMembers.map((element, index) => {
+            for(let i = 0; i < element.order.length; i++){
+                totalOrderPrice += element.order[i].price * element.order[i].num;
+            }
+        })
+        return (totalOrderPrice >= myPartyInfo.minOrderPrice);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+
+        // 가게의 ID를 가지고 서버로부터 가게 정보 받기(특히 메뉴 정보)
+        const data = {restaurantId: myPartyInfo.restaurantId};
+
+        fetch(`${API.RESTAURANT_INFORMATION}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+            .then((respones) => {
+                status.handleRestaurantResponse(respones.status);
+                return respones.json();
+            })
+            .then((data) => {
+                console.log("Respones Data from Restaurant Info API : ", data);
+                setCountList(new Array(data.menu.menu.length).fill(0))
+                setRestInfo(data);
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    handleLogOut();
+                }
+                // 요청한 것에 대한 데이터가 없을 때 에러 처리
+                else if (error.name === "NoDataError") {
+                    alert("error.message");
+                }
+                console.log(`${error.name} : ${error.message}`);
+            });
+    }
+
     const handleExitPartyRoom = () => {
         setMyPartyInfo(null);
         fetch(`${API.PARTY_DELETE}/${username}`, {
-            method : "DELETE",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -98,6 +169,51 @@ function MyPartyRoom() {
                 }
                 console.log(`PARTY DELETE API -> ${error.name} : ${error.message}`);
             });
+    }
+
+    const handleChangingMenu = () => {
+        // 사용자가 선택한 메뉴에 대한 정보 담기
+        const orderList = [];
+        restInfo.menu.menu.map((item, index) => {
+            if(countList[index] > 0){
+                orderList.push({
+                    menuName : item.menuName,
+                    price : item.price,
+                    num : countList[index]
+                })
+            }
+        })
+
+        // 최종적으로 서버에게 보낼 데이터 형태
+        const data = {
+            order : orderList
+        }
+
+        fetch(`${API.PARTY_ORDER}/${username}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+            .then((respones) => {
+                status.handlePartyResponse(respones.status);
+                return respones.text();
+            })
+            .then((data) => {
+                console.log("Respones Data from PARTY ORDER API : ", data);
+                setOpen(false);
+                alert("메뉴가 수정되었습니다!");
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    handleLogOut();
+                }
+                console.log(`PARTY ORDER API -> ${error.name} : ${error.message}`);
+            });
+
     }
 
     // 맨 처음에 username을 가지고 사용자가 속해있는 파티방의 ID를 GET 합니다.
@@ -150,7 +266,6 @@ function MyPartyRoom() {
                 .then((data) => {
                     console.log("Respones Data from PARTY API : ", data);
                     const _myMenu = findMyMenu(data.partyMembers, username);
-                    console.log("reuslt : " , _myMenu);
                     setMyMenu(_myMenu);
                     setMyPartyInfo(data);
                 })
@@ -164,6 +279,7 @@ function MyPartyRoom() {
         }
     }, [myPartyId])
 
+<<<<<<< HEAD
     const {isLoading, error, queryData} = useQuery(["partyInfo"], () => {
         fetch(`${API.PARTY}?id=${myPartyId}`, {
             headers: {
@@ -196,6 +312,9 @@ function MyPartyRoom() {
        refetchIntervalInBackground: true,
        retry : 0
    })
+=======
+
+>>>>>>> eabe7d4b0fb56fdc1c36d2c4a9ad07d4394a714d
 
     return (<Box component="main" sx={{
         my: 8,
@@ -223,9 +342,6 @@ function MyPartyRoom() {
                 />
             </Box>
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
-                거리 : {calculateDistance(userPos.lat, userPos.lng, myPartyInfo.latitude, myPartyInfo.longitude)}m
-            </Typography>
-            <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 픽업 상세 위치 : {myPartyInfo.pickUpAddress.split("|")[1]}
             </Typography>
             <Box sx={{display: "flex"}}>
@@ -234,7 +350,7 @@ function MyPartyRoom() {
                 </Typography>
                 {myPartyInfo.partyMembers.map((item, index) => {
                     return (
-                        <LetterAvatar key={index} name={item.nickname} />
+                        <LetterAvatar key={index} name={item.nickname}/>
                     );
                 })}
             </Box>
@@ -253,16 +369,45 @@ function MyPartyRoom() {
                                 </Button>
                             </Grid>
                         </Grid>);
-                }
+                    }
                 )}
             </Stack>
-
+            <Button
+                fullWidth
+                variant="contained"
+                onClick={handleOpen}
+                sx={{mt: 3, mb: 2}}
+            >메뉴 수정하기</Button>
             <Button
                 fullWidth
                 variant="contained"
                 onClick={handleExitPartyRoom}
                 sx={{mt: 3, mb: 2}}
-            >딜리버스 나가기</Button> </Fragment>) : (<CircularProgress/>)}
+            >딜리버스 나가기</Button>
+            {username === myPartyInfo.host && <Button
+                fullWidth
+                variant="contained"
+                disabled={!meetMinOrderPrice}
+                sx={{mt: 3, mb: 2}}
+            >✅주문 시작하기</Button>}
+        </Fragment>) : (<CircularProgress/>)}
+        <Dialog open={open}
+                onClose={handleClose}
+                TransitionComponent={Transition}
+                keepMounted
+                fullWidth={true}
+                maxWidth="md">
+            <DialogTitle>메뉴 수정</DialogTitle>
+            <DialogContent sx={{border: 1, borderRadius: '16px', mx: 1, p: 0}}>
+                {restInfo !== null ? <MenuSelecting countList={countList} setCountList={setCountList}
+                                                    menuList={restInfo.menu.menu}/>
+                    : (<CircularProgress/>)}
+            </DialogContent>
+            <DialogActions>
+                <Button disabled={countList && !countList.some(element => element > 0)}
+                    onClick={handleChangingMenu}>메뉴 수정하기</Button>
+            </DialogActions>
+        </Dialog>
     </Box>);
 }
 

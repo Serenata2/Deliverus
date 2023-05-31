@@ -159,7 +159,7 @@ const RestaurantInfo = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-start",
-                maxWidth: '850px'
+                maxWidth: '800px'
             }}>
                 {restaurantDescript}
                 {recruitingPartyList && <RecruitingPartyList partyList={recruitingPartyList}/>}

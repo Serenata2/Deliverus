@@ -158,7 +158,9 @@ const MainContents = () => {
 
     return (
         <div className={styles.mainContents_body}>
-            <h2>안녕하세요 {username}님!</h2>
+            <Box sx={{display: "flex", justifyContent: "center"}}>
+             <h2>안녕하세요 {username}님!</h2>
+            </Box>
             <Box sx={{display: "flex", justifyContent: "flex-start"}}>
                 <h4>📌 {userPosAddr}</h4>
                 <Button
@@ -181,15 +183,17 @@ const MainContents = () => {
                 </div>
             </div>
             <Stack>
-            {restInfoList && restInfoList.map((items, idx) => {
+            {restInfoList && restInfoList.map((item, idx) => {
                 if (idx < 5) {
                     return (
                         <RestaurantCard
-                            name={items.name}
-                            rating={items.rating}
-                            id={items.restaurant_id}
-                            category={items.category}
-                            intro={items.intro}
+                            name={item.name}
+                            rating={item.rating}
+                            id={item.restaurant_id}
+                            category={item.category}
+                            intro={item.intro}
+                            deliveryFee={item.deliveryFee}
+                            minOrderPrice={item.minOrderPrice}
                             key={idx}
                         />
                     );

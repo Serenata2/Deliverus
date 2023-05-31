@@ -1,4 +1,4 @@
-import React, { useContext, useState} from 'react';
+import React, {Fragment, useContext, useState} from 'react';
 import PositionSettingMap from "../../postionSetting/PositionSettingMap"
 import {Box} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -43,16 +43,16 @@ function PartyPositionSetting(props) {
         props.setDetailPos(event.target.value);
     }
 
-    return (<Box sx={{
-        m: 2, display: "flex", flexDirection: "column", alignItems: "center", py: 2
-    }}>
+    return (<Fragment>
         <Typography component="h1" variant="h5" sx={{my: 3}}>
             픽업할 위치를 설정해 주세요!
         </Typography>
-        <PositionSettingMap propFunction={handleClickPosEvent}
-                            initLatLng={initLatLng}
-                            resLatLng={props.resPos}
-                            radius={radius}/>
+        <Box sx={{width: "80%", height: "50vh", border: 1}}>
+            <PositionSettingMap propFunction={handleClickPosEvent}
+                                initLatLng={initLatLng}
+                                resLatLng={props.resPos}
+                                radius={radius}/>
+        </Box>
         <TextField id="standard-basic"
                    label="상세 위치를 기술해 주세요"
                    variant="standard"
@@ -60,7 +60,7 @@ function PartyPositionSetting(props) {
                    value={detailPos}
                    onChange={handleDetailPosInput}
                    sx={{mb: 5, width: "80%"}}/>
-    </Box>)
+    </Fragment>);
 }
 
 export default PartyPositionSetting;
