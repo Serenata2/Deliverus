@@ -141,11 +141,6 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
         );
     } else { // 모바일 화면
         return (
-            // <Grid container>
-            //     <Grid item xs={4}></Grid>
-            //     <Grid item xs={4}></Grid>
-            //     <Grid item xs={4}></Grid>
-            // </Grid>
             <Card variant="outlined"
                   sx={{display: "flex", alignItems: "center", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
                 <Grid container alignItems={"center"} justifyContent={"center"}>
@@ -162,11 +157,13 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                                     {name}
                                 </Typography>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    <Typography variant="body2" sx={{pr: 1, mb: 1}}>
-                                        ⭐
-                                        {rating}
+                                    <Box sx={{display: "flex", flexDirection: "row"}}>
+                                        <Typography variant="body2" sx={{pr: 1, mb: 1}}>
+                                            ⭐
+                                            {rating}
+                                        </Typography>
                                         <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
-                                    </Typography>
+                                    </Box>
                                     <Typography variant="body2" sx={{pr: 2}}>
                                         배달비 : {deliveryFee}원
                                     </Typography>
