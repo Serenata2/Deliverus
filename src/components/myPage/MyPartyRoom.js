@@ -12,6 +12,7 @@ import LetterAvatar from "../ui/LetterAvatar";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../restaurant/MenuCard";
 import Stack from "@mui/material/Stack";
+import {useQuery} from "@tanstack/react-query";
 
 // Get PARY API에서 내가 선택한 메뉴를 찾는 함수입니다.
 function findMyMenu(partyMembers, userName) {
@@ -162,6 +163,39 @@ function MyPartyRoom() {
                 });
         }
     }, [myPartyId])
+
+    const {isLoading, error, queryData} = useQuery(["partyInfo"], () => {
+        fetch(`${API.PARTY}?id=${myPartyId}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+        .then((respones) => {
+            status.handlePartyResponse(respones.status);
+            return respones.json();
+        })
+        .then((data) => {
+            console.log("Respones Query Data from PARTY API : ", data);
+            const _myMenu = findMyMenu(data.partyMembers, username);
+            console.log("reuslt : " , _myMenu);
+            setMyMenu(_myMenu);
+            setMyPartyInfo(data);
+        })  
+           .catch((error) => {
+               // 로그인 만료 에러인 경우 로그아웃 실행
+               if (error.name === "LoginExpirationError") {
+                   console.log(`${error.name} : ${error.message}`);
+               }
+               console.log(`${error.name} : ${error.message}`);
+               return error;
+           });
+   }, {
+       refetchOnWindowFocus : true,
+       refetchInterval: 5000,
+       refetchIntervalInBackground: true,
+       retry : 0
+   })
 
     return (<Box component="main" sx={{
         my: 8,
