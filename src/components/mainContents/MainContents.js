@@ -37,40 +37,41 @@ const MainContents = () => {
     }
 
     // // react-query 예제 테스트
-    // const {isLoading, error, queryData} = useQuery(["paryList"], () => {
-    //      fetch(`${API.PARTY_ALL}`, {
-    //         method : "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         credentials: "include",
-    //         body: JSON.stringify({
-    //             latitude: userPos.lat,
-    //             longitude: userPos.lng
-    //         })
-    //     })
-    //         .then((respones) => {
-    //             status.handlePartyResponse(respones.status);
-    //             return respones.json();
-    //         })
-    //         .then((data) => {
-    //             console.log("Respones Query Data from PARTY LIST API : ", data);
-    //             return data;
-    //         })
-    //         .catch((error) => {
-    //             // 로그인 만료 에러인 경우 로그아웃 실행
-    //             if (error.name === "LoginExpirationError") {
-    //                 console.log(`${error.name} : ${error.message}`);
-    //             }
-    //             console.log(`${error.name} : ${error.message}`);
-    //             return error;
-    //         });
-    // }, {
-    //     refetchOnWindowFocus : true,
-    //     refetchInterval: 5000,
-    //     refetchIntervalInBackground: true,
-    //     retry : 0
-    // })
+    const {isLoading, error, queryData} = useQuery(["paryList"], () => {
+         fetch(`${API.PARTY_ALL}`, {
+            method : "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                latitude: userPos.lat,
+                longitude: userPos.lng
+            })
+        })
+            .then((respones) => {
+                status.handlePartyResponse(respones.status);
+                return respones.json();
+            })
+            .then((data) => {
+                console.log("Respones Query Data from PARTY LIST API : ", data);
+                setRecruitingPartyList(data);
+                return data;
+            })
+            .catch((error) => {
+                // 로그인 만료 에러인 경우 로그아웃 실행
+                if (error.name === "LoginExpirationError") {
+                    console.log(`${error.name} : ${error.message}`);
+                }
+                console.log(`${error.name} : ${error.message}`);
+                return error;
+            });
+    }, {
+        refetchOnWindowFocus : true,
+        refetchInterval: 5000,
+        refetchIntervalInBackground: true,
+        retry : 0
+    })
 
     useEffect(() => {
         // 처음 화면이 띄워졌을 때 모든 인접 파티방 리스트를 받아옵니다.

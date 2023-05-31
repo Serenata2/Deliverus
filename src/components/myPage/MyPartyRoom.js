@@ -12,9 +12,11 @@ import LetterAvatar from "../ui/LetterAvatar";
 import Grid from "@mui/material/Grid";
 import MenuCard from "../restaurant/MenuCard";
 import Stack from "@mui/material/Stack";
+import {useQuery} from "@tanstack/react-query";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import MenuSelecting from "../partyRoom/partyRoomCreate/MenuSelecting";
+import axios from 'axios';
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -275,7 +277,88 @@ function MyPartyRoom() {
         }
     }, [myPartyId])
 
+    const {isLoading, error, queryData} = useQuery(["partyInfo"], () => {
+        fetch(`${API.PARTY}?id=${myPartyId}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+        .then((respones) => {
+            status.handlePartyResponse(respones.status);
+            return respones.json();
+        })
+        .then((data) => {
+            console.log("Respones Query Data from PARTY API : ", data);
+            const _myMenu = findMyMenu(data.partyMembers, username);
+            console.log("reuslt : " , _myMenu);
+            setMyMenu(_myMenu);
+            setMyPartyInfo(data);
+        })  
+           .catch((error) => {
+               // 로그인 만료 에러인 경우 로그아웃 실행
+               if (error.name === "LoginExpirationError") {
+                   console.log(`${error.name} : ${error.message}`);
+               }
+               console.log(`${error.name} : ${error.message}`);
+               return error;
+           });
+   }, {
+       refetchOnWindowFocus : true,
+       refetchInterval: 5000,
+       refetchIntervalInBackground: true,
+       retry : 0
+   })
 
+   // 방장이 결제하기 클릭시 로직 (미완성, state API 필요함함)
+
+   useEffect(() => {
+    const script1 = document.createElement('script');
+    script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement('script');
+    script2.src = 'https://cdn.iamport.kr/js/iamport.payment-1.2.0.js';
+    script2.async = true;
+    document.body.appendChild(script2);
+
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
+  }, []);
+
+   const requestPay = () => {
+    let totalPrice = 0;
+    for(let i = 0; i < myMenu.length; i++) {
+        totalPrice += myMenu[i].price;
+    }
+
+  if (window.IMP) {
+    console.log(totalPrice);
+    window.IMP.init('imp33478261');
+    window.IMP.request_pay({
+      pg: 'kakao',
+      pay_method: 'kakaopay',
+      merchant_uid: 'merchant_' + new Date().getTime(),
+      name: myPartyInfo.restaurantName,
+      amount: totalPrice, // 변경된 금액 (원하는 금액으로 수정)
+      buyer_email: 'Iamport@chai.finance',
+      buyer_name: '포트원 기술지원팀',
+      buyer_tel: '010-1234-5678',
+      buyer_addr: '서울특별시 강남구 삼성동',
+      buyer_postcode: '123-456',
+    }, function(rsp) {
+      if (rsp.success) {
+        // 결제 성공 시 로직
+      } else {
+        alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
+        console.log(myPartyInfo);
+      }
+    });
+  }
+  };
 
     return (<Box component="main" sx={{
         my: 8,
@@ -345,10 +428,12 @@ function MyPartyRoom() {
                 onClick={handleExitPartyRoom}
                 sx={{mt: 3, mb: 2}}
             >딜리버스 나가기</Button>
-            {username === myPartyInfo.host && <Button
+            {username === myPartyInfo.host && 
+            <Button
                 fullWidth
                 variant="contained"
                 disabled={!meetMinOrderPrice}
+                onClick={requestPay}
                 sx={{mt: 3, mb: 2}}
             >✅주문 시작하기</Button>}
         </Fragment>) : (<CircularProgress/>)}

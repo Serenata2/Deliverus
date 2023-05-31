@@ -14,7 +14,9 @@ import PersonalMenuSelecting from "./components/partyRoom/partyRoomEnter/Persona
 import MyPage from "./components/myPage/MyPage";
 import { createTheme, ThemeProvider } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Payment from './components/payment/Payment';
 import { grey } from "@mui/material/colors";
+
 
 function App() {
   const context = useContext(UserContext);
