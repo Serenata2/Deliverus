@@ -67,7 +67,7 @@ const handleRestaurantResponse = (statusNum) => {
 
     console.log(statusNum);
     switch (statusNum) {
-      // 요청한 것에 대한 데이터가 벗을 때 에러 처리
+      // 요청한 것에 대한 데이터가 없을 때 에러 처리
       case 204:
         error.message = "요청한 데이터가 없습니다.";
         error.name = "NoDataError";
@@ -159,7 +159,6 @@ const handleChatResponse = (statusNum) => {
 
       case 204:
         error.message = "처음 연결한 경우입니다.";
-
 
         // 기타 에러 처리
       default:
