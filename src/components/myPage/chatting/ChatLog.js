@@ -49,6 +49,7 @@ function ChatLog(props) {
                                         <Chip
                                             size="medium"
                                             sx={{
+                                                fontSize: "1rem",
                                                 height: 'auto',
                                                 '& .MuiChip-label': {
                                                     display: 'block',
@@ -73,6 +74,7 @@ function ChatLog(props) {
                                         <Chip
                                             size="medium"
                                             sx={{
+                                                fontSize: "1rem",
                                                 height: 'auto',
                                                 '& .MuiChip-label': {
                                                     display: 'block',

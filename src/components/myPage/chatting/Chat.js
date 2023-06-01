@@ -196,7 +196,7 @@ function Chat() {
 
     return (
         <Fragment>
-            <Box sx={{bgcolor: "#ffebee"}}>
+            <Box sx={{margin: "auto", bgcolor: "#ffebee", maxWidth: "md"}}>
                 <ChatLog list={chatLog} name={username}/>
                 <Divider sx={{border: 2}}/>
                 <Box component="form" sx={{display: "flex", alignItem: "row", margin: "auto", padding: 3}}>
