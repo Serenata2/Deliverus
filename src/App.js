@@ -43,14 +43,22 @@ function App() {
       fontFamily: "BMDOHYEON",
       body1: {
         fontSize: body1FontSize,
+        fontWeight: "normal",
       },
       body2: {
         fontSize: body2FontSize,
+        fontWeight: "normal",
       },
     },
     palette: {
       text: {
         secondary: "grey",
+      },
+      primary: {
+        main: "#ff0700",
+      },
+      info: {
+        main: "#BABABA",
       },
     },
   });

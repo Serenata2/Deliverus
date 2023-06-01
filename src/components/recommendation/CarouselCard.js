@@ -12,6 +12,7 @@ const CarouselCard = (props) => {
         height: 230,
         width: "100%",
         position: "relative",
+        boxShadow: "2px 3px 3px grey",
       }}
     >
       <CardActionArea>
