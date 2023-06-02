@@ -19,4 +19,8 @@ export const API = {
     PARTY_ORDER : `${BASE_URL}/api/party/order`,
     AI_RECOMMEND : `${BASE_URL}/api/recommend`,
     CHAT_MESSAGE : `${BASE_URL}/api/chat/message`,
+    PAYMENT_EACH : `${BASE_URL}/api/order/payment`,
+    PARTY_STATE : `${BASE_URL}/api/party/state`,
+    PARTY_ORDER : `${BASE_URL}/api/order/deliverOrder`,
+    PARTY_FINISH : `${BASE_URL}/api/order`
 }

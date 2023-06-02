@@ -91,6 +91,17 @@ function MyPartyRoom() {
     // 파티방의 가게 정보를 담은 리스트
     const [restInfo, setRestInfo] = useState(null);
 
+    // 현재 참가한 방의 state
+    const [partyState, setPartyState] = useState(null);
+
+    // 주문이 완료되었을 때 시간 보여주기
+    const [deliverTime, setDeliverTime] = useState(null);
+
+    // 주문이 시작되었을 때 alert창을 한번만 띄우기 위한 state
+    const [isAlerted, setIsAlerted] = useState(false);
+
+    // 방장이 주문하기 버튼 클릭
+
     // 결제 상태로 가도 괜찮은지 판단하는 함수
     const meetMinOrderPrice= () => {
         let totalOrderPrice = 0;
@@ -310,7 +321,42 @@ function MyPartyRoom() {
        retry : 0
    })
 
-   // 방장이 결제하기 클릭시 로직 (미완성, state API 필요함함)
+   // 방의 상태를 react-query로 지속적으로 가져오며, 상태를 변화시킴.
+   const {partyStateIsLoading, partyStateError, partyStateQueryData} = useQuery(["partyState"], () => {
+    axios.get(`${API.PARTY_STATE}?nickname=${username}`)
+    .then((res) => {
+        console.log(`current party state : ${res.data}`);
+        setPartyState(res.data);
+        return res
+    })
+    .then((res) => {
+        if(res.data == 2) {
+            if(isAlerted == false) {
+                alert('모든 인원이 결제하여 배달이 시작됩니다!')
+            }
+            setIsAlerted(true);
+            axios.get(`${API.PARTY_FINISH}?id=${myPartyId}`)
+            .then((res) => {
+                console.log(res);
+                setDeliverTime(res.data.deliverTime);
+            })
+        }
+    })
+    .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+        }
+        console.log(`${error.name} : ${error.message}`);
+        return error;
+    });
+}, {
+   refetchOnWindowFocus : true,
+   refetchInterval: 1000,
+   refetchIntervalInBackground: true,
+   retry : 0
+})
+
 
    useEffect(() => {
     const script1 = document.createElement('script');
@@ -329,7 +375,9 @@ function MyPartyRoom() {
     };
   }, []);
 
-   const requestPay = () => {
+    // 각자 결제하는 로직
+
+  const payEach = () => {
     let totalPrice = 0;
     for(let i = 0; i < myMenu.length; i++) {
         totalPrice += myMenu[i].price;
@@ -352,15 +400,44 @@ function MyPartyRoom() {
     }, function(rsp) {
       if (rsp.success) {
         // 결제 성공 시 로직
+        let partyId = parseInt(myPartyId)
+        axios.post(`${API.PAYMENT_EACH}`, {
+            partyId: partyId,
+            nickname: myPartyInfo.host
+            }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then((res) => console.log(res));
       } else {
+        // 결제에 실패했을 때 로직
         alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
-        console.log(myPartyInfo);
       }
     });
-  }
+    }
   };
 
-    return (<Box component="main" sx={{
+  // 방장이 주문 클릭했을 때 로직
+  const requestPay = () => {
+    let partyId = parseInt(myPartyId)
+    axios.post(`${API.PARTY_ORDER}`, {
+        partyId: partyId
+    })
+    .then((res) => {
+        console.log(res)
+    })
+    .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+        }
+        console.log(`${error.name} : ${error.message}`);
+        return error;
+    });
+  }
+
+    return (
+    <Box component="main" sx={{
         my: 8,
         mx: 'auto',
         px: 4,
@@ -379,6 +456,12 @@ function MyPartyRoom() {
             <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                 위치 : {myPartyInfo.pickUpAddress.split("|")[0]}
             </Typography>
+            {
+            partyState == 2 &&
+            <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                배달시간 : {deliverTime}분
+            </Typography>
+            }
             <Box sx={{width: "100%", height: "500px"}}>
                 <KakaoMapStore
                     lat={myPartyInfo.latitude}
@@ -391,6 +474,7 @@ function MyPartyRoom() {
             <Box sx={{display: "flex"}}>
                 <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
                     참가자 정보 :
+
                 </Typography>
                 {myPartyInfo.partyMembers.map((item, index) => {
                     return (
@@ -416,26 +500,37 @@ function MyPartyRoom() {
                     }
                 )}
             </Stack>
+            {partyState == 0 && 
             <Button
-                fullWidth
-                variant="contained"
-                onClick={handleOpen}
-                sx={{mt: 3, mb: 2}}
+            fullWidth
+            variant="contained"
+            onClick={handleOpen}
+            sx={{mt: 3, mb: 2}}
             >메뉴 수정하기</Button>
+            }
             <Button
-                fullWidth
-                variant="contained"
-                onClick={handleExitPartyRoom}
-                sx={{mt: 3, mb: 2}}
-            >딜리버스 나가기</Button>
+            fullWidth
+            variant="contained"
+            onClick={handleExitPartyRoom}
+            sx={{mt: 3, mb: 2}}
+            >{(partyState == 0 || partyState == 1) ? '딜리버스 나가기' : '배달 완료 & 방 나가기'}</Button>
             {username === myPartyInfo.host && 
+            partyState == 0 &&
             <Button
                 fullWidth
                 variant="contained"
                 disabled={!meetMinOrderPrice}
                 onClick={requestPay}
                 sx={{mt: 3, mb: 2}}
-            >✅주문 시작하기</Button>}
+            >🛵주문 시작하기</Button>}
+            {partyState == 1 && 
+            <Button
+            fullWidth
+            variant="contained"
+            disabled={!meetMinOrderPrice}
+            onClick={payEach}
+            sx={{mt: 3, mb: 2}}
+            >✅결제하기</Button>}
         </Fragment>) : (<CircularProgress/>)}
         <Dialog open={open}
                 onClose={handleClose}
