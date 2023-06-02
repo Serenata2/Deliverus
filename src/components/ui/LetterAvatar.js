@@ -42,7 +42,8 @@ function stringAvatar(name) {
 // props로 이름이 들어옵니다.
 // 이름을 가지고 Avatar를 만들어줍니다.
 export default function LetterAvatar(props) {
+    const {key, name, ...other} = props;
     return (
-            <Avatar {...stringAvatar(props.name)} />
+            <Avatar {...stringAvatar(name)} {...other}/>
     );
 }

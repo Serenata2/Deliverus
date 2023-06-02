@@ -260,7 +260,6 @@ const DeliverusList = ({ partyCard }) => {
         lng: 0,
         category : ""
     });
-    //console.log(partyInfo);
 
     return (
       <div style={{ maxWidth: '800px', margin: 'auto'}}>

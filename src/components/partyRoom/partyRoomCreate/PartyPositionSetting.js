@@ -59,7 +59,7 @@ function PartyPositionSetting(props) {
                    required
                    value={detailPos}
                    onChange={handleDetailPosInput}
-                   sx={{mb: 5, width: "80%"}}/>
+                   sx={{my: 5, width: "80%"}}/>
     </Fragment>);
 }
 

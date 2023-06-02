@@ -31,7 +31,7 @@ function ChatLog(props) {
     return (
         <List ref={scrollRef} sx={{height: "80vh", overflowY: "auto"}}>
             {chatLogList.length !== 0 && chatLogList.map((item, idx) => {
-                if(item.type === 0) {
+                if(item.type === 0 || item.type === -1) {
                     return (
                         <ListItem key={idx} sx={{pb:2}}>
                             <Box align="center" sx={{margin:"auto"}}>

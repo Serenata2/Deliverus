@@ -51,7 +51,9 @@ export default function RecommendationList(props) {
   if (isMobile) {
     return (
       <Fragment>
-        <h3>📈 AI가 추천해주는 Top5 음식!</h3>
+        <Typography paddingBottom={"4px"} variant="h6" component="h6">
+          AI가 추천해주는 현재 TOP 5 음식
+        </Typography>
         {/* <Box
           align="center"
           sx={{
@@ -89,7 +91,14 @@ export default function RecommendationList(props) {
                 : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
             const carouselImg = require(`../../images/carousel/${title}.jpg`);
             if (idx <= 5) {
-              return <CarouselCard img={carouselImg} text={item} idx={idx} />;
+              return (
+                <CarouselCard
+                  key={idx}
+                  img={carouselImg}
+                  text={item}
+                  idx={idx}
+                />
+              );
             }
           })}
         </Carousel>
