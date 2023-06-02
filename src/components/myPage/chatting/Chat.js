@@ -29,8 +29,6 @@ function Chat() {
     // 내가 속해 있는 파티방 ID를 가지고 있는 변수
     const [myPartyId, setMyPartyId] = useState(-1);
 
-    const [partyList, setPartyList] = useState(null);
-
     // 메세지 전송 시 호출되는 함수
     const handleSendMessage = (e) => {
         e.preventDefault();

@@ -51,7 +51,11 @@ const MainContents = () => {
   };
 
   const navToPartyList = () => {
-    navigate(`/party/list`);
+    navigate(`/party/list`, {
+      state: {
+        recruitingPartyList: recruitingPartyList
+      }
+    });
   };
 
   // // react-query 예제 테스트
@@ -298,7 +302,9 @@ const MainContents = () => {
       <div>
         <div className={styles.mainContents_subTitle}>
           <h3>👥 내 근처에서 모집중인 딜리버스 👥</h3>
-          <Link to="/party/list">더보기</Link>
+          <h4 className={styles.show_more} onClick={navToPartyList}>
+            더보기
+          </h4>
         </div>
         {recruitingPartyList && (
           <RecruitingPartyList partyList={recruitingPartyList} />
