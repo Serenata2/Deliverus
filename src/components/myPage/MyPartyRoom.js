@@ -104,8 +104,11 @@ function MyPartyRoom() {
     // 주문이 완료되었을 때 시간 보여주기
     const [deliverTime, setDeliverTime] = useState(null);
 
-    // 주문이 시작되었을 때 alert창을 한번만 띄우기 위한 state
+    // 결제가 완료되었을 때 alert창을 한번만 띄우기 위한 state
     const [isAlerted, setIsAlerted] = useState(false);
+
+    // 방장이 결제 버튼을 눌렀을 때 alert창을 한번만 띄우기 위한 state
+    const [isPaymentAlerted, setIsPaymentAlerted] = useState(false);
 
     // 방장이 주문하기 버튼 클릭
 
@@ -354,11 +357,19 @@ function MyPartyRoom() {
         return res
     })
     .then((res) => {
+        if(res.data == 1){
+            if(isPaymentAlerted == false) {
+                alert('결제를 진행해주세요! 모든 인원이 결제를 완료하면 배달이 시작됩니다.');
+                setIsPaymentAlerted(true);
+            }
+        }
+
         if(res.data == 2) {
             if(isAlerted == false) {
                 alert('모든 인원이 결제하여 배달이 시작됩니다!')
+                setIsAlerted(true);
             }
-            setIsAlerted(true);
+            
             axios.get(`${API.PARTY_FINISH}?id=${myPartyId}`)
             .then((res) => {
                 console.log(res);
@@ -511,6 +522,9 @@ function MyPartyRoom() {
             <Typography variant="h5" sx={{margin: "auto", mb: 3}}>
                 {myPartyInfo.partyName}
             </Typography>
+            <Typography variant="h5" sx={{margin: "auto", mb: 3, color: "#9e9e9e"}}>
+                {partyState === 0 ? "주문 대기" : partyState === 1 ? "결제 대기" : "결제 완료"}
+            </Typography>
             <Typography variant="h6" mb={1}>
                 🏠가게 정보
             </Typography>
@@ -518,7 +532,7 @@ function MyPartyRoom() {
                 {myPartyInfo.restaurantName}
             </Typography>
             <Typography  variant="h6" sx={{color: "#ef5350", fontSize: "1rem"}}>
-                {partyState == 2 ? `배달 시간 : ${deliverTime}` : `파티방 만료 시간 : ${myPartyInfo.expireTime}`} : 🕓 
+                {`파티방 만료 시간 : ${myPartyInfo.expireTime}`}🕓
             </Typography>
             <Divider sx={{border: 1, my: 4}}/>
             <Typography variant="h6" mb={1}>
