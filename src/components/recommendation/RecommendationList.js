@@ -9,20 +9,33 @@ import LooksTwoOutlinedIcon from "@mui/icons-material/LooksTwoOutlined";
 import Looks3OutlinedIcon from "@mui/icons-material/Looks3Outlined";
 import Looks4OutlinedIcon from "@mui/icons-material/Looks4Outlined";
 import Looks5OutlinedIcon from "@mui/icons-material/Looks5Outlined";
-import {
-  Box,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import Card from "@mui/material/Card";
+import Image from "mui-image";
+
+import { Typography } from "@mui/material";
+// import Card from "@mui/material/Card";
+import { ScrollCard } from "./ScrollCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Fragment } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import { useNavigate } from "react-router-dom";
-import Carousel from "react-material-ui-carousel";
-import CarouselCard from "./CarouselCard";
+import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import "react-horizontal-scrolling-menu/dist/styles.css";
+import useDrag from "./useDrag.ts";
+
+function onWheel(apiObj, ev) {
+  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+
+  if (isThouchpad) {
+    ev.stopPropagation();
+    return;
+  }
+
+  if (ev.deltaY < 0) {
+    apiObj.scrollNext();
+  } else if (ev.deltaY > 0) {
+    apiObj.scrollPrev();
+  }
+}
 
 export default function RecommendationList(props) {
   const iconList = [
@@ -47,6 +60,25 @@ export default function RecommendationList(props) {
     });
   };
 
+  // 슬라이드를 위한 드래그 관련 함수입니다.
+  const { dragStart, dragStop, dragMove, dragging } = useDrag();
+  const handleDrag =
+    ({ scrollContainer }) =>
+    (ev) =>
+      dragMove(ev, (posDiff) => {
+        if (scrollContainer.current) {
+          scrollContainer.current.scrollLeft += posDiff;
+        }
+      });
+
+  const [selected, setSelected] = React.useState("");
+  const handleItemClick = (itemId) => () => {
+    if (dragging) {
+      return false;
+    }
+    setSelected(selected !== itemId ? itemId : "");
+  };
+
   // 모바일 화면인 경우
   if (isMobile) {
     return (
@@ -54,35 +86,13 @@ export default function RecommendationList(props) {
         <Typography paddingBottom={"4px"} variant="h6" component="h6">
           AI가 추천해주는 현재 TOP 5 음식
         </Typography>
-        {/* <Box
-          align="center"
-          sx={{
-            display: "flex",
-            alignItem: "row",
-            justifyContent: "space-between",
-            m: 4,
-          }}
+        <ScrollMenu
+          onMouseLeave={dragStop}
+          onMouseDown={() => dragStart}
+          onMouseUp={() => dragStop}
+          onMouseMove={handleDrag}
+          onWheel={onWheel}
         >
-          {props.list.map((item, idx) => {
-            if (idx <= 5) {
-              return (
-                <Card key={idx} onClick={handleClick}>
-                  <CardActionArea>
-                    <Typography
-                      gutterBottom
-                      variant="h6"
-                      component="div"
-                      sx={{ m: 1 }}
-                    >
-                      {item}
-                    </Typography>
-                  </CardActionArea>
-                </Card>
-              );
-            }
-          })}
-        </Box> */}
-        <Carousel height={230} duration={500} animation="slide">
           {props.list.map((item, idx) => {
             const slashIdx = item.indexOf("/");
             const title =
@@ -90,18 +100,20 @@ export default function RecommendationList(props) {
                 ? item
                 : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
             const carouselImg = require(`../../images/carousel/${title}.jpg`);
-            if (idx <= 5) {
-              return (
-                <CarouselCard
-                  key={idx}
-                  img={carouselImg}
-                  text={item}
-                  idx={idx}
-                />
-              );
-            }
+
+            return (
+              <ScrollCard
+                title={item}
+                itemId={idx}
+                idx={idx}
+                img={carouselImg}
+                onClick={handleItemClick(idx)}
+                selected={idx === selected}
+                restInfoList={props.restInfoList}
+              />
+            );
           })}
-        </Carousel>
+        </ScrollMenu>
       </Fragment>
     );
   }
