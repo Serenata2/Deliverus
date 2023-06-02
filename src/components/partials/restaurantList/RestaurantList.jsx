@@ -103,6 +103,16 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
     //     ratingLabel = "인생식당"
     // }
 
+    // 가게 설명 주석입니다. 재활용 할 수 있을 것 같아서 남겨요
+    // <Typography variant="body2" color="text.secondary" sx={{
+        // overflow: "hidden",
+        // textOverflow: "ellipsis",
+    //     display: "-webkit-box",
+    //     WebkitLineClamp: 2, 
+    //     WebkitBoxOrient: "vertical",
+    //     textAlign: "start"
+    // }}>{intro}</Typography>
+
     rating = rating % 1 === 0 ? rating + '.0' : rating;
     
     // pc화면
@@ -158,83 +168,47 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                     marginX: "auto",
                     width: "100%",
                     border: 1,
-                    borderRadius: 3,
+                    borderRadius: 2,
                     boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
+                    backgroundColor: "#fff"
                 }}>
                     <Grid item xs={4}>
                         <img src={image} style={{
                             width: "80px",
                             aspectRatio: "1 / 1",
                             borderRadius: "6px",
-                            paddingRight: "8px"
                         }} />
                     </Grid>
-                    <Grid item xs={8}>
-                        <Stack direction="row">
-                            <Stack direction="column" justifyContent="flex-start" spacing={1} minWidth={0}>
-                                <Typography textAlign="start">{name}</Typography>
-                                <Box>
-                                    <Typography variant="body2" sx={{border: 1, borderRadius: 3, width:"50%", textAlign: "center", backgroundColor: "info.main"}}>
-                                        ⭐ {rating} / 5.0&nbsp;
-                                    </Typography>
-                                </Box>
-                                <Typography variant="body2" color="text.secondary" sx={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 2, 
-                                    WebkitBoxOrient: "vertical",
-                                    textAlign: "start"
-                                }}>{intro}</Typography>
-                            </Stack>
-                        </Stack>
+                    <Grid item xs={8} paddingLeft={"4px"} container spacing={0.5}>
+                        {/* <Stack direction="row"> */}
+                            {/* <Stack direction="column" justifyContent="flex-start" spacing={1} minWidth={0}> */}
+                        <Grid item xs={6}>
+                            <Typography noWrap textAlign="start" textOverflow={"ellipsis"}>{name}</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body2" sx={{border: 1, borderRadius: 3, width:"100%", textAlign: "center", backgroundColor: "info.main"}}>
+                                            ⭐ {rating} / 5.0&nbsp;
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6} container>
+                            <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
+                                배달비: {deliveryFee.toLocaleString()}원
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                        
+                        </Grid>
+                        <Grid item xs={12} container>
+                            <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
+                                최소 주문 금액: {minOrderPrice.toLocaleString()}원
+                            </Typography>
+                        </Grid>
+                            {/* </Stack> */}
+                        
+                        {/* </Stack> */}
                     </Grid>
                 </Grid>
             </ButtonBase>
-            // <Card variant="outlined"
-            //       sx={{display: "flex", alignItems: "center", m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)", borderRadius: 3}}>
-            //     <Grid container sx={{justifyContent: "center", alignItems: "center"}}>
-            //         <Grid item xs={3}>
-            //             <CardContent sx={{padding: 0}}>
-            //                 <Image width="80px" height="80px" src={image} duration="500" fit="cover"/>
-            //             </CardContent>
-            //         </Grid>
-            //         <Grid item xs={6}>
-            //             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', p:0, m:0}}>
-            //                 <CardContent>
-            //                     <Typography sx={{textOverflow: 'ellipsis'}} fontSize="1.3rem" variant="h5" component="div">
-            //                         {name}
-            //                     </Typography>
-            //                     <Box sx={{display: "flex", flexDirection: "column"}}>
-            //                         <Box sx={{display: "flex", flexDirection: "row"}}>
-            //                             <Typography variant="body2" sx={{pr: 1, mb: 1}}>
-            //                                 ⭐
-            //                                 {rating}
-            //                             </Typography>
-            //                             <Chip icon={<FaceIcon/>} size="small" label={ratingLabel} sx={{ml: 0.5}}/>
-            //                         </Box>
-            //                         <Typography variant="body2" sx={{pr: 2}}>
-            //                             배달비 : {deliveryFee}원
-            //                         </Typography>
-            //                         <Typography variant="body2">
-            //                             최소주문 : {minOrderPrice}원
-            //                         </Typography>
-            //                     </Box>
-            //                 </CardContent>
-            //             {/* <CardActions align="center" sx={{flexDirection: "column"}}>
-            //                 <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
-            //                     둘러보기</Button>
-            //             </CardActions> */}
-            //             </Box>
-            //         </Grid>
-            //         <Grid item xs={2}>
-            //         <CardActions align="center" sx={{flexDirection: "column"}}>
-            //                 <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.5rem"}}>
-            //                     둘러보기</Button>
-            //             </CardActions>
-            //         </Grid>
-            //     </Grid>
-            // </Card>
         );
     }
 } 
