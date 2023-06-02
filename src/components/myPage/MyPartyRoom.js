@@ -22,6 +22,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import Backdrop from "@mui/material/Backdrop";
+import axios from 'axios';
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -96,6 +97,20 @@ function MyPartyRoom() {
 
   // 파티방의 가게 정보를 담은 리스트
   const [restInfo, setRestInfo] = useState(null);
+
+    // 현재 참가한 방의 state
+    const [partyState, setPartyState] = useState(null);
+
+    // 주문이 완료되었을 때 시간 보여주기
+    const [deliverTime, setDeliverTime] = useState(null);
+
+    // 결제가 완료되었을 때 alert창을 한번만 띄우기 위한 state
+    const [isAlerted, setIsAlerted] = useState(false);
+
+    // 방장이 결제 버튼을 눌렀을 때 alert창을 한번만 띄우기 위한 state
+    const [isPaymentAlerted, setIsPaymentAlerted] = useState(false);
+
+    // 방장이 주문하기 버튼 클릭
 
     // 결제 상태로 가도 괜찮은지 판단하는 함수
     const meetMinOrderPrice = () => {
@@ -334,6 +349,50 @@ function MyPartyRoom() {
     }
   }, [myPartyId]);
 
+   // 방의 상태를 react-query로 지속적으로 가져오며, 상태를 변화시킴.
+   const {partyStateIsLoading, partyStateError, partyStateQueryData} = useQuery(["partyState"], () => {
+    axios.get(`${API.PARTY_STATE}?nickname=${username}`)
+    .then((res) => {
+        console.log(`current party state : ${res.data}`);
+        setPartyState(res.data);
+        return res
+    })
+    .then((res) => {
+        if(res.data == 1){
+            if(isPaymentAlerted == false) {
+                alert('결제를 진행해주세요! 모든 인원이 결제를 완료하면 배달이 시작됩니다.');
+                setIsPaymentAlerted(true);
+            }
+        }
+
+        if(res.data == 2) {
+            if(isAlerted == false) {
+                alert('모든 인원이 결제하여 배달이 시작됩니다!')
+                setIsAlerted(true);
+            }
+            
+            axios.get(`${API.PARTY_FINISH}?id=${myPartyId}`)
+            .then((res) => {
+                console.log(res);
+                setDeliverTime(res.data.deliverTime);
+            })
+        }
+    })
+    .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+        }
+        console.log(`${error.name} : ${error.message}`);
+        return error;
+    });
+}, {
+   refetchOnWindowFocus : true,
+   refetchInterval: 1000,
+   refetchIntervalInBackground: true,
+   retry : 0
+})
+
   const { isLoading, error, queryData } = useQuery(
     ["partyInfo"],
     () => {
@@ -390,40 +449,67 @@ function MyPartyRoom() {
     };
   }, []);
 
-  const requestPay = () => {
+    // 각자 결제하는 로직
+
+  const payEach = () => {
     let totalPrice = 0;
     for (let i = 0; i < myMenu.length; i++) {
       totalPrice += myMenu[i].price;
     }
 
-    if (window.IMP) {
-      console.log(totalPrice);
-      window.IMP.init("imp33478261");
-      window.IMP.request_pay(
-        {
-          pg: "kakao",
-          pay_method: "kakaopay",
-          merchant_uid: "merchant_" + new Date().getTime(),
-          name: myPartyInfo.restaurantName,
-          amount: totalPrice, // 변경된 금액 (원하는 금액으로 수정)
-          buyer_email: "Iamport@chai.finance",
-          buyer_name: "포트원 기술지원팀",
-          buyer_tel: "010-1234-5678",
-          buyer_addr: "서울특별시 강남구 삼성동",
-          buyer_postcode: "123-456",
-        },
-        function (rsp) {
-          if (rsp.success) {
-            // 결제 성공 시 로직
-          } else {
-            alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
-            console.log(myPartyInfo);
-          }
-        }
-      );
+  if (window.IMP) {
+    console.log(totalPrice);
+    window.IMP.init('imp33478261');
+    window.IMP.request_pay({
+      pg: 'kakao',
+      pay_method: 'kakaopay',
+      merchant_uid: 'merchant_' + new Date().getTime(),
+      name: myPartyInfo.restaurantName,
+      amount: totalPrice, // 변경된 금액 (원하는 금액으로 수정)
+      buyer_email: 'Iamport@chai.finance',
+      buyer_name: '포트원 기술지원팀',
+      buyer_tel: '010-1234-5678',
+      buyer_addr: '서울특별시 강남구 삼성동',
+      buyer_postcode: '123-456',
+    }, function(rsp) {
+      if (rsp.success) {
+        // 결제 성공 시 로직
+        let partyId = parseInt(myPartyId)
+        axios.post(`${API.PAYMENT_EACH}`, {
+            partyId: partyId,
+            nickname: myPartyInfo.host
+            }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then((res) => console.log(res));
+      } else {
+        // 결제에 실패했을 때 로직
+        alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
+      }
+    });
     }
   };
 
+  // 방장이 주문 클릭했을 때 로직
+  const requestPay = () => {
+    let partyId = parseInt(myPartyId)
+    axios.post(`${API.PARTY_ORDER}`, {
+        partyId: partyId
+    })
+    .then((res) => {
+        console.log(res)
+    })
+    .catch((error) => {
+        // 로그인 만료 에러인 경우 로그아웃 실행
+        if (error.name === "LoginExpirationError") {
+            console.log(`${error.name} : ${error.message}`);
+        }
+        console.log(`${error.name} : ${error.message}`);
+        return error;
+    });
+  }
+  
   return (
     <Box
       component="main"
@@ -440,6 +526,9 @@ function MyPartyRoom() {
             <Typography variant="h5" sx={{margin: "auto", mb: 3}}>
                 {myPartyInfo.partyName}
             </Typography>
+            <Typography variant="h5" sx={{margin: "auto", mb: 3, color: "#9e9e9e"}}>
+                {partyState === 0 ? "주문 대기" : partyState === 1 ? "결제 대기" : "결제 완료"}
+            </Typography>
             <Typography variant="h6" mb={1}>
                 🏠가게 정보
             </Typography>
@@ -447,7 +536,7 @@ function MyPartyRoom() {
                 {myPartyInfo.restaurantName}
             </Typography>
             <Typography  variant="h6" sx={{color: "#ef5350", fontSize: "1rem"}}>
-                파티방 만료 시간 : 🕓 {myPartyInfo.expireTime}
+                {`파티방 만료 시간 : ${myPartyInfo.expireTime}`}🕓
             </Typography>
             <Divider sx={{border: 1, my: 4}}/>
             <Typography variant="h6" mb={1}>
@@ -475,6 +564,12 @@ function MyPartyRoom() {
             <Typography variant="h6" mb={1}>
                 🚩딜리버스 픽업 장소!
             </Typography>
+            {
+            partyState == 2 &&
+            <Typography component="h1" variant="h6" sx={{margin: "auto"}}>
+                배달시간 : {deliverTime}분
+            </Typography>
+            }
             <Box sx={{width: "100%", height: "500px"}}>
                 <KakaoMapStore
                     lat={myPartyInfo.latitude}
@@ -543,8 +638,16 @@ function MyPartyRoom() {
                 variant="contained"
                 onClick={handleExitPartyRoom}
                 sx={{mt: 3, mb: 2}}
-            >딜리버스 나가기</Button>
-            {username === myPartyInfo.host && <Button
+            >{partyState == 2 ? '배달 완료 & 방 나가기' : '딜리버스 나가기'}</Button>
+            {partyState == 1 && <Button
+                fullWidth
+                variant="contained"
+                disabled={!meetMinOrderPrice}
+                onClick={payEach}
+                sx={{mt: 3, mb: 2}}
+            >✅결제하기</Button>}
+            {username === myPartyInfo.host &&
+            partyState == 0 && <Button
                 fullWidth
                 variant="contained"
                 disabled={!meetMinOrderPrice()}
