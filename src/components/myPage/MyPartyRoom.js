@@ -105,6 +105,7 @@ function MyPartyRoom() {
                 totalOrderPrice += element.order[i].price * element.order[i].num;
             }
         })
+
         return (totalOrderPrice >= myPartyInfo.minOrderPrice);
     }
 
@@ -144,7 +145,7 @@ function MyPartyRoom() {
         else if (error.name === "NoDataError") {
           alert("error.message");
         }
-        console.log(`${error.name} : ${error.message}`);
+        console.log(`Restaurant Info API -> ${error.name} : ${error.message}`);
       });
   };
 
@@ -427,12 +428,13 @@ function MyPartyRoom() {
     <Box
       component="main"
       sx={{
-        my: 8,
+        mt: 8,
         mx: "auto",
         px: 4,
         display: "flex",
         flexDirection: "column",
-        maxWidth: 'md'
+        maxWidth: 'md',
+        bgcolor: "#eeeeee"
     }}>
         {myPartyInfo ? (<Fragment>
             <Typography variant="h5" sx={{margin: "auto", mb: 3}}>
@@ -545,7 +547,7 @@ function MyPartyRoom() {
             {username === myPartyInfo.host && <Button
                 fullWidth
                 variant="contained"
-                disabled={!meetMinOrderPrice}
+                disabled={!meetMinOrderPrice()}
                 onClick={requestPay}
                 sx={{mt: 3, mb: 2}}
             >✅{myPartyInfo.minOrderPrice.toLocaleString()}원 이상 주문할 수 있어요!</Button>}

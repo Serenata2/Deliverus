@@ -46,7 +46,7 @@ const MenuCard = ({ menu }) => {
             {menu.menuName}
           </Typography>
           <Typography fontSize="0.7rem" variant="body2">
-            가격 : {menu.price}원
+            가격 : {menu.price.toLocaleString()}원
           </Typography>
         </CardContent>
         <CardActions>
