@@ -1,33 +1,72 @@
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import FaceIcon from '@mui/icons-material/Face';
-import Chip from '@mui/material/Chip';
 import React from 'react'
 import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ButtonBase, Grid } from "@mui/material";
-import Image from "mui-image";
 import { Stack, borderRadius } from "@mui/system";
+import {UserContext} from "../../store/UserContext";
+import {API} from "../../../utils/config";
+import * as status from "../../../utils/status";
 
 const restaurantCategories = ["한식", "분식", "치킨", "아시안/양식", "족발/보쌈", "돈까스/일식", "카페/디저트", "찜탕", "패스트푸드", "피자"];
 
 export default function RestaurantList() {
+    // 설정한 도로명 주소, 위도/경도 가져오기
+    const { userState, handleLogOut} = useContext(UserContext);
+    const { userPosAddr, userPos } = userState;
 
-    // 가게 정보(나중에 백엔드에서 받아와서 state로 관리할 거임.)
+    // 가게 정보 리스트
     const {state} = useLocation();
-    const [currentCategories, setCurrentCategories] = useState(state.category);
+    const [restInfoList, setRestInfoList] = useState(state ? state.restInfoList : null);
+
+    const [currentCategories, setCurrentCategories] = useState(state ? state.category : "all");
+
     const handleCategories = (e) => {
         const category = e.target.textContent;
         setCurrentCategories(category);
     }
 
+    useEffect(() => {
+        // Header의 방 만들기 버튼을 통해 들어온 경우
+        if(state === null || typeof state === "undefined"){
+            // 모든 가게 리스트를 받아옵니다.
+            fetch(`${API.RESTAURANT_LIST}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    latitude: userPos.lat,
+                    longitude: userPos.lng,
+                }),
+            })
+                .then((respones) => {
+                    status.handleRestaurantResponse(respones.status);
+                    return respones.json();
+                })
+                .then((data) => {
+                    console.log("Respones Data from Restaurant LIST API : ", data);
+                    setRestInfoList(data);
+                })
+                .catch((error) => {
+                    // 로그인 만료 에러인 경우 로그아웃 실행
+                    if (error.name === "LoginExpirationError") {
+                        console.log(`${error.name} : ${error.message}`);
+                        handleLogOut();
+                    }
+                    console.log(`${error.name} : ${error.message}`);
+                });
+        }
+    })
     return (
         <div className={styles.list_body}>
             <div className={styles.list_all} onClick={e => setCurrentCategories('all')}>전체</div>
@@ -40,10 +79,10 @@ export default function RestaurantList() {
             </div>
             <div className={styles.list_location_wrapper}>
                 <LocationOnIcon/>
-                <span className={styles.list_location_txt}>서울시 상암동</span>
+                <span className={styles.list_location_txt}>{userPosAddr}</span>
             </div>
             <div className={styles.list_card}>
-                {state.restInfoList.map((item, idx) => {
+                {restInfoList && restInfoList.map((item, idx) => {
                     if (
                         currentCategories === 'all' ||
                         currentCategories === item.category
