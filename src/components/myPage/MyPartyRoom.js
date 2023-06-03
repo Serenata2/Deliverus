@@ -211,7 +211,7 @@ function MyPartyRoom() {
             order: orderList
         }
 
-    fetch(`${API.PARTY_ORDER}/${username}`, {
+    fetch(`${API.PARTY_CHANGE_ORDER}/${username}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
