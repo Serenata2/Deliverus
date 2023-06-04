@@ -31,6 +31,7 @@ import DrawerLinkTab from "./headerComponents/DrawerLinkTab";
 const Header = () => {
   const { userState, handleLogOut } = useContext(UserContext);
   const { isLoggedIn } = userState;
+  const { userPosAddr } = userState;
   const matches = useMediaQuery("(min-width:750px)");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -66,7 +67,6 @@ const Header = () => {
       component: (
         <Typography
           onClick={() => {
-            toggleDrawer();
             handleLogOut();
           }}
           sx={{
@@ -81,7 +81,7 @@ const Header = () => {
   ];
 
   // 모바일 환경에서 Drawer에 들어가는 Box와 그 산하 List
-  const list = () => (
+  const list = (userPosAddr) => (
     <Box sx={{ width: 180 }} role="presentation">
       <List
         aria-labelledby="nested-list-subheader"
@@ -97,10 +97,11 @@ const Header = () => {
       >
         {drawerTab.map((tab, index) => (
           <ListItem onClick={toggleDrawer} key={index} disableGutters>
+            {(tab.component.props.children === "로그아웃" || userPosAddr) &&
             <ListItemButton>
               <ListItemIcon>{tab.icon}</ListItemIcon>
               {tab.component}
-            </ListItemButton>
+            </ListItemButton>}
           </ListItem>
         ))}
       </List>
@@ -127,10 +128,10 @@ const Header = () => {
                 <div style={{ display: "flex" }}>
                   <TitleTab />
                   <div style={{ margin: "0 0 0 100px" }}>
-                    {isLoggedIn && (
+                    {isLoggedIn && userPosAddr && (
                       <>
                         <LinkTab to="/" name="홈" />
-                        <LinkTab to="/" name="방 만들기" />
+                        <LinkTab to="/restaurant/list" name="방 만들기" />
                         <LinkTab to="/myPage/0" name="마이페이지" />
                       </>
                     )}
@@ -186,7 +187,7 @@ const Header = () => {
                     open={isDrawerOpen}
                     onClose={toggleDrawer}
                   >
-                    {list()}
+                    {list(userPosAddr)}
                   </Drawer>
                 </React.Fragment>
               )}

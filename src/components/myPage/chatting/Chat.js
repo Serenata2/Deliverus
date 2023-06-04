@@ -29,8 +29,6 @@ function Chat() {
     // 내가 속해 있는 파티방 ID를 가지고 있는 변수
     const [myPartyId, setMyPartyId] = useState(-1);
 
-    const [partyList, setPartyList] = useState(null);
-
     // 메세지 전송 시 호출되는 함수
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -113,90 +111,92 @@ function Chat() {
     // 파티방 ID를 이용해서 구독을 하고, chatlog를 가져옵니다.
     useEffect(() => {
         if (myPartyId !== -1) {
-            fetch(`${API.CHAT_MESSAGE}?name=${username}&id=${myPartyId}`, {
-                headers: {
-                    "Content-Type": "application/json",
+            client = new StompJS.Client({
+                brokerURL: BASE_CHAT_URL,
+                connectHeaders: {
+                    sender: username,
+                    channelId: Number(myPartyId)
                 },
-                credentials: "include",
-            })
-                .then((respones) => {
-                    status.handleChatResponse(respones.status);
-                    return respones.json();
-                })
-                .then((data) => {
-                    console.log("Respones Data from CHAT MESSAGE API : ", data);
-                    if (Array.isArray(data) && data.length === 0) {
-                        data.push({
-                            sender: username, time: "00:00",
-                            chat: `${username}님이 입장하셨습니다`, type: 0
-                        });
-                    }
-                    setChatLog(prevState => [...prevState].concat(data));
+                debug: function (str) {
+                    console.log(str);
+                },
+                heartbeatIncoming: 4000,
+                heartbeatOutgoing: 4000,
+            });
 
-                    client = new StompJS.Client({
-                        brokerURL: BASE_CHAT_URL,
-                        connectHeaders: {
-                            sender: username,
-                            channelId: Number(myPartyId)
-                        },
-                        debug: function (str) {
-                            console.log(str);
-                        },
-                        heartbeatIncoming: 4000,
-                        heartbeatOutgoing: 4000,
+            // Fallback code
+            if (typeof WebSocket !== 'function') {
+                // For SockJS you need to set a factory that creates a new SockJS instance
+                // to be used for each (re)connect
+                client.webSocketFactory = mySocketFactory();
+            }
+
+            // Fallback code
+            if (typeof WebSocket !== 'function') {
+                // For SockJS you need to set a factory that creates a new SockJS instance
+                // to be used for each (re)connect
+                client.webSocketFactory = function () {
+                    // Note that the URL is different from the WebSocket URL
+                    return new SockJS('http://localhost:15674/stomp');
+                };
+            }
+
+            client.onConnect = function (frame) {
+                console.log(frame);
+                // Do something, all subscribes must be done is this callback
+                // This is needed because this will be executed after a (re)connect
+
+                // connect하고 chatLog 불러오기
+                fetch(`${API.CHAT_MESSAGE}?name=${username}&id=${myPartyId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                })
+                    .then((respones) => {
+                        status.handleChatResponse(respones.status);
+                        return respones.json();
+                    })
+                    .then((data) => {
+                        console.log("Respones Data from CHAT MESSAGE API : ", data);
+                        if (Array.isArray(data) && data.length === 0) {
+                            data.push({
+                                sender: username, time: "00:00",
+                                chat: `${username}님이 입장하셨습니다`, type: 0
+                            });
+                        }
+                        setChatLog(prevState => [...prevState].concat(data));
+
+                    })
+                    .catch((error) => {
+                        // 로그인 만료 에러인 경우 로그아웃 실행
+                        if (error.name === "LoginExpirationError") {
+                            handleLogOut();
+                        }
+                        console.log(`CHAT MESSAGE API -> ${error.name} : ${error.message}`);
                     });
 
-                    // Fallback code
-                    if (typeof WebSocket !== 'function') {
-                        // For SockJS you need to set a factory that creates a new SockJS instance
-                        // to be used for each (re)connect
-                        client.webSocketFactory = mySocketFactory();
-                    }
+                subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
+                console.log("subscribed!");
+            };
 
-                    // Fallback code
-                    if (typeof WebSocket !== 'function') {
-                        // For SockJS you need to set a factory that creates a new SockJS instance
-                        // to be used for each (re)connect
-                        client.webSocketFactory = function () {
-                            // Note that the URL is different from the WebSocket URL
-                            return new SockJS('http://localhost:15674/stomp');
-                        };
-                    }
+            client.onStompError = function (frame) {
+                // Will be invoked in case of error encountered at Broker
+                // Bad login/passcode typically will cause an error
+                // Complaint brokers will set `message` header with a brief message. Body may contain details.
+                // Compliant brokers will terminate the connection after any error
+                console.log('Broker reported error: ' + frame.headers['message']);
+                console.log('Additional details: ' + frame.body);
+            };
 
-                    client.onConnect = function (frame) {
-                        console.log(frame);
-                        // Do something, all subscribes must be done is this callback
-                        // This is needed because this will be executed after a (re)connect
-
-                        subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
-                        console.log("subscribed!");
-                    };
-
-                    client.onStompError = function (frame) {
-                        // Will be invoked in case of error encountered at Broker
-                        // Bad login/passcode typically will cause an error
-                        // Complaint brokers will set `message` header with a brief message. Body may contain details.
-                        // Compliant brokers will terminate the connection after any error
-                        console.log('Broker reported error: ' + frame.headers['message']);
-                        console.log('Additional details: ' + frame.body);
-                    };
-
-                    client.activate();
-                })
-                .catch((error) => {
-                    // 로그인 만료 에러인 경우 로그아웃 실행
-                    if (error.name === "LoginExpirationError") {
-                        handleLogOut();
-                    }
-                    console.log(`CHAT MESSAGE API -> ${error.name} : ${error.message}`);
-                });
+            client.activate();
         }
     }, [myPartyId]);
 
 
     return (
         <Fragment>
-            <Box sx={{bgcolor: "#ffebee"}}>
+            <Box sx={{margin: "auto", bgcolor: "#ffebee", maxWidth: "md"}}>
                 <ChatLog list={chatLog} name={username}/>
                 <Divider sx={{border: 2}}/>
                 <Box component="form" sx={{display: "flex", alignItem: "row", margin: "auto", padding: 3}}>

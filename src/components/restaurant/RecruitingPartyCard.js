@@ -45,44 +45,45 @@ function RecruitingPartyCard(props) {
         direction="row"
         sx={{
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
           padding: 2,
           marginX: "auto",
           width: "100%",
           border: 1,
           borderRadius: 3,
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
+          backgroundColor: "#fff",
         }}
       >
         <LetterAvatar name={props.partyInfo.host} />
-        <Grid container spacing={0.5} sx={{ paddingLeft: 2 }}>
-          <Grid item xs={9} container justifyContent="flex-start">
+        <Grid container spacing={0.5} sx={{ paddingLeft: 1 }}>
+          <Grid item xs={8} container justifyContent="flex-start">
             <Typography variant="body1" noWrap>
               {recruitPartyInfo.partyName}
             </Typography>
           </Grid>
-          <Grid item xs={3} container justifyContent="flex-end">
+          <Grid item xs={4} container justifyContent="flex-end">
             <Typography variant="body2" color="text.secondary">
               {recruitPartyInfo.currentMemberNum}/{recruitPartyInfo.memberNum}
             </Typography>
           </Grid>
-          <Grid item xs={9} container justifyContent="flex-start">
+          <Grid item xs={8} container justifyContent="flex-start">
             <Typography variant="body2" color="text.secondary">
               {recruitPartyInfo.restaurantName}
             </Typography>
           </Grid>
-          <Grid item xs={3} container justifyContent="flex-end">
+          <Grid item xs={4} container justifyContent="flex-end">
             <Typography variant="body2" color="text.secondary">
               {Math.round(recruitPartyInfo.distance.toLocaleString())}m
             </Typography>
           </Grid>
-          <Grid item xs={6} container justifyContent="flex-start">
+          <Grid item xs={8} container justifyContent="flex-start">
             <Typography variant="body2" color="text.secondary">
               배달 팁: {recruitPartyInfo.deliveryFee.toLocaleString()}원
             </Typography>
           </Grid>
-          <Grid item xs={6} container justifyContent="flex-end">
-            <Typography variant="body2" color="text.secondary">
+          <Grid item xs={4} container justifyContent="flex-end">
+            <Typography variant="body2" color="text.secondary" noWrap>
               {remainMinutes}분 후 만료
             </Typography>
           </Grid>

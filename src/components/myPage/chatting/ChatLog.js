@@ -28,6 +28,7 @@ function ChatLog(props) {
 
     const chatLogList = props.list;
     const userName = props.name;
+
     return (
         <List ref={scrollRef} sx={{height: "80vh", overflowY: "auto"}}>
             {chatLogList.length !== 0 && chatLogList.map((item, idx) => {
@@ -35,7 +36,7 @@ function ChatLog(props) {
                     return (
                         <ListItem key={idx} sx={{pb:2}}>
                             <Box align="center" sx={{margin:"auto"}}>
-                                <Chip variant="outlined" color="info" label={item.chat}/>
+                                <Chip variant="outlined" label={item.chat} sx={{color: "#2196f3"}}/>
                             </Box>
                         </ListItem>
                     );
@@ -49,6 +50,7 @@ function ChatLog(props) {
                                         <Chip
                                             size="medium"
                                             sx={{
+                                                fontSize: "1rem",
                                                 height: 'auto',
                                                 '& .MuiChip-label': {
                                                     display: 'block',
@@ -73,6 +75,7 @@ function ChatLog(props) {
                                         <Chip
                                             size="medium"
                                             sx={{
+                                                fontSize: "1rem",
                                                 height: 'auto',
                                                 '& .MuiChip-label': {
                                                     display: 'block',
@@ -91,8 +94,7 @@ function ChatLog(props) {
                     </ListItem>
                 );
             })}
-        </List>
-    );
+        </List>);
 }
 
 export default ChatLog;
