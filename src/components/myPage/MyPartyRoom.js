@@ -473,6 +473,10 @@ function MyPartyRoom() {
     }, function(rsp) {
       if (rsp.success) {
         // 결제 성공 시 로직
+        
+      } else {
+        // 결제에 실패했을 때 로직
+        // alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
         let partyId = parseInt(myPartyId)
         axios.post(`${API.PAYMENT_EACH}`, {
             partyId: partyId,
@@ -482,9 +486,6 @@ function MyPartyRoom() {
                 'Content-Type': 'application/json'
             }
             }).then((res) => console.log(res));
-      } else {
-        // 결제에 실패했을 때 로직
-        alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
       }
     });
     }
