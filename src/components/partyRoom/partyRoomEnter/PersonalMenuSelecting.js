@@ -59,13 +59,17 @@ function PersonalMenuSelecting() {
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
-                    handleLogOut();
+                    console.log(`${error.name} : ${error.message}`);
                 }
-                // 요청한 것에 대한 데이터가 없을 때 에러 처리
-                else if (error.name === "NoDataError") {
-                    alert("error.message");
+                else if (error.name === "DuplicateJoinError"){
+                    alert("이미 딜리버스 중입니다!");
                 }
-                console.log(`${error.name} : ${error.message}`);
+                else {
+                    console.log(`${error.name} : ${error.message}`);
+                    alert("파티방 참여가 거절되었습니다!");
+                }
+                //에러 시 메인페이지로 이동
+                navigate("/");
             });
     }, []);
 
