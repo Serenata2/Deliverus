@@ -515,7 +515,7 @@ function MyPartyRoom() {
                     let partyId = parseInt(myPartyId)
                     axios.post(`${API.PAYMENT_EACH}`, {
                         partyId: partyId,
-                        nickname: myPartyInfo.host
+                        nickname: username
                     }, {
                         headers: {
                             'Content-Type': 'application/json'
