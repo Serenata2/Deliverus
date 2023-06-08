@@ -1,4 +1,4 @@
-import {Box, DialogActions, DialogContent, DialogTitle, Divider, TableRow} from "@mui/material";
+import {Box, DialogActions, DialogContent, DialogTitle, Divider, Grow, TableRow} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React, {Fragment, useContext, useEffect, useState} from "react";
 import KakaoMapStore from "../restaurant/KakaoMapStore";
@@ -25,6 +25,8 @@ import Backdrop from "@mui/material/Backdrop";
 import axios from 'axios';
 import styles from './MyPartyRoom.module.css'
 import deliveryIcon from '../../images/deliveryIcon/delivery.ico';
+import Snackbar from '@mui/material/Snackbar';
+import Fade from '@mui/material/Fade';
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -91,6 +93,19 @@ function MyPartyRoom() {
     const {username, userPos} = userState;
 
     const navigate = useNavigate();
+
+    const [state, setState] = useState({
+        open: false,
+        message: "",
+    });
+
+    const handleSnakbarClose = () => {
+        setState({
+            ...state,
+            open: false,
+            message: "",
+        });
+    };
 
     // 내가 속해 있는 파티방 ID를 가지고 있는 변수
     const [myPartyId, setMyPartyId] = useState(-1);
@@ -396,14 +411,22 @@ function MyPartyRoom() {
             .then((res) => {
                 if (res.data == 1) {
                     if (isPaymentAlerted == false) {
-                        alert('결제를 진행해주세요! 모든 인원이 결제를 완료하면 배달이 시작됩니다.');
+                        //alert('결제를 진행해주세요! 모든 인원이 결제를 완료하면 배달이 시작됩니다.');
+                        setState({
+                            open: true,
+                            message : "결제를 진행해주세요! 모든 인원이 결제를 완료하면 배달이 시작됩니다.",
+                        });
                         setIsPaymentAlerted(true);
                     }
                 }
 
                 if (res.data == 2) {
                     if (isAlerted == false) {
-                        alert('모든 인원이 결제하여 배달이 시작됩니다!')
+                        //alert('모든 인원이 결제하여 배달이 시작됩니다!');
+                        setState({
+                            open: true,
+                            message : "모든 인원이 결제하여 배달이 시작됩니다!",
+                        });
                         setIsAlerted(true);
                     }
 
@@ -699,24 +722,18 @@ function MyPartyRoom() {
                         </TableContainer>
                     </>
                 }
-                {partyState === 0 && <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleExitPartyRoom}
-                    sx={{mt: 3, mb: 2}}
-                >'딜리버스 나가기'</Button>}
-                {partyState === 2 && <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={handleExitPartyRoom}
-                    sx={{mt: 3, mb: 2}}
-                >'배달 완료 & 방 나가기'</Button>}
                 {partyState == 1 && <Button
                     fullWidth
                     variant="contained"
                     onClick={openMap}
                     sx={{mt: 3, mb: 2}}
                 >지도보기</Button>}
+                <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleExitPartyRoom}
+                    sx={{mt: 3, mb: 2}}
+                >{partyState == 2 ? '배달 완료 & 방 나가기' : '딜리버스 나가기'}</Button>
                 {partyState == 1 && <Button
                     fullWidth
                     variant="contained"
@@ -853,6 +870,13 @@ function MyPartyRoom() {
 
                     </>
                 )}
+            <Snackbar
+                anchorOrigin={{vertical: "top", horizontal : "center"}}
+                open={state.open}
+                onClose={handleSnakbarClose}
+                TransitionComponent={Fade}
+                message={state.message}
+            />
         </Box>);
 }
 
