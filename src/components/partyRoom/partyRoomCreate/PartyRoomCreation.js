@@ -14,6 +14,9 @@ import PartyRoomCrateResult from "./PartyRoomCreateResult";
 import { API } from "../../../utils/config";
 import * as status from "../../../utils/status";
 import Paper from "@mui/material/Paper";
+import Snackbar from '@mui/material/Snackbar';
+import Slide from '@mui/material/Slide';
+import Alert from '@mui/material/Alert';
 
 function getFutureExpireTime(expireTime) {
   const currentDate = new Date();
@@ -31,6 +34,11 @@ function getFutureExpireTime(expireTime) {
 
   return futureDate;
 }
+
+function TransitionRight(props) {
+  return <Slide {...props} direction="right" />;
+}
+
 // 파티방을 만드는 컴포넌트입니다.
 function PartyRoomCreation() {
   const context = useContext(UserContext);
@@ -83,6 +91,16 @@ function PartyRoomCreation() {
     setPartyInfo(tempPartyInfo);
     setState(value);
   };
+
+  // 경고창 띄우기 위한 변수
+  const [open, setOpen] = useState(false);
+  // 경고창의 message에 대한 변수
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   // 진행 단계마다 보여줄 컴포넌트
   const componentSteps = [
@@ -159,9 +177,13 @@ function PartyRoomCreation() {
         if (error.name === "LoginExpirationError") {
           console.log(`${error.name} : ${error.message}`);
         }
-        console.log(`${error.name} : ${error.message}`);
-
-        alert("파티방 생성이 거절되었습니다!");
+        else if (error.name === "DuplicateJoinError"){
+          alert("이미 딜리버스 중입니다!");
+        }
+        else {
+          console.log(`${error.name} : ${error.message}`);
+          alert("파티방 생성이 거절되었습니다!");
+        }
         //에러 시 메인페이지로 이동
         navigate("/");
       });

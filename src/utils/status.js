@@ -12,24 +12,24 @@ const checkStatus = (statusNum) => successNum.includes(statusNum);
  * @param statusNum Respond의 status 번호
  */
 const handleRegisterResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error();
+    if (!checkStatus(statusNum)) {
+        const error = new Error();
 
-    switch (statusNum) {
-      // 중복된 아이디, 닉네임 입력 에러 처리
-      case 406:
-        error.message = "중복된 아이디, 닉네임이 존재합니다";
-        error.name = "DuplicationError";
-        break;
+        switch (statusNum) {
+            // 중복된 아이디, 닉네임 입력 에러 처리
+            case 406:
+                error.message = "중복된 아이디, 닉네임이 존재합니다";
+                error.name = "DuplicationError";
+                break;
 
-      // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 /**
@@ -37,24 +37,24 @@ const handleRegisterResponse = (statusNum) => {
  * @param statusNum Respond의 status 번호
  */
 const handleLogInResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error("Error occurred.");
+    if (!checkStatus(statusNum)) {
+        const error = new Error("Error occurred.");
 
-    switch (statusNum) {
-      // 로그인 시도 거부 에러 처리
-      case 404:
-        error.message = "로그인이 거부되었습니다.";
-        error.name = "LoginError";
-        break;
+        switch (statusNum) {
+            // 로그인 시도 거부 에러 처리
+            case 404:
+                error.message = "로그인이 거부되었습니다.";
+                error.name = "LoginError";
+                break;
 
-      // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 /**
@@ -62,31 +62,31 @@ const handleLogInResponse = (statusNum) => {
  * @param statusNum Respond의 status 번호
  */
 const handleRestaurantResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error("Error occurred.");
+    if (!checkStatus(statusNum)) {
+        const error = new Error("Error occurred.");
 
-    console.log(statusNum);
-    switch (statusNum) {
-      // 요청한 것에 대한 데이터가 없을 때 에러 처리
-      case 204:
-        error.message = "요청한 데이터가 없습니다.";
-        error.name = "NoDataError";
-        break;
+        console.log(statusNum);
+        switch (statusNum) {
+            // 요청한 것에 대한 데이터가 없을 때 에러 처리
+            case 204:
+                error.message = "요청한 데이터가 없습니다.";
+                error.name = "NoDataError";
+                break;
 
-      // 로그인 시간이 만료된 에러 처리
-      case 401:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
+            // 로그인 시간이 만료된 에러 처리
+            case 401:
+                error.message = "로그인 시간이 만료되었습니다.";
+                error.name = "LoginExpirationError";
+                break;
 
-      // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 /**
@@ -94,25 +94,37 @@ const handleRestaurantResponse = (statusNum) => {
  * @param statusNum Respond의 status 번호
  */
 const handlePartyResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error("Error occurred.");
+    if (!checkStatus(statusNum)) {
+        const error = new Error("Error occurred.");
 
-    console.log(statusNum);
-    switch (statusNum) {
-        // 로그인 시간이 만료된 에러 처리
-      case 401:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
+        console.log(statusNum);
+        switch (statusNum) {
+            // 데이터가 없는 경우
+            case 204:
+                error.message = "데이터가 없습니다";
+                error.name = "NoDataError";
+                break;
 
-        // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 로그인 시간이 만료된 에러 처리
+            case 401:
+                error.message = "로그인 시간이 만료되었습니다.";
+                error.name = "LoginExpirationError";
+                break;
+
+            // 파티방에 이미 참여했는데 또 참여하려할 때 에러 처리
+            case 406:
+                error.message = "이미 파티방에 참여하고 있습니다";
+                error.name = "DuplicateJoinError";
+                break;
+
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 /**
@@ -120,25 +132,26 @@ const handlePartyResponse = (statusNum) => {
  * @param statusNum Respond의 status 번호
  */
 const handleRecommendResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error("Error occurred.");
+    if (!checkStatus(statusNum)) {
+        const error = new Error("Error occurred.");
 
-    console.log(statusNum);
-    switch (statusNum) {
-        // 로그인 시간이 만료된 에러 처리
-      case 401:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
+        console.log(statusNum);
+        switch (statusNum) {
+            // 로그인 시간이 만료된 에러 처리
+            case 401:
+                error.message = "로그인 시간이 만료되었습니다.";
+                error.name = "LoginExpirationError";
+                break;
 
-        // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+                break;
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 /**
@@ -146,35 +159,37 @@ const handleRecommendResponse = (statusNum) => {
  * @param statusNum Respond의 status 번호
  */
 const handleChatResponse = (statusNum) => {
-  if (!checkStatus(statusNum)) {
-    const error = new Error("Error occurred.");
+    if (!checkStatus(statusNum)) {
+        const error = new Error("Error occurred.");
 
-    console.log(statusNum);
-    switch (statusNum) {
-        // 로그인 시간이 만료된 에러 처리
-      case 401:
-        error.message = "로그인 시간이 만료되었습니다.";
-        error.name = "LoginExpirationError";
-        break;
+        console.log(statusNum);
+        switch (statusNum) {
+            // 로그인 시간이 만료된 에러 처리
+            case 401:
+                error.message = "로그인 시간이 만료되었습니다.";
+                error.name = "LoginExpirationError";
+                break;
 
-      case 204:
-        error.message = "처음 연결한 경우입니다.";
+            case 204:
+                error.message = "처음 연결한 경우입니다.";
+                break;
 
-        // 기타 에러 처리
-      default:
-        error.message = `${statusNum} 오류`;
-        error.name = "UnkownError";
+            // 기타 에러 처리
+            default:
+                error.message = `${statusNum} 오류`;
+                error.name = "UnkownError";
+                break;
+        }
+
+        throw error;
     }
-
-    throw error;
-  }
 };
 
 export {
-  handleLogInResponse,
-  handleRegisterResponse,
-  handleRestaurantResponse,
-  handlePartyResponse,
-  handleRecommendResponse,
-  handleChatResponse
+    handleLogInResponse,
+    handleRegisterResponse,
+    handleRestaurantResponse,
+    handlePartyResponse,
+    handleRecommendResponse,
+    handleChatResponse
 };

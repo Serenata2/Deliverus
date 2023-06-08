@@ -56,7 +56,7 @@ const Header = () => {
     },
     {
       icon: <GroupAddIcon />,
-      component: <DrawerLinkTab to="/" text="방 만들기" />,
+      component: <DrawerLinkTab to="/restaurant/list" text="방 만들기" />,
     },
     {
       icon: <AccountBoxIcon />,
