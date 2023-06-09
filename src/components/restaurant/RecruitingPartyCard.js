@@ -48,6 +48,7 @@ function RecruitingPartyCard(props) {
           padding: 2,
           marginX: "auto",
           borderRadius: 2,
+          width: "100%",
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
           backgroundColor: "#fff",
         }}
