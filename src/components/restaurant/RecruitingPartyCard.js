@@ -45,12 +45,10 @@ function RecruitingPartyCard(props) {
         direction="row"
         sx={{
           alignItems: "center",
-          justifyContent: "center",
           padding: 2,
           marginX: "auto",
+          borderRadius: 2,
           width: "100%",
-          border: 1,
-          borderRadius: 3,
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
           backgroundColor: "#fff",
         }}
