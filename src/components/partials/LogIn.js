@@ -19,6 +19,17 @@ const LogIn = ({ togglePage }) => {
     typography: {
       fontFamily: `"Roboto", sans-serif`
     },
+    palette: {
+      text: {
+        secondary: "grey",
+      },
+      primary: {
+        main: "#ff0700",
+      },
+      info: {
+        main: "#BABABA",
+      },
+    },
   });
 
   const { handleLogIn } = useContext(UserContext);
@@ -103,7 +114,9 @@ const LogIn = ({ togglePage }) => {
           로그인
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1}}>
+          <ThemeProvider theme={loginTheme}>
           <TextField
+            color="primary"
             margin="normal"
             required
             fullWidth
@@ -114,8 +127,8 @@ const LogIn = ({ togglePage }) => {
             value={username}
             onChange={handleIdInput}
           />
-          <ThemeProvider theme={loginTheme}>
           <TextField
+            color="primary"
             margin="normal"
             required
             fullWidth
