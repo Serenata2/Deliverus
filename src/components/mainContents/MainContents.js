@@ -306,8 +306,19 @@ const MainContents = () => {
             더보기
           </h4>
         </div>
-        {recruitingPartyList && (
-          <RecruitingPartyList partyList={recruitingPartyList} />
+        {recruitingPartyList ? (
+            <RecruitingPartyList partyList={recruitingPartyList} />
+        ) : (
+            <Box
+                sx={{
+                  backgroundColor: "info.main",
+                  textAlign: "center",
+                  paddingY: "10vh",
+                  borderRadius: 3,
+                }}
+            >
+              <Typography>주변에 모집 중인 딜리버스가 없어요...</Typography>
+            </Box>
         )}
         <div className={styles.mainContents_subTitle}>
           <h3>💪 내가 직접 딜리버스 모집하기 💪</h3>
