@@ -158,7 +158,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
     if (!isMobile) {
         return (
             <Card variant="outlined"
-                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
+                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)", borderRadius: 2}}>
                 <CardContent sx={{px: 0, pl: 1}}>
                     <img src={image} alt='음식점 사진'
                          style={{width: '120px', height: '120px', borderRadius: '16px', border: "1px solid"}}/>
@@ -206,7 +206,6 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                     padding: 2,
                     marginX: "auto",
                     width: "100%",
-                    border: 1,
                     borderRadius: 2,
                     boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
                     backgroundColor: "#fff"
@@ -216,6 +215,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                             width: "80px",
                             aspectRatio: "1 / 1",
                             borderRadius: "6px",
+                            boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.5)",
                         }} />
                     </Grid>
                     <Grid item xs={8} paddingLeft={"4px"} container spacing={0.5}>
@@ -239,7 +239,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                         </Grid>
                         <Grid item xs={12} container>
                             <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
-                                최소 주문 금액: {minOrderPrice.toLocaleString()}원
+                                최소 주문: {minOrderPrice.toLocaleString()}원
                             </Typography>
                         </Grid>
                             {/* </Stack> */}
