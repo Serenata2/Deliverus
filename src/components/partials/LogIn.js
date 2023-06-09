@@ -11,8 +11,16 @@ import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 import { UserContext } from "../store/UserContext";
+import {createTheme, ThemeProvider} from "@mui/material";
 
 const LogIn = ({ togglePage }) => {
+
+  const loginTheme = createTheme({
+    typography: {
+      fontFamily: `"Roboto", sans-serif`
+    },
+  });
+
   const { handleLogIn } = useContext(UserContext);
 
   // 알람창을 위한 변수입니다.
@@ -106,6 +114,7 @@ const LogIn = ({ togglePage }) => {
             value={username}
             onChange={handleIdInput}
           />
+          <ThemeProvider theme={loginTheme}>
           <TextField
             margin="normal"
             required
@@ -117,6 +126,7 @@ const LogIn = ({ togglePage }) => {
             value={password}
             onChange={handlePwInput}
           />
+          </ThemeProvider>
           <Button
             type="submit"
             fullWidth
