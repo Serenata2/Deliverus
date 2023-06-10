@@ -101,6 +101,7 @@ export default function RecommendationList(props) {
 
           return (
             <ScrollCard
+              key={idx}
               title={item}
               itemId={idx}
               idx={idx}

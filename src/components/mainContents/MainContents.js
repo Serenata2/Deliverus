@@ -225,7 +225,7 @@ const MainContents = () => {
       <div>
         <div className={styles.mainContents_subTitle}>
           <Typography variant="h6" component="h6">
-            👥 내 근처에 있는 딜리버스
+            👥 내 근처 딜리버스
           </Typography>
 
           <IconButton
@@ -253,7 +253,7 @@ const MainContents = () => {
         )}
         <div className={styles.mainContents_subTitle}>
           <Typography variant="h6" component="h6">
-            🏪 내 근처에 있는 가게 리스트
+            🏪 내 근처 가게 리스트
           </Typography>
           <IconButton
             onClick={navToRestaurantList}
