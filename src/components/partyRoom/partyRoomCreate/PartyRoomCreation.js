@@ -247,7 +247,7 @@ function PartyRoomCreation() {
           {componentSteps[activeStep]}
         </Paper>
         <Box sx={{ width: "100%", mt: 5 }}>
-          <Stepper activeStep={activeStep} sx={{ mb: 8 }}>
+          <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
             {labelSteps.map((label, inx) => {
               const stepProps = {};
               return (
@@ -258,7 +258,7 @@ function PartyRoomCreation() {
             })}
           </Stepper>
           {activeStep === labelSteps.length ? (
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 5 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 3 }}>
               <Box sx={{ display: "flex", pt: 2 }} />
               <Button
                 color="inherit"
@@ -275,7 +275,7 @@ function PartyRoomCreation() {
             </Box>
           ) : (
             <Fragment>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 5}}>
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 3}}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -301,7 +301,7 @@ function PartyRoomCreation() {
           )}
         </Box>
       </Box>
-      <Snackbar open={open} autoHideDuration={3000}
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}
                 anchorOrigin={{vertical: "top", horizontal : "center"}}>
         <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
           {alertMessage}

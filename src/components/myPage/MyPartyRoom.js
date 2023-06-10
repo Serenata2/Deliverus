@@ -575,6 +575,8 @@ function MyPartyRoom() {
           buyer_tel: "010-1234-5678",
           buyer_addr: "서울특별시 강남구 삼성동",
           buyer_postcode: "123-456",
+          //'http://localhost:8080/orderCompleteMobile'
+          m_redirect_url: "https://deliverus.online/payments/complete/mobile",
         },
         function (rsp) {
           if (rsp.success) {
@@ -664,8 +666,7 @@ function MyPartyRoom() {
           </Typography>
           {partyState === 0 && (
             <Typography variant="body1" color="primary">
-              파티방 유지 시간 : 🕓{" "}
-              {`파티방 남은 시간 : ${getRemainTime(myPartyInfo.expireTime)}분!`}
+              {`파티방 남은 시간 : 🕓${getRemainTime(myPartyInfo.expireTime)}분!`}
             </Typography>
           )}
           <Divider sx={{ border: 1, my: 4 }} />
@@ -824,7 +825,7 @@ function MyPartyRoom() {
             <Button
               fullWidth
               onClick={openMap}
-              sx={{ mt: 3, mb: 2, border: 1 }}
+              sx={{ mt: 1, mb: 1, border: 1 }}
             >
               지도보기
             </Button>
@@ -832,7 +833,7 @@ function MyPartyRoom() {
           <Button
             fullWidth
             onClick={handleExitPartyRoom}
-            sx={{ mt: 3, mb: 2, border: 1 }}
+            sx={{ mt: 2, mb: 2, border: 1 }}
           >
             {partyState == 2 ? "배달 완료 & 방 나가기" : "딜리버스 나가기"}
           </Button>
@@ -841,7 +842,7 @@ function MyPartyRoom() {
               fullWidth
               disabled={!meetMinOrderPrice}
               onClick={payEach}
-              sx={{ mt: 3, mb: 2, border: 1 }}
+              sx={{ mt: 2, mb: 2, border: 1 }}
             >
               ✅결제하기
             </Button>
@@ -851,7 +852,7 @@ function MyPartyRoom() {
               fullWidth
               disabled={!meetMinOrderPrice()}
               onClick={requestPay}
-              sx={{ mt: 3, mb: 2, border: 1 }}
+              sx={{ mt: 2, mb: 2, border: 1 }}
             >
               ✅{myPartyInfo.minOrderPrice.toLocaleString()}원 이상 주문할 수
               있어요!
@@ -1014,6 +1015,7 @@ function MyPartyRoom() {
       />
       <Snackbar
         open={alertOpen}
+        onClose={handleAlertClose}
         autoHideDuration={3000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >

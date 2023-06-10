@@ -158,7 +158,7 @@ function PersonalMenuSelecting() {
                 disabled={!countList.some(element => element > 0)}>
             🚩 Deliverus 파티방 입장하기
         </Button>
-        <Snackbar open={open} autoHideDuration={3000}
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}
                   anchorOrigin={{vertical: "top", horizontal : "center"}}>
             <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
                 {alertMessage}

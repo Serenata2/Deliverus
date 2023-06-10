@@ -185,7 +185,7 @@ export default function MyPage() {
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>)}
-                <Snackbar open={open} autoHideDuration={3000}
+                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}
                           anchorOrigin={{vertical: "top", horizontal : "center"}}>
                     <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
                         {alertMessage}
