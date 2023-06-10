@@ -10,7 +10,7 @@ import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ButtonBase, Grid } from "@mui/material";
+import {ButtonBase, Grid, IconButton} from "@mui/material";
 import { Stack, borderRadius } from "@mui/system";
 import {UserContext} from "../../store/UserContext";
 import {API} from "../../../utils/config";
@@ -77,10 +77,16 @@ export default function RestaurantList() {
                     );
                 })}
             </div>
-            <div className={styles.list_location_wrapper}>
-                <LocationOnIcon/>
-                <span className={styles.list_location_txt}>{userPosAddr}</span>
-            </div>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3}}>
+                <IconButton
+                    sx={{}}
+                    color="primary"
+                    aria-label="more"
+                >
+                    <LocationOnIcon />
+                </IconButton>
+                <h4>{userPosAddr}</h4>
+            </Box>
             <div className={styles.list_card}>
                 {restInfoList && restInfoList.map((item, idx) => {
                     if (

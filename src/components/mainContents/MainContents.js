@@ -291,7 +291,14 @@ const MainContents = () => {
         <h2>안녕하세요 {username}님!</h2>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-        <h4>📌 {userPosAddr}</h4>
+        <IconButton
+            sx={{}}
+            color="primary"
+            aria-label="more"
+        >
+          <LocationOnIcon />
+        </IconButton>
+        <h4>{userPosAddr}</h4>
         <Button onClick={handleChangeUserPos} sx={{ ml: 1.5 }}>
           위치 바꾸기
         </Button>
