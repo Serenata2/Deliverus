@@ -206,11 +206,19 @@ const RestaurantInfo = () => {
       >
         <LabelBox
           label={"배달비"}
-          detail={restaurant.deliveryFee.toLocaleString() + " 원"}
+          detail={
+            restaurant.deliveryFee
+              ? restaurant.deliveryFee.toLocaleString() + " 원"
+              : 0 + "원"
+          }
         />
         <LabelBox
           label={"최소배달비용"}
-          detail={restaurant.minOrderPrice.toLocaleString() + " 원"}
+          detail={
+            restaurant.minOrderPrice
+              ? restaurant.minOrderPrice.toLocaleString() + " 원"
+              : 0 + "원"
+          }
         />
         <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
       </Box>
@@ -266,11 +274,19 @@ const RestaurantInfo = () => {
       >
         <LabelBox
           label={"배달비"}
-          detail={restaurant.deliveryFee.toLocaleString() + "원"}
+          detail={
+            restaurant.deliveryFee
+              ? restaurant.deliveryFee.toLocaleString() + " 원"
+              : 0 + "원"
+          }
         />
         <LabelBox
           label={"최소배달비용"}
-          detail={restaurant.minOrderPrice.toLocaleString() + "원"}
+          detail={
+            restaurant.minOrderPrice
+              ? restaurant.minOrderPrice.toLocaleString() + " 원"
+              : 0 + "원"
+          }
         />
         <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
       </Box>
@@ -308,6 +324,7 @@ const RestaurantInfo = () => {
         }}
       >
         {restaurantDescript}
+        <Box sx={{ my: 1 }} />
         {recruitingPartyList && (
           <RecruitingPartyList partyList={recruitingPartyList} />
         )}

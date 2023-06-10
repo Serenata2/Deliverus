@@ -124,13 +124,13 @@ const RecruitingPartyList = (props) => {
               }}
             >
               <Stack alignItems={"center"}>
-                <Typography variant="body2">배달비</Typography>
+                <Typography variant="body1">배달비</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {partyInfo.deliveryFee.toLocaleString()} 원
                 </Typography>
               </Stack>
               <Stack alignItems={"center"}>
-                <Typography variant="body2">최소배달비용</Typography>
+                <Typography variant="body1">최소배달비용</Typography>
                 <Typography variant="body2" color="text.secondary">
                   {partyInfo.minOrderPrice.toLocaleString()} 원
                 </Typography>
