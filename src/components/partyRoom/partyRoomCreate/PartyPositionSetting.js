@@ -44,10 +44,10 @@ function PartyPositionSetting(props) {
     }
 
     return (<Fragment>
-        <Typography component="h1" variant="h5" sx={{my: 3}}>
+        <Typography variant="h2" sx={{mt: 5, mb: 6}}>
             픽업할 위치를 설정해 주세요!
         </Typography>
-        <Box sx={{width: "80%", height: "50vh", border: 1}}>
+        <Box sx={{width: "80%", height: "40vh", border: 1}}>
             <PositionSettingMap propFunction={handleClickPosEvent}
                                 initLatLng={initLatLng}
                                 resLatLng={props.resPos}
