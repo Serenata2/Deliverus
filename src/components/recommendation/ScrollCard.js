@@ -42,7 +42,7 @@ export function ScrollCard({ title, itemId, img, idx, restInfoList }) {
     >
       <Image
         src={img}
-        duration="0"
+        duration={0}
         style={{ borderRadius: "12px" }}
         name={title}
       />
