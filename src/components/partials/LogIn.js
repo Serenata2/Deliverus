@@ -101,13 +101,13 @@ const LogIn = ({ togglePage }) => {
       <Box
         sx={{
           my: 8,
-          mx: 'auto',
+          mx: "auto",
           px: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          maxWidth: 'sm',
-          mt: 30
+          maxWidth: "sm",
+          mt: 30,
         }}
       >
         <Typography component="h1" variant="h5">

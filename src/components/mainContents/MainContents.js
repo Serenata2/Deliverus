@@ -53,8 +53,8 @@ const MainContents = () => {
   const navToPartyList = () => {
     navigate(`/party/list`, {
       state: {
-        recruitingPartyList: recruitingPartyList
-      }
+        recruitingPartyList: recruitingPartyList,
+      },
     });
   };
 
@@ -287,9 +287,6 @@ const MainContents = () => {
   ) : (
     // PC 컴포넌트
     <div className={styles.mainContents_body}>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <h2>안녕하세요 {username}님!</h2>
-      </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
         <IconButton
             sx={{}}

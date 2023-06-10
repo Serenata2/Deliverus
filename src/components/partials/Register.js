@@ -118,13 +118,13 @@ const Register = ({ togglePage }) => {
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "sm",
-          mt: 30
+          mt: 30,
         }}
       >
         <Typography component="h1" variant="h5">
           회원가입
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
