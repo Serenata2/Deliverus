@@ -15,8 +15,7 @@ import { API } from "../../../utils/config";
 import * as status from "../../../utils/status";
 import Paper from "@mui/material/Paper";
 import Snackbar from '@mui/material/Snackbar';
-import Slide from '@mui/material/Slide';
-import Alert from '@mui/material/Alert';
+import MuiAlert from '@mui/material/Alert';
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 function getFutureExpireTime(expireTime) {
@@ -36,9 +35,9 @@ function getFutureExpireTime(expireTime) {
   return futureDate;
 }
 
-function TransitionRight(props) {
-  return <Slide {...props} direction="right" />;
-}
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // 파티방을 만드는 컴포넌트입니다.
 function PartyRoomCreation() {
@@ -105,13 +104,24 @@ function PartyRoomCreation() {
 
   // 경고창 띄우기 위한 변수
   const [open, setOpen] = useState(false);
+
   // 경고창의 message에 대한 변수
   const [alertMessage, setAlertMessage] = useState("");
 
+  // alert창 종류
+  const [alertType, setAlertType] = useState("error");
+
+  // 경고창을 닫는 함수
   const handleClose = () => {
     setOpen(false);
+    if (alertType === "success"){
+      navigate("/myPage/0");
+    }
+    else {
+      //에러 시 메인페이지로 이동
+      navigate("/");
+    }
   };
-
 
   // 진행 단계마다 보여줄 컴포넌트
   const componentSteps = [
@@ -181,7 +191,10 @@ function PartyRoomCreation() {
       .then((data) => {
         console.log("Respones Data from PARTY API : ", data);
         // MyPage에서 나의 파티방 페이지로 이동
-        navigate("/myPage/0");
+        setAlertType("success");
+        setAlertMessage("성공적으로 방이 생성되었습니다!")
+        setOpen(true);
+        //navigate("/myPage/0");
       })
       .catch((error) => {
         // 로그인 만료 에러인 경우 로그아웃 실행
@@ -189,14 +202,18 @@ function PartyRoomCreation() {
           console.log(`${error.name} : ${error.message}`);
         }
         else if (error.name === "DuplicateJoinError"){
-          alert("이미 딜리버스 중입니다!");
+          setAlertType("error");
+          setAlertMessage("이미 딜리버스 중입니다!")
+          setOpen(true);
+          //alert("이미 딜리버스 중입니다!");
         }
         else {
           console.log(`${error.name} : ${error.message}`);
-          alert("파티방 생성이 거절되었습니다!");
+          setAlertType("error");
+          setAlertMessage("파티방 생성이 거절되었습니다!");
+          setOpen(true);
+          //alert("파티방 생성이 거절되었습니다!");
         }
-        //에러 시 메인페이지로 이동
-        navigate("/");
       });
   };
 
@@ -284,6 +301,12 @@ function PartyRoomCreation() {
           )}
         </Box>
       </Box>
+      <Snackbar open={open} autoHideDuration={3000}
+                anchorOrigin={{vertical: "top", horizontal : "center"}}>
+        <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
