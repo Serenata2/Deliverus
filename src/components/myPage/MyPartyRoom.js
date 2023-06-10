@@ -468,7 +468,6 @@ function MyPartyRoom() {
                 .then((data) => {
                     console.log("Respones Query Data from PARTY API : ", data);
                     const _myMenu = findMyMenu(data.partyMembers, username);
-                    console.log("reuslt : ", _myMenu);
                     setMyMenu(_myMenu);
                     setMyPartyInfo(data);
                 })
@@ -518,7 +517,6 @@ function MyPartyRoom() {
         totalPrice += Math.ceil(myPartyInfo.deliveryFee / myPartyInfo.partyMembers.length);
 
         if (window.IMP) {
-            console.log(totalPrice);
             window.IMP.init('imp33478261');
 
             window.IMP.request_pay({
@@ -554,7 +552,6 @@ function MyPartyRoom() {
 
     // 방장이 주문 시작 버튼을 클릭했을 때 로직
     const requestPay = () => {
-        console.log("pay~~~");
         let partyId = parseInt(myPartyId)
         axios.post(`${API.PARTY_ORDER}`, {
             partyId: partyId
@@ -578,41 +575,55 @@ function MyPartyRoom() {
             sx={{
                 mt: 8,
                 mx: "auto",
-                px: 4,
+                px: 1.5,
+                py: 3,
                 display: "flex",
                 flexDirection: "column",
                 maxWidth: 'md',
                 bgcolor: "#eeeeee"
             }}>
             {myPartyInfo ? (<Fragment>
-                <Typography variant="h5" sx={{margin: "auto", mb: 3}}>
-                    {myPartyInfo.partyName}
+                <Typography variant="h1" sx={{margin: "auto", mb: 3, color: "#9e9e9e"}}>
+                    {partyState === 0 ? "🛒주문 대기" : partyState === 1 ? "💰결제 대기" : "🛵결제가 모두 완료되어 배달이 시작됩니다! "}
                 </Typography>
-                <Typography variant="h5" sx={{margin: "auto", mb: 3, color: "#9e9e9e"}}>
-                    {partyState === 0 ? "주문 대기" : partyState === 1 ? "결제 대기" : "🛵결제가 모두 완료되어 배달이 시작됩니다! "}
+                <Typography variant="h2" my={2}>
+                    🏫파티방 정보
                 </Typography>
-                <Typography variant="h6" mb={1}>
+                <Typography variant="body1" mb={1}>
+                    방명 : {myPartyInfo.partyName}
+                </Typography>
+                <Typography variant="body1" mb={1}>
+                    정원 : {myPartyInfo.memberNum}명
+                </Typography>
+                {partyState === 0 && <Typography variant="body1" color="primary">
+                    파티방 유지 시간 : 🕓 {`파티방 남은 시간 : ${getRemainTime(myPartyInfo.expireTime)}분!`}
+                </Typography>}
+                <Divider sx={{border: 1, my: 4}}/>
+                <Typography variant="h2" mb={2}>
                     🏠가게 정보
                 </Typography>
-                <Typography variant="h6" sx={{color: "#9e9e9e", fontSize: "1.5rem"}}>
-                    {myPartyInfo.restaurantName}
+                <Typography variant="body1" mb={1}>
+                    가게명 : {myPartyInfo.restaurantName}
                 </Typography>
-                {partyState === 0 && <Typography variant="h6" sx={{color: "#ef5350", fontSize: "1rem"}}>
-                    {`파티방 남은 시간 : ${getRemainTime(myPartyInfo.expireTime)}분`}🕓
-                </Typography>}
+                <Typography variant="body1" mb={1}>
+                    최소 주문 금액 : {myPartyInfo.minOrderPrice.toLocaleString()}원
+                </Typography>
+                <Typography variant="body1" color="primary">
+                    배달비 : {myPartyInfo.deliveryFee.toLocaleString()}원
+                </Typography>
                 <Divider sx={{border: 1, my: 4}}/>
                 {partyState == 2 &&
                     <>
                         <div style={{display: "flex", margin: 'auto'}}>
                             <div className={styles.menuWrap} onClick={openMenu}>
-                                <Typography variant="h6" sx={{color: "#9e9e9e", fontSize: "1.5rem"}}>
+                                <Typography variant="h1" sx={{color: "#9e9e9e", mb:1}}>
                                     결제 내역
                                 </Typography>
                                 <img src={deliveryIcon} alt='오토바이 아이콘'
                                      style={{width: '420px', height: '420px', textAlign: 'center'}}/>
                             </div>
                             <div className={styles.menuWrap} onClick={openMap}>
-                                <Typography variant="h6" sx={{color: "#9e9e9e", fontSize: "1.5rem"}}>
+                                <Typography variant="h1" sx={{color: "#9e9e9e", mb:1}}>
                                     지도 보기
                                 </Typography>
                                 <img
@@ -624,12 +635,12 @@ function MyPartyRoom() {
                         <Divider sx={{border: 1, my: 4}}/>
                     </>
                 }
-                <Typography variant="h6" mb={1}>
+                <Typography variant="h2" mb={2}>
                     🙋‍♂️멤버 목록
                 </Typography>
                 <Box sx={{display: "flex"}}>
                     {myPartyInfo.partyMembers.map((item, index) => {
-                        let option = {fontSize: "1.3rem", mr: 2};
+                        let option = {fontSize: "1.0rem", mr: 2};
                         if (item.nickname === username) {
                             option.color = "#ef5350";
                         }
@@ -648,19 +659,19 @@ function MyPartyRoom() {
                 <Divider sx={{border: 1, my: 4}}/>
                 {partyState == 0 &&
                     <>
-                        <Typography variant="h6" mb={1}>
+                        <Typography variant="h2" mb={2}>
                             🚩딜리버스 픽업 장소!
                         </Typography>
-                        <Box sx={{width: "100%", height: "500px"}}>
+                        <Box sx={{width: "80%", height: "40vh", margin: "auto", border: 1}}>
                             <KakaoMapStore
                                 lat={myPartyInfo.latitude}
                                 lng={myPartyInfo.longitude}
                             />
                         </Box>
-                        <Typography variant="h6" sx={{margin: "auto", fontSize: "1rem"}}>
+                        <Typography variant="body1" sx={{mt: 2}}>
                             픽업 위치 : {myPartyInfo.pickUpAddress.split("|")[0]}
                         </Typography>
-                        <Typography variant="h6" sx={{margin: "auto"}}>
+                        <Typography variant="body1"sx={{my : 2}}>
                             {myPartyInfo.pickUpAddress.split("|")[1] && `픽업 상세 위치 : ${myPartyInfo.pickUpAddress.split("|")[1]}`}
                         </Typography>
                         <Divider sx={{border: 1, my: 4}}/>
@@ -669,7 +680,7 @@ function MyPartyRoom() {
                 {(partyState == 0 || partyState == 1) &&
                     <>
                         <Box sx={{display: "flex", justifyContent: "space-between"}}>
-                            <Typography variant="h6" mb={1}>
+                            <Typography variant="h2" mb={1}>
                                 🍽️내 메뉴
                             </Typography>
                             {partyState === 0 &&
@@ -678,28 +689,16 @@ function MyPartyRoom() {
                                 onClick={handleOpen}
                             >메뉴 수정하기</Button>}
                         </Box>
-                        <Box sx={{width: "90%", margin: "auto"}}>
+                        <Box sx={{width: "95%", margin: "auto"}}>
                             <Stack spacing={3} sx={{}}>
                                 {myMenu.map((item, index) => {
-                                        return (<Grid container direction="row"
-                                                      justifyContent="center"
-                                                      alignItems="center"
-                                                      key={index}>
-                                            <Grid item xs={11}>
-                                                <MenuCard key={index} menu={item}/>
-                                            </Grid>
-                                            <Grid item xs={1} sx={{pl: 1}}>
-                                                <Button variant="outlined" disableRipple={true}>
-                                                    {item.num}
-                                                </Button>
-                                            </Grid>
-                                        </Grid>);
+                                        return (<MenuCard key={index} menu={item} countNum={item.num}/>);
                                     }
                                 )}
                             </Stack>
                         </Box>
                         <Divider sx={{border: 1, my: 4}}/>
-                        <Typography variant="h6" mb={1}>
+                        <Typography variant="h2" mb={1}>
                             💸내 결제 정보
                         </Typography>
                         <TableContainer>
@@ -779,7 +778,7 @@ function MyPartyRoom() {
                             <div>
                                 <>
                                     <Box sx={{display: "flex", justifyContent: "space-between"}}>
-                                        <Typography variant="h6" mb={1}>
+                                        <Typography variant="h2" mb={2}>
                                             🍽️내 메뉴
                                         </Typography>
                                         {partyState == 0 &&
@@ -810,7 +809,7 @@ function MyPartyRoom() {
                                         </Stack>
                                     </Box>
                                     <Divider sx={{border: 1, my: 4}}/>
-                                    <Typography variant="h6" mb={1}>
+                                    <Typography variant="h2" mb={2}>
                                         💸내 결제 정보
                                     </Typography>
                                     <TableContainer>
@@ -845,19 +844,19 @@ function MyPartyRoom() {
                         <div className={styles.modal}>
                             <div className={styles.modalContent}>
                                 <div>
-                                    <Typography variant="h6" mb={1}>
+                                    <Typography variant="h2" mb={2}>
                                         🚩딜리버스 픽업 장소!
                                     </Typography>
-                                    <Box sx={{width: "100%", height: "500px"}}>
+                                    <Box sx={{width: "100%", height: "40vh"}}>
                                         <KakaoMapStore
                                             lat={myPartyInfo.latitude}
                                             lng={myPartyInfo.longitude}
                                         />
                                     </Box>
-                                    <Typography variant="h6" sx={{margin: "auto", fontSize: "1rem"}}>
+                                    <Typography variant="body1" sx={{mt: 2}}>
                                         픽업 위치 : {myPartyInfo.pickUpAddress.split("|")[0]}
                                     </Typography>
-                                    <Typography variant="h6" sx={{margin: "auto"}}>
+                                    <Typography variant="body1"sx={{my : 2}}>
                                         {myPartyInfo.pickUpAddress.split("|")[1] && `픽업 상세 위치 : ${myPartyInfo.pickUpAddress.split("|")[1]}`}
                                     </Typography>
                                     <button className={styles.modalClose} onClick={closeMap}
