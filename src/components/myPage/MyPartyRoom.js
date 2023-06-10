@@ -589,9 +589,7 @@ function MyPartyRoom() {
                 }
             });
         }
-      );
     }
-  };
 
   // 방장이 주문 시작 버튼을 클릭했을 때 로직
   const requestPay = () => {
