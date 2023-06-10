@@ -12,8 +12,6 @@ import { UserContext } from "../store/UserContext";
 import { Link, useParams } from "react-router-dom";
 import { Divider, Rating, useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import CallIcon from "@mui/icons-material/Call";
-import DeliverusStyleButton from "../ui/DeliverusStyleButton";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
@@ -332,7 +330,12 @@ const RestaurantInfo = () => {
           to="/party/creation"
           state={{ restaurantInfo: restaurant, resId: id }}
         >
-          <DeliverusStyleButton content="내가 딜리버스 모집하기" />
+          <Button
+            fullWidth
+            sx={{ border: 1, my: 2, backgroundColor: "#f5f3f3" }}
+          >
+            내가 딜리버스 모집하기
+          </Button>
         </Link>
         {restaurantMenu}
       </Box>
