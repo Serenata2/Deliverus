@@ -33,8 +33,8 @@ function App() {
   //   isLoggedIn: false,
   // });
 
-  const body1FontSize = isMobile ? 16 : 14;
-  const body2FontSize = isMobile ? 14 : 13;
+  const body1FontSize = isMobile ? 14 : 16;
+  const body2FontSize = isMobile ? 13 : 14;
 
   const theme = createTheme({
     typography: {

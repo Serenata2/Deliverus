@@ -10,10 +10,8 @@ import { API } from "../../utils/config";
 import * as status from "../../utils/status";
 import { UserContext } from "../store/UserContext";
 import { Link, useParams } from "react-router-dom";
-import RecruitingPartyCard from "./RecruitingPartyCard";
 import { Divider, Rating, useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import CallIcon from "@mui/icons-material/Call";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
@@ -26,21 +24,21 @@ const RestaurantInfo = () => {
 
   // 가게 정보를 담은 변수
   const [restaurant, setRestaurant] = useState({
-    address: "string",
-    category: "string",
-    intro: "string",
+    address: "불러오는 중..",
+    category: "불러오는 중..",
+    intro: "불러오는 중..",
     latitude: 0,
     longitude: 0,
     menu: {
       menu: [
         {
-          menuName: "string",
+          menuName: "",
           price: 0,
         },
       ],
     },
     name: "",
-    phoneNumber: "string",
+    phoneNumber: "불러오는 중..",
     rating: 0,
   });
 
@@ -113,7 +111,7 @@ const RestaurantInfo = () => {
   // 향후 이미지를 카테고리 별로 S3에 저장해서 모듈화 해야겠습니다.
   let image = null;
   if (!restaurant.name) {
-    image = require(`../../images/delivery-cat.png`);
+    image = require(`../../images/deliveryIcon/delivery.ico`);
   } else {
     try {
       const category = restaurant.category.replace("/", ",");
@@ -122,7 +120,7 @@ const RestaurantInfo = () => {
       image = require(`../../images/${category}/${name}.png`);
     } catch (e) {
       console.log(e);
-      image = require(`../../images/delivery-cat.png`);
+      image = require(`../../images/deliveryIcon/delivery.ico`);
     }
   }
 
