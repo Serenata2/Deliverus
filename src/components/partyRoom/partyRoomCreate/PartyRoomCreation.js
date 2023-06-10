@@ -17,6 +17,7 @@ import Paper from "@mui/material/Paper";
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import Alert from '@mui/material/Alert';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function getFutureExpireTime(expireTime) {
   const currentDate = new Date();
@@ -45,6 +46,7 @@ function PartyRoomCreation() {
   const { userState } = context;
   const { username, userPos } = userState;
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 750px)");
 
   // 파티방을 만들기
   const location = useLocation();
@@ -54,6 +56,9 @@ function PartyRoomCreation() {
   // 파티방의 정보를 state로 관리
   const [partyInfo, setPartyInfo] = useState({
     restaurantId: resId,
+    restaurantName : restaurantInfo.name,
+    deliveryFee : restaurantInfo.deliveryFee,
+    minOrderPrice : restaurantInfo.minOrderPrice,
     partyName: `${restaurantInfo.name} 딜리버스입니다.`,
     memberNum: 4,
     expireTime: "00:00",
@@ -79,6 +84,12 @@ function PartyRoomCreation() {
     "위치 설정",
     "나의 메뉴 결정",
   ];
+
+  const mobileLabelSteps = [
+      "파티방",
+      "위치",
+      "메뉴"
+  ]
 
   // 필요한 입력을 해야지만 button을 활성화 시키기 위해 선언한 변수
   // 일단은 지도를 선택하는 페이지에서만 확인하게 했습니다.
@@ -194,17 +205,17 @@ function PartyRoomCreation() {
       <Box
         component="main"
         sx={{
-          my: 8,
+          my: 6,
           mx: "auto",
-          px: 4,
+          px: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "md",
         }}
       >
-        <Typography component="h1" variant="h4" sx={{ my: 3 }}>
-          Deliverus 파티방을 생성해 보세요!
+        <Typography variant="h1" sx={{ mb: 3 }}>
+          {isMobile ? "파티방을 생성해 보세요!" : "Deliverus 파티방을 생성해 보세요!"}
         </Typography>
         <Paper
           elevation={1}
@@ -218,19 +229,19 @@ function PartyRoomCreation() {
         >
           {componentSteps[activeStep]}
         </Paper>
-        <Box sx={{ width: "100%", mt: 3 }}>
-          <Stepper activeStep={activeStep} sx={{ mb: 5 }}>
+        <Box sx={{ width: "100%", mt: 5 }}>
+          <Stepper activeStep={activeStep} sx={{ mb: 8 }}>
             {labelSteps.map((label, inx) => {
               const stepProps = {};
               return (
                 <Step key={label} {...stepProps}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel>{isMobile ? mobileLabelSteps[inx] : label}</StepLabel>
                 </Step>
               );
             })}
           </Stepper>
           {activeStep === labelSteps.length ? (
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 5 }}>
               <Box sx={{ display: "flex", pt: 2 }} />
               <Button
                 color="inherit"
@@ -247,7 +258,7 @@ function PartyRoomCreation() {
             </Box>
           ) : (
             <Fragment>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 5}}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}

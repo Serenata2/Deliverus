@@ -53,14 +53,14 @@ function PartyNameSetting(props) {
                        required
                        value={partyName}
                        onChange={handlePartyNameInput}
-                       sx={{mb: 5, width: "80%"}}/>
+                       sx={{mt: 5, mb: 8, width: "70%"}}/>
             <TextField
                 select
                 required
                 defaultValue="4"
                 helperText="파티방의 최대인원을 설정해 보세요"
                 onChange={handleMaxPeopleInput}
-                sx={{mb : 3}}
+                sx={{mb : 8}}
             >
                 {peopleList.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -74,6 +74,7 @@ function PartyNameSetting(props) {
                 defaultValue="30"
                 onChange={handleOpenTimeInput}
                 helperText="파티방의 유지 시간을 설정하세요!"
+                sx={{mb : 5}}
             >
                 {timeList.map((option) => (
                     <MenuItem key={option.value} value={option.value}>

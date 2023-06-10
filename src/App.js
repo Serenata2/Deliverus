@@ -35,6 +35,8 @@ function App() {
 
   const body1FontSize = isMobile ? 14 : 16;
   const body2FontSize = isMobile ? 13 : 14;
+  const h1FontSize = isMobile ? 28 : 30; // 대제목
+  const h2FontSize = isMobile ? 23 : 25; // 소제목
 
   const theme = createTheme({
     typography: {
@@ -47,6 +49,14 @@ function App() {
       },
       body2: {
         fontSize: body2FontSize,
+        fontWeight: "normal",
+      },
+      h1: {
+        fontSize: h1FontSize,
+        fontWeight: "normal",
+      },
+      h2: {
+        fontSize: h2FontSize,
         fontWeight: "normal",
       },
     },
