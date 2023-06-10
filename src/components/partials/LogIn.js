@@ -11,13 +11,12 @@ import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 import { UserContext } from "../store/UserContext";
-import {createTheme, ThemeProvider} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const LogIn = ({ togglePage }) => {
-
   const loginTheme = createTheme({
     typography: {
-      fontFamily: `"Roboto", sans-serif`
+      fontFamily: `"Roboto", sans-serif`,
     },
     palette: {
       text: {
@@ -113,38 +112,41 @@ const LogIn = ({ togglePage }) => {
         <Typography component="h1" variant="h5">
           로그인
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1}}>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <ThemeProvider theme={loginTheme}>
-          <TextField
-            color="primary"
-            margin="normal"
-            required
-            fullWidth
-            id="id"
-            label="Id"
-            name="id"
-            autoFocus
-            value={username}
-            onChange={handleIdInput}
-          />
-          <TextField
-            color="primary"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={handlePwInput}
-          />
+            <TextField
+              color="primary"
+              margin="normal"
+              required
+              fullWidth
+              id="id"
+              label="Id"
+              name="id"
+              autoFocus
+              value={username}
+              onChange={handleIdInput}
+            />
+            <TextField
+              color="primary"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              value={password}
+              onChange={handlePwInput}
+            />
           </ThemeProvider>
           <Button
             type="submit"
             fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              border: 1,
+            }}
           >
             Sign In
           </Button>
