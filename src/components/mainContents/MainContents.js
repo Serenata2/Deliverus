@@ -225,7 +225,7 @@ const MainContents = () => {
       <div>
         <div className={styles.mainContents_subTitle}>
           <Typography variant="h6" component="h6">
-            내 근처에서 모집 중인 딜리버스
+            👥 내 근처에 있는 딜리버스
           </Typography>
 
           <IconButton
@@ -253,7 +253,7 @@ const MainContents = () => {
         )}
         <div className={styles.mainContents_subTitle}>
           <Typography variant="h6" component="h6">
-            내가 직접 딜리버스 모집하기
+            🏪 내 근처에 있는 가게 리스트
           </Typography>
           <IconButton
             onClick={navToRestaurantList}
@@ -288,11 +288,7 @@ const MainContents = () => {
     // PC 컴포넌트
     <div className={styles.mainContents_body}>
       <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-        <IconButton
-            sx={{}}
-            color="primary"
-            aria-label="more"
-        >
+        <IconButton sx={{}} color="primary" aria-label="more">
           <LocationOnIcon />
         </IconButton>
         <h4>{userPosAddr}</h4>
@@ -305,27 +301,27 @@ const MainContents = () => {
       )}
       <div>
         <div className={styles.mainContents_subTitle}>
-          <h3>👥 내 근처에서 모집중인 딜리버스 👥</h3>
+          <h3>👥 내 근처에서 모집중인 딜리버스</h3>
           <h4 className={styles.show_more} onClick={navToPartyList}>
             더보기
           </h4>
         </div>
         {recruitingPartyList ? (
-            <RecruitingPartyList partyList={recruitingPartyList} />
+          <RecruitingPartyList partyList={recruitingPartyList} />
         ) : (
-            <Box
-                sx={{
-                  backgroundColor: "info.main",
-                  textAlign: "center",
-                  paddingY: "10vh",
-                  borderRadius: 3,
-                }}
-            >
-              <Typography>주변에 모집 중인 딜리버스가 없어요...</Typography>
-            </Box>
+          <Box
+            sx={{
+              backgroundColor: "info.main",
+              textAlign: "center",
+              paddingY: "10vh",
+              borderRadius: 3,
+            }}
+          >
+            <Typography>주변에 모집 중인 딜리버스가 없어요...</Typography>
+          </Box>
         )}
         <div className={styles.mainContents_subTitle}>
-          <h3>💪 내가 직접 딜리버스 모집하기 💪</h3>
+          <h3>🏪 내가 직접 딜리버스 모집하기</h3>
           <h4 className={styles.show_more} onClick={navToRestaurantList}>
             더보기
           </h4>

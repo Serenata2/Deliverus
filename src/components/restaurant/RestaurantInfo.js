@@ -12,6 +12,8 @@ import { UserContext } from "../store/UserContext";
 import { Link, useParams } from "react-router-dom";
 import { Divider, Rating, useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import CallIcon from "@mui/icons-material/Call";
+import DeliverusStyleButton from "../ui/DeliverusStyleButton";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
@@ -164,7 +166,7 @@ const RestaurantInfo = () => {
       }}
     >
       <Image src={image} width="100%" fit="contain" duration={1000} />
-      <Typography component="h3" variant="h3" sx={{ mt: 2 }}>
+      <Typography component="h4" variant="h4" sx={{ mt: 2 }}>
         {restaurant.name}
       </Typography>
       <Box
@@ -202,8 +204,22 @@ const RestaurantInfo = () => {
           width: "100%",
         }}
       >
-        <LabelBox label={"배달비"} detail={"4,500 원"} />
-        <LabelBox label={"최소배달비용"} detail={"12,500 원"} />
+        <LabelBox
+          label={"배달비"}
+          detail={
+            restaurant.deliveryFee
+              ? restaurant.deliveryFee.toLocaleString() + " 원"
+              : 0 + "원"
+          }
+        />
+        <LabelBox
+          label={"최소배달비용"}
+          detail={
+            restaurant.minOrderPrice
+              ? restaurant.minOrderPrice.toLocaleString() + " 원"
+              : 0 + "원"
+          }
+        />
         <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
       </Box>
     </Box>
@@ -215,21 +231,15 @@ const RestaurantInfo = () => {
         alignItems: "center",
       }}
     >
-      <Image
-        src={image}
-        height="250px"
-        width="250px"
-        fit="contain"
-        duration={1000}
-      />
-      <Typography component="h3" variant="h3" sx={{ mt: 2 }}>
+      <Image src={image} width="80%" fit="contain" duration={1000} />
+      <Typography component="h4" variant="h4" sx={{ mt: 2 }}>
         {restaurant.name}
       </Typography>
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",
+          alignItems: "end",
           my: 1,
         }}
       >
@@ -244,28 +254,42 @@ const RestaurantInfo = () => {
           sx={{ color: "dimgray" }}
         >{`${restaurant.rating} / 5.0`}</Typography>
       </Box>
-      <Divider sx={{ width: "100%", my: 1 }} />
+      <Divider sx={{ width: "100%", my: 1 }}>
+        <Typography variant="body1" sx={{ color: "text.secondary" }}>
+          가게 소개
+        </Typography>
+      </Divider>
       <Typography component="h6" variant="h6">
         {restaurant.intro}
       </Typography>
-      <Divider sx={{ width: "100%", my: 1 }} />
-      <Grid contianer sx={{ width: "100%" }}>
-        <Grid item>
-          <Typography component="h6" variant="h6">
-            {`배달팁: 4500원`}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography component="h6" variant="h6">
-            {`최소 배달금액: 10000원`}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography component="h6" variant="h6">
-            {`전화번호: ${restaurant.phoneNumber}`}
-          </Typography>
-        </Grid>
-      </Grid>
+      <Divider sx={{ width: "100%", my: 1 }}>
+        <Typography sx={{ color: "text.secondary" }}>배달 정보</Typography>
+      </Divider>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+        }}
+      >
+        <LabelBox
+          label={"배달비"}
+          detail={
+            restaurant.deliveryFee
+              ? restaurant.deliveryFee.toLocaleString() + " 원"
+              : 0 + "원"
+          }
+        />
+        <LabelBox
+          label={"최소배달비용"}
+          detail={
+            restaurant.minOrderPrice
+              ? restaurant.minOrderPrice.toLocaleString() + " 원"
+              : 0 + "원"
+          }
+        />
+        <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
+      </Box>
     </Box>
   );
 
@@ -300,6 +324,7 @@ const RestaurantInfo = () => {
         }}
       >
         {restaurantDescript}
+        <Box sx={{ my: 1 }} />
         {recruitingPartyList && (
           <RecruitingPartyList partyList={recruitingPartyList} />
         )}
@@ -307,9 +332,7 @@ const RestaurantInfo = () => {
           to="/party/creation"
           state={{ restaurantInfo: restaurant, resId: id }}
         >
-          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            내가 딜리버스 모집하기
-          </Button>
+          <DeliverusStyleButton content="내가 딜리버스 모집하기" />
         </Link>
         {restaurantMenu}
       </Box>

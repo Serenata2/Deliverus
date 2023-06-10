@@ -82,7 +82,9 @@ function RecruitingPartyCard(props) {
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
             <Typography variant="body2" color="text.secondary" noWrap>
-              {remainMinutes}분 후 만료
+              {remainMinutes >= 0
+                ? remainMinutes + "분 후 만료"
+                : "만료됐어요..."}
             </Typography>
           </Grid>
         </Grid>
