@@ -8,6 +8,7 @@ import {useLocation} from "react-router-dom";
 import Slide from "@mui/material/Slide";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import RecruitingPartyList from "../restaurant/RecruitingPartyList";
+import {Button, IconButton} from "@mui/material";
 
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
@@ -59,10 +60,16 @@ const DeliverusList = () => {
                     );
                 })}
             </div>
-            <div className={styles.list_location_wrapper}>
-                <LocationOnIcon/>
-                <span className={styles.list_location_txt}>{userPosAddr}</span>
-            </div>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3}}>
+                <IconButton
+                    sx={{}}
+                    color="primary"
+                    aria-label="more"
+                >
+                    <LocationOnIcon />
+                </IconButton>
+                <h4>{userPosAddr}</h4>
+            </Box>
             <div className={styles.list_card}>
                 {(filteredPartyList && (Array.isArray(filteredPartyList) && filteredPartyList.length !== 0)) ? (
                     <RecruitingPartyList partyList={filteredPartyList}/>

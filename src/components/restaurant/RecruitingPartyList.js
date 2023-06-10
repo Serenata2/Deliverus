@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import RecruitingPartyCard from "./RecruitingPartyCard";
 import Slide from "@mui/material/Slide";
 import { Link, useNavigate } from "react-router-dom";
+import { Divider } from "@mui/material";
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -35,7 +36,7 @@ const RecruitingPartyList = (props) => {
       const name = _partyInfo.restaurantName;
       setImage(require(`../../images/${category}/${name}.png`));
     } catch (e) {
-      setImage(require(`../../images/delivery-cat.png`));
+      setImage(require(`../../images/deliveryIcon/delivery.ico`));
     }
     setPartyInfo(_partyInfo);
     setRestaurantId(_partyInfo.restaurantId);
@@ -63,9 +64,13 @@ const RecruitingPartyList = (props) => {
     longitude: 0,
     restaurantName: "",
     restaurantId: 0,
+    deliveryFee: 0,
+    minOrderPrice: 0,
   });
 
-  const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
+  const [image, setImage] = useState(
+    require(`../../images/deliveryIcon/delivery.ico`)
+  );
 
   return (
     <Stack spacing={3} sx={{ fontFamily: "BMDOHYEON" }}>
@@ -108,57 +113,29 @@ const RecruitingPartyList = (props) => {
             <Typography component="h4" variant="h4" sx={{ mt: 2 }}>
               {partyInfo.restaurantName}
             </Typography>
+            <Divider sx={{ width: "100%" }} />
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "end",
+                justifyContent: "space-around",
                 my: 1,
-              }}
-            ></Box>
-            {/* <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "end",
-                my: 1,
-              }}
-            >
-              <Rating
-                value={restaurant.rating}
-                precision={0.5}
-                readOnly
-                sx={{ mr: 1 }}
-                size="large"
-              />
-              <Typography
-                sx={{ color: "dimgray" }}
-              >{`${restaurant.rating} / 5.0`}</Typography>
-            </Box>
-            <Divider sx={{ width: "100%", my: 1 }}>
-              <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                가게 소개
-              </Typography>
-            </Divider>
-            <Typography component="h6" variant="h6">
-              {restaurant.intro}
-            </Typography>
-            <Divider sx={{ width: "100%", my: 1 }}>
-              <Typography sx={{ color: "text.secondary" }}>
-                배달 정보
-              </Typography>
-            </Divider>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
                 width: "100%",
               }}
             >
-              <LabelBox label={"배달비"} detail={"4,500 원"} />
-              <LabelBox label={"최소배달비용"} detail={"12,500 원"} />
-              <LabelBox label={"전화번호"} detail={restaurant.phoneNumber} />
-            </Box> */}
+              <Stack alignItems={"center"}>
+                <Typography variant="body2">배달비</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {partyInfo.deliveryFee.toLocaleString()} 원
+                </Typography>
+              </Stack>
+              <Stack alignItems={"center"}>
+                <Typography variant="body2">최소배달비용</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {partyInfo.minOrderPrice.toLocaleString()} 원
+                </Typography>
+              </Stack>
+            </Box>
           </Box>
         </DialogContent>
         <DialogTitle>픽업 위치 확인</DialogTitle>

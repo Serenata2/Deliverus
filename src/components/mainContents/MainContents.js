@@ -288,7 +288,14 @@ const MainContents = () => {
     // PC 컴포넌트
     <div className={styles.mainContents_body}>
       <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-        <h4>📌 {userPosAddr}</h4>
+        <IconButton
+            sx={{}}
+            color="primary"
+            aria-label="more"
+        >
+          <LocationOnIcon />
+        </IconButton>
+        <h4>{userPosAddr}</h4>
         <Button onClick={handleChangeUserPos} sx={{ ml: 1.5 }}>
           위치 바꾸기
         </Button>
@@ -303,8 +310,19 @@ const MainContents = () => {
             더보기
           </h4>
         </div>
-        {recruitingPartyList && (
-          <RecruitingPartyList partyList={recruitingPartyList} />
+        {recruitingPartyList ? (
+            <RecruitingPartyList partyList={recruitingPartyList} />
+        ) : (
+            <Box
+                sx={{
+                  backgroundColor: "info.main",
+                  textAlign: "center",
+                  paddingY: "10vh",
+                  borderRadius: 3,
+                }}
+            >
+              <Typography>주변에 모집 중인 딜리버스가 없어요...</Typography>
+            </Box>
         )}
         <div className={styles.mainContents_subTitle}>
           <h3>💪 내가 직접 딜리버스 모집하기 💪</h3>
