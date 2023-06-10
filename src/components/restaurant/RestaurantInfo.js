@@ -10,10 +10,8 @@ import { API } from "../../utils/config";
 import * as status from "../../utils/status";
 import { UserContext } from "../store/UserContext";
 import { Link, useParams } from "react-router-dom";
-import RecruitingPartyCard from "./RecruitingPartyCard";
 import { Divider, Rating, useMediaQuery } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import CallIcon from "@mui/icons-material/Call";
 
 // 가게 조회 화면 컴포넌트입니다.
 // prop으로 보여주고자 하는 가게 ID을 받습니다.
