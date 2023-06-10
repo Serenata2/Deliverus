@@ -13,6 +13,12 @@ import {useNavigate, useParams} from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Backdrop from '@mui/material/Backdrop';
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -83,6 +89,21 @@ export default function MyPage() {
         setValue(newValue);
     };
 
+    // 경고창 띄우기 위한 변수
+    const [open, setOpen] = useState(false);
+
+    // 경고창의 message에 대한 변수
+    const [alertMessage, setAlertMessage] = useState("");
+
+    // alert창 종류
+    const [alertType, setAlertType] = useState("error");
+
+    // 경고창을 닫는 함수
+    const handleClose = () => {
+        setOpen(false);
+        navigate("/");
+    };
+
     // 맨 처음에 username을 가지고 사용자가 속해있는 파티방의 ID를 GET 합니다.
     useEffect(() => {
         fetch(`${API.PARTY_ID}?name=${username}`, {
@@ -103,8 +124,9 @@ export default function MyPage() {
                 }
                 // 사용자가 속해있는 파티방이 없는 경우 main화면으로 이동
                 else {
-                    alert("속해 있는 파티방이 없습니다ㅠ");
-                    navigate("/");
+                    setAlertType("error");
+                    setAlertMessage("참여중인 파티방이 없습니다");
+                    setOpen(true);
                 }
             })
             .catch((error) => {
@@ -132,6 +154,12 @@ export default function MyPage() {
                 <MobileTabPanel value={value} index={1}>
                     <Chat/>
                 </MobileTabPanel>
+                <Snackbar open={open} autoHideDuration={3000}
+                          anchorOrigin={{vertical: "top", horizontal : "center"}}>
+                    <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+                        {alertMessage}
+                    </Alert>
+                </Snackbar>
             </Fragment> :
             <Box sx={{flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: "100%"}}>
                 {myPartyId !== -1 ? (<Fragment>
@@ -157,6 +185,12 @@ export default function MyPage() {
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>)}
+                <Snackbar open={open} autoHideDuration={3000}
+                          anchorOrigin={{vertical: "top", horizontal : "center"}}>
+                    <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+                        {alertMessage}
+                    </Alert>
+                </Snackbar>
             </Box>
     );
 }

@@ -27,6 +27,11 @@ import styles from './MyPartyRoom.module.css'
 import deliveryIcon from '../../images/deliveryIcon/delivery.ico';
 import Snackbar from '@mui/material/Snackbar';
 import Fade from '@mui/material/Fade';
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -179,6 +184,24 @@ function MyPartyRoom() {
         setIsMapOpened(true);
     }
 
+    // 경고창 띄우기 위한 변수
+    const [alertOpen, setAlertOpen] = useState(false);
+
+    // 경고창의 message에 대한 변수
+    const [alertMessage, setAlertMessage] = useState("");
+
+    // alert창 종류
+    const [alertType, setAlertType] = useState("info");
+
+    // 경고창을 닫는 함수
+    const handleAlertClose = () => {
+        setAlertOpen(false);
+        if (alertType === "error" || alertType === "info"){
+            //에러, 나가기 버튼 클릭 시 메인페이지로 이동
+            navigate("/");
+        }
+    };
+
     const handleOpen = () => {
         setOpen(true);
 
@@ -231,8 +254,9 @@ function MyPartyRoom() {
             })
             .then((data) => {
                 console.log("Respones Data from PARTY DELETE API : ", data);
-                alert("딜리버스에서 나오셨습니다!");
-                navigate("/");
+                setAlertType("info");
+                setAlertMessage("딜리버스에서 나오셨습니다")
+                setAlertOpen(true);
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
@@ -277,13 +301,18 @@ function MyPartyRoom() {
             .then((data) => {
                 console.log("Respones Data from PARTY ORDER API : ", data);
                 setOpen(false);
-                alert("메뉴가 수정되었습니다!");
+                setAlertType("success");
+                setAlertMessage("메뉴가 성공적으로 수정되었습니다")
+                setAlertOpen(true);
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
                     handleLogOut();
                 }
+                setAlertType("warning");
+                setAlertMessage("메뉴 수정하는 과정에서 오류가 생겼습니다")
+                setAlertOpen(true);
                 console.log(`PARTY ORDER API -> ${error.name} : ${error.message}`);
             });
     };
@@ -326,8 +355,9 @@ function MyPartyRoom() {
                 }
                 // 사용자가 속해있는 파티방이 없는 경우 main화면으로 이동
                 else {
-                    alert("속해 있는 파티방이 없습니다ㅠ");
-                    navigate("/");
+                    setAlertType("error");
+                    setAlertMessage("속해 있는 파티방이 없습니다");
+                    setAlertOpen(true);
                 }
             })
             .catch((error) => {
@@ -335,38 +365,9 @@ function MyPartyRoom() {
                 if (error.name === "LoginExpirationError") {
                     handleLogOut();
                 }
-                console.log(`PARTY ID API -> ${error.name} : ${error.message}`);
-            });
-    }, []);
-    // 맨 처음에 username을 가지고 사용자가 속해있는 파티방의 ID를 GET 합니다.
-    useEffect(() => {
-        fetch(`${API.PARTY_ID}?name=${username}`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        })
-            .then((respones) => {
-                status.handlePartyResponse(respones.status);
-                return respones.text();
-            })
-            .then((data) => {
-                console.log("Respones Data from PARTY ID API : ", data);
-                // 사용자가 속해 있는 파티방이 있는 경우
-                if (Number(data) !== -1) {
-                    setMyPartyId(data);
-                }
-                // 사용자가 속해있는 파티방이 없는 경우 main화면으로 이동
-                else {
-                    alert("속해 있는 파티방이 없습니다ㅠ");
-                    navigate("/");
-                }
-            })
-            .catch((error) => {
-                // 로그인 만료 에러인 경우 로그아웃 실행
-                if (error.name === "LoginExpirationError") {
-                    handleLogOut();
-                }
+                setAlertType("error");
+                setAlertMessage("서버로 데이터를 받지 못했습니다");
+                setAlertOpen(true);
                 console.log(`PARTY ID API -> ${error.name} : ${error.message}`);
             });
     }, []);
@@ -391,11 +392,21 @@ function MyPartyRoom() {
                     setMyPartyInfo(data);
                 })
                 .catch((error) => {
-                    // 로그인 만료 에러인 경우 로그아웃 실행
-                    if (error.name === "LoginExpirationError") {
-                        handleLogOut();
+                    if(myPartyId !== -1) {
+                        // 로그인 만료 에러인 경우 로그아웃 실행
+                        if (error.name === "LoginExpirationError") {
+                            handleLogOut();
+                        } else if (error.name === "NoDataError") {
+                            setAlertType("error");
+                            setAlertMessage("파티방이 존재하지 않습니다");
+                            setAlertOpen(true);
+                        } else {
+                            setAlertType("error");
+                            setAlertMessage("서버로부터 데이터를 받지 못했습니다");
+                            setAlertOpen(true);
+                        }
+                        console.log(`GET PARTY API -> ${error.name} : ${error.message}`);
                     }
-                    console.log(`GET PARTY API -> ${error.name} : ${error.message}`);
                 });
         }
     }, [myPartyId]);
@@ -404,7 +415,6 @@ function MyPartyRoom() {
     const {partyStateIsLoading, partyStateError, partyStateQueryData} = useQuery(["partyState"], () => {
         axios.get(`${API.PARTY_STATE}?nickname=${username}`)
             .then((res) => {
-                console.log(`current party state : ${res.data}`);
                 setPartyState(res.data);
                 return res
             })
@@ -472,11 +482,21 @@ function MyPartyRoom() {
                     setMyPartyInfo(data);
                 })
                 .catch((error) => {
-                    // 로그인 만료 에러인 경우 로그아웃 실행
-                    if (error.name === "LoginExpirationError") {
+                    if (myPartyId !== -1) {
+                        // 로그인 만료 에러인 경우 로그아웃 실행
+                        if (error.name === "LoginExpirationError") {
+                            console.log(`${error.name} : ${error.message}`);
+                        } else if (error.name === "NoDataError" && myPartyId !== -1) {
+                            setAlertType("error");
+                            setAlertMessage("파티방이 존재하지 않습니다");
+                            setAlertOpen(true);
+                        } else {
+                            setAlertType("error");
+                            setAlertMessage("서버로부터 데이터를 받지 못했습니다");
+                            setAlertOpen(true);
+                        }
                         console.log(`${error.name} : ${error.message}`);
                     }
-                    console.log(`${error.name} : ${error.message}`);
                     return error;
                 });
         },
@@ -544,7 +564,9 @@ function MyPartyRoom() {
                     }).then((res) => console.log(res));
                 } else {
                     // 결제에 실패했을 때 로직
-                    alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
+                    setAlertType("warning");
+                    setAlertMessage(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
+                    setAlertOpen(true);
                 }
             });
         }
@@ -876,6 +898,12 @@ function MyPartyRoom() {
                 TransitionComponent={Fade}
                 message={state.message}
             />
+            <Snackbar open={alertOpen} autoHideDuration={3000}
+                      anchorOrigin={{vertical: "top", horizontal : "center"}}>
+                <Alert onClose={handleAlertClose} severity={alertType} sx={{ width: '100%' }}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </Box>);
 }
 
