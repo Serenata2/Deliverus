@@ -567,7 +567,7 @@ function MyPartyRoom() {
         {
           pg: "kakao",
           pay_method: "kakaopay",
-          merchant_uid: "merchant_" + new Date().getTime(),
+          merchant_uid: "merchant_" + new Date().getTime() + `?${myPartyId.toString()}?${username}`,
           name: myPartyInfo.restaurantName,
           amount: totalPrice, // 변경된 금액 (원하는 금액으로 수정)
           buyer_email: "Iamport@chai.finance",
@@ -575,8 +575,7 @@ function MyPartyRoom() {
           buyer_tel: "010-1234-5678",
           buyer_addr: "서울특별시 강남구 삼성동",
           buyer_postcode: "123-456",
-          //'http://localhost:8080/orderCompleteMobile'
-          m_redirect_url: "https://deliverus.online/myPage/0/payments/complete/mobile",
+          m_redirect_url: `${API.PAYMENT_EACH}`,
         },
         function (rsp) {
           if (rsp.success) {
