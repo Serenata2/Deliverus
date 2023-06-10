@@ -576,7 +576,7 @@ function MyPartyRoom() {
           buyer_addr: "서울특별시 강남구 삼성동",
           buyer_postcode: "123-456",
           //'http://localhost:8080/orderCompleteMobile'
-          m_redirect_url: "https://deliverus.online/payments/complete/mobile",
+          m_redirect_url: "https://deliverus.online/myPage/0/payments/complete/mobile",
         },
         function (rsp) {
           if (rsp.success) {
