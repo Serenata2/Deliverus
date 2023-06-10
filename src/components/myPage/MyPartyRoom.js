@@ -573,7 +573,7 @@ function MyPartyRoom() {
         <Box
             component="main"
             sx={{
-                mt: 8,
+                mt: 3,
                 mx: "auto",
                 px: 1.5,
                 py: 3,
