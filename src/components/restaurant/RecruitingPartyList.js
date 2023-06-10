@@ -35,7 +35,7 @@ const RecruitingPartyList = (props) => {
             const name = _partyInfo.restaurantName;
             setImage(require(`../../images/${category}/${name}.png`));
         } catch (e) {
-            setImage(require(`../../images/delivery-cat.png`));
+            setImage(require(`../../images/deliveryIcon/delivery.ico`));
         }
         setPartyInfo(_partyInfo);
         setRestaurantId(_partyInfo.restaurantId);
@@ -65,7 +65,7 @@ const RecruitingPartyList = (props) => {
         restaurantId: 0
     });
 
-    const [image, setImage] = useState(require(`../../images/delivery-cat.png`));
+    const [image, setImage] = useState(require(`../../images/deliveryIcon/delivery.ico`));
 
     return (
         <Stack spacing={3} sx={{ fontFamily: 'BMDOHYEON' }}>
