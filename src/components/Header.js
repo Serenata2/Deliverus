@@ -27,7 +27,6 @@ import TitleTab from "./headerComponents/TitleTab";
 import LinkTab from "./headerComponents/LinkTab";
 import { useState } from "react";
 import DrawerLinkTab from "./headerComponents/DrawerLinkTab";
-import DeliverusStyleButton from "./ui/DeliverusStyleButton";
 
 const Header = () => {
   const { userState, handleLogOut } = useContext(UserContext);
