@@ -19,10 +19,10 @@ function MenuSelecting(props) {
 
   const restaurantMenu = matches ? (
     <Fragment>
-      <Typography component="h6" variant="h6" sx={{ mb: 1 }}>
+      <Typography variant="h2" sx={{ mt: 5, mb : 7 }}>
         메뉴를 선택해 보세요
       </Typography>
-      <Stack spacing={3} sx={{ width: "80%" }}>
+      <Stack spacing={3} sx={{ width: "78%", mb: 5}}>
         {menuList.map((item, index) => {
           return (
             <Grid
@@ -32,10 +32,10 @@ function MenuSelecting(props) {
               alignItems="center"
               key={index}
             >
-              <Grid item xs={9}>
+              <Grid item xs={11}>
                 <MenuCard key={index} menu={item} />
               </Grid>
-              <Grid item xs={3} sx={{ pl: 1 }}>
+              <Grid item xs={1} sx={{ pl: 2.5 }}>
                 <ButtonGroup size="small">
                   <Button
                     aria-label="reduce"
@@ -67,10 +67,10 @@ function MenuSelecting(props) {
     </Fragment>
   ) : (
     <>
-      <Typography component="h6" variant="h6" sx={{ mb: 1 }}>
+      <Typography variant="h2" sx={{ mt: 3, mb: 5 }}>
         메뉴를 선택해 보세요
       </Typography>
-      <Stack spacing={3} sx={{ width: "80%" }}>
+      <Stack spacing={3} sx={{ width: "90%", mb: 3}}>
         {menuList.map((item, index) => {
           return (
             <Grid

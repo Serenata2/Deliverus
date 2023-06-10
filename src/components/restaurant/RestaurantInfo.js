@@ -289,9 +289,10 @@ const RestaurantInfo = () => {
       <Box
         component="main"
         sx={{
-          my: 8,
+          my: 6,
           mx: "auto",
           px: 4,
+          pb: 5,
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
