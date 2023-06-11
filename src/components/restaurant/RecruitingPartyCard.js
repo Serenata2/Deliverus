@@ -45,12 +45,10 @@ function RecruitingPartyCard(props) {
         direction="row"
         sx={{
           alignItems: "center",
-          justifyContent: "center",
           padding: 2,
           marginX: "auto",
+          borderRadius: 2,
           width: "100%",
-          border: 1,
-          borderRadius: 3,
           boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
           backgroundColor: "#fff",
         }}
@@ -84,7 +82,9 @@ function RecruitingPartyCard(props) {
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
             <Typography variant="body2" color="text.secondary" noWrap>
-              {remainMinutes}분 후 만료
+              {remainMinutes >= 0
+                ? remainMinutes + "분 후 만료"
+                : "만료됐어요..."}
             </Typography>
           </Grid>
         </Grid>

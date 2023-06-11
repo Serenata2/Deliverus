@@ -56,7 +56,7 @@ const Header = () => {
     },
     {
       icon: <GroupAddIcon />,
-      component: <DrawerLinkTab to="/" text="방 만들기" />,
+      component: <DrawerLinkTab to="/restaurant/list" text="방 만들기" />,
     },
     {
       icon: <AccountBoxIcon />,
@@ -97,11 +97,12 @@ const Header = () => {
       >
         {drawerTab.map((tab, index) => (
           <ListItem onClick={toggleDrawer} key={index} disableGutters>
-            {(tab.component.props.children === "로그아웃" || userPosAddr) &&
-            <ListItemButton>
-              <ListItemIcon>{tab.icon}</ListItemIcon>
-              {tab.component}
-            </ListItemButton>}
+            {(tab.component.props.children === "로그아웃" || userPosAddr) && (
+              <ListItemButton>
+                <ListItemIcon>{tab.icon}</ListItemIcon>
+                {tab.component}
+              </ListItemButton>
+            )}
           </ListItem>
         ))}
       </List>
@@ -142,10 +143,10 @@ const Header = () => {
                 <Button
                   color="primary"
                   onClick={() => handleLogOut()}
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
+                  sx={{
                     marginRight: "20px",
+                    border: 1,
+                    fontFamily: "inherit",
                   }}
                 >
                   로그아웃

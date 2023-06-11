@@ -14,6 +14,9 @@ import PartyRoomCrateResult from "./PartyRoomCreateResult";
 import { API } from "../../../utils/config";
 import * as status from "../../../utils/status";
 import Paper from "@mui/material/Paper";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function getFutureExpireTime(expireTime) {
   const currentDate = new Date();
@@ -31,12 +34,18 @@ function getFutureExpireTime(expireTime) {
 
   return futureDate;
 }
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 // 파티방을 만드는 컴포넌트입니다.
 function PartyRoomCreation() {
   const context = useContext(UserContext);
   const { userState } = context;
   const { username, userPos } = userState;
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 750px)");
 
   // 파티방을 만들기
   const location = useLocation();
@@ -46,6 +55,9 @@ function PartyRoomCreation() {
   // 파티방의 정보를 state로 관리
   const [partyInfo, setPartyInfo] = useState({
     restaurantId: resId,
+    restaurantName : restaurantInfo.name,
+    deliveryFee : restaurantInfo.deliveryFee,
+    minOrderPrice : restaurantInfo.minOrderPrice,
     partyName: `${restaurantInfo.name} 딜리버스입니다.`,
     memberNum: 4,
     expireTime: "00:00",
@@ -72,6 +84,12 @@ function PartyRoomCreation() {
     "나의 메뉴 결정",
   ];
 
+  const mobileLabelSteps = [
+      "파티방",
+      "위치",
+      "메뉴"
+  ]
+
   // 필요한 입력을 해야지만 button을 활성화 시키기 위해 선언한 변수
   // 일단은 지도를 선택하는 페이지에서만 확인하게 했습니다.
   const [state, setState] = useState(false);
@@ -82,6 +100,27 @@ function PartyRoomCreation() {
     tempPartyInfo.pickUpAddress = addr;
     setPartyInfo(tempPartyInfo);
     setState(value);
+  };
+
+  // 경고창 띄우기 위한 변수
+  const [open, setOpen] = useState(false);
+
+  // 경고창의 message에 대한 변수
+  const [alertMessage, setAlertMessage] = useState("");
+
+  // alert창 종류
+  const [alertType, setAlertType] = useState("error");
+
+  // 경고창을 닫는 함수
+  const handleClose = () => {
+    setOpen(false);
+    if (alertType === "success"){
+      navigate("/myPage/0");
+    }
+    else {
+      //에러 시 메인페이지로 이동
+      navigate("/");
+    }
   };
 
   // 진행 단계마다 보여줄 컴포넌트
@@ -152,18 +191,29 @@ function PartyRoomCreation() {
       .then((data) => {
         console.log("Respones Data from PARTY API : ", data);
         // MyPage에서 나의 파티방 페이지로 이동
-        navigate("/myPage/0");
+        setAlertType("success");
+        setAlertMessage("성공적으로 방이 생성되었습니다!")
+        setOpen(true);
+        //navigate("/myPage/0");
       })
       .catch((error) => {
         // 로그인 만료 에러인 경우 로그아웃 실행
         if (error.name === "LoginExpirationError") {
           console.log(`${error.name} : ${error.message}`);
         }
-        console.log(`${error.name} : ${error.message}`);
-
-        alert("파티방 생성이 거절되었습니다!");
-        //에러 시 메인페이지로 이동
-        navigate("/");
+        else if (error.name === "DuplicateJoinError"){
+          setAlertType("error");
+          setAlertMessage("이미 딜리버스 중입니다!")
+          setOpen(true);
+          //alert("이미 딜리버스 중입니다!");
+        }
+        else {
+          console.log(`${error.name} : ${error.message}`);
+          setAlertType("error");
+          setAlertMessage("파티방 생성이 거절되었습니다!");
+          setOpen(true);
+          //alert("파티방 생성이 거절되었습니다!");
+        }
       });
   };
 
@@ -172,17 +222,17 @@ function PartyRoomCreation() {
       <Box
         component="main"
         sx={{
-          my: 8,
+          my: 6,
           mx: "auto",
-          px: 4,
+          px: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "md",
         }}
       >
-        <Typography component="h1" variant="h4" sx={{ my: 3 }}>
-          Deliverus 파티방을 생성해 보세요!
+        <Typography variant="h1" sx={{ mb: 3 }}>
+          {isMobile ? "파티방을 생성해 보세요!" : "Deliverus 파티방을 생성해 보세요!"}
         </Typography>
         <Paper
           elevation={1}
@@ -196,19 +246,19 @@ function PartyRoomCreation() {
         >
           {componentSteps[activeStep]}
         </Paper>
-        <Box sx={{ width: "100%", mt: 3 }}>
-          <Stepper activeStep={activeStep} sx={{ mb: 5 }}>
+        <Box sx={{ width: "100%", mt: 5 }}>
+          <Stepper activeStep={activeStep} sx={{ mb: 3 }}>
             {labelSteps.map((label, inx) => {
               const stepProps = {};
               return (
                 <Step key={label} {...stepProps}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel>{isMobile ? mobileLabelSteps[inx] : label}</StepLabel>
                 </Step>
               );
             })}
           </Stepper>
           {activeStep === labelSteps.length ? (
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 3 }}>
               <Box sx={{ display: "flex", pt: 2 }} />
               <Button
                 color="inherit"
@@ -225,7 +275,7 @@ function PartyRoomCreation() {
             </Box>
           ) : (
             <Fragment>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2, mb: 3}}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -251,6 +301,12 @@ function PartyRoomCreation() {
           )}
         </Box>
       </Box>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}
+                anchorOrigin={{vertical: "top", horizontal : "center"}}>
+        <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

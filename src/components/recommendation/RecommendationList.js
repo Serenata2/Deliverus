@@ -79,74 +79,69 @@ export default function RecommendationList(props) {
     setSelected(selected !== itemId ? itemId : "");
   };
 
-  // 모바일 화면인 경우
-  if (isMobile) {
-    return (
-      <Fragment>
-        <Typography paddingBottom={"4px"} variant="h6" component="h6">
-          AI가 추천해주는 현재 TOP 5 음식
-        </Typography>
-        <ScrollMenu
-          onMouseLeave={dragStop}
-          onMouseDown={() => dragStart}
-          onMouseUp={() => dragStop}
-          onMouseMove={handleDrag}
-          onWheel={onWheel}
-        >
-          {props.list.map((item, idx) => {
-            const slashIdx = item.indexOf("/");
-            const title =
-              slashIdx == -1
-                ? item
-                : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
-            const carouselImg = require(`../../images/carousel/${title}.jpg`);
-
-            return (
-              <ScrollCard
-                title={item}
-                itemId={idx}
-                idx={idx}
-                img={carouselImg}
-                onClick={handleItemClick(idx)}
-                selected={idx === selected}
-                restInfoList={props.restInfoList}
-              />
-            );
-          })}
-        </ScrollMenu>
-      </Fragment>
-    );
-  }
-  // PC 화면인 경우
-  else {
-    return (
-      <List
-        sx={{
-          width: "100%",
-          maxWidth: 270,
-          bgcolor: "background.paper",
-          borderRadius: "16px",
-          border: 3,
-          position: "absolute",
-          top: "300px",
-          left: "80vw",
-        }}
-        aria-label="contacts"
-        subheader={<ListSubheader>📈 AI가 추천해주는 Top5</ListSubheader>}
+  return (
+    <Fragment>
+      <Typography paddingBottom={"4px"} variant="h6" component="h6">
+        🚀 AI가 추천해주는 현재 TOP 5 음식
+      </Typography>
+      <ScrollMenu
+        onMouseLeave={dragStop}
+        onMouseDown={() => dragStart}
+        onMouseUp={() => dragStop}
+        onMouseMove={handleDrag}
+        onWheel={onWheel}
       >
         {props.list.map((item, idx) => {
-          if (idx <= 5) {
-            return (
-              <ListItem onClick={handleClick} key={idx}>
-                <ListItemButton>
-                  <ListItemIcon>{iconList[idx]}</ListItemIcon>
-                  <ListItemText primary={item} />
-                </ListItemButton>
-              </ListItem>
-            );
-          }
+          const slashIdx = item.indexOf("/");
+          const title =
+            slashIdx == -1
+              ? item
+              : item.substring(0, slashIdx) + item.substring(slashIdx + 1);
+          const carouselImg = require(`../../images/carousel/${title}.jpg`);
+
+          return (
+            <ScrollCard
+              key={idx}
+              title={item}
+              itemId={idx}
+              idx={idx}
+              img={carouselImg}
+              onClick={handleItemClick(idx)}
+              selected={idx === selected}
+              restInfoList={props.restInfoList}
+            />
+          );
         })}
-      </List>
-    );
-  }
+      </ScrollMenu>
+    </Fragment>
+  );
+  // PC 화면인 경우
+
+  // <List
+  //   sx={{
+  //     width: "100%",
+  //     maxWidth: 270,
+  //     bgcolor: "background.paper",
+  //     borderRadius: "16px",
+  //     border: 3,
+  //     position: "absolute",
+  //     top: "300px",
+  //     left: "80vw",
+  //   }}
+  //   aria-label="contacts"
+  //   subheader={<ListSubheader>📈 AI가 추천해주는 Top5</ListSubheader>}
+  // >
+  //   {props.list.map((item, idx) => {
+  //     if (idx <= 5) {
+  //       return (
+  //         <ListItem onClick={handleClick} key={idx}>
+  //           <ListItemButton>
+  //             <ListItemIcon>{iconList[idx]}</ListItemIcon>
+  //             <ListItemText primary={item} />
+  //           </ListItemButton>
+  //         </ListItem>
+  //       );
+  //     }
+  //   })}
+  // </List>
 }

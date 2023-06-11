@@ -118,13 +118,13 @@ const Register = ({ togglePage }) => {
           flexDirection: "column",
           alignItems: "center",
           maxWidth: "sm",
-          mt: 30
+          mt: 30,
         }}
       >
         <Typography component="h1" variant="h5">
           회원가입
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -161,12 +161,7 @@ const Register = ({ togglePage }) => {
           <Typography fontSize="0.5rem" component="h3" variant="h5">
             모든 정보는 4자리 이상, 특수문자는 사용하면 안됩니다.
           </Typography>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth sx={{ mt: 3, mb: 2, border: 1 }}>
             Sign Up
           </Button>
           <Collapse in={alertOpen}>

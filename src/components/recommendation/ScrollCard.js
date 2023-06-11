@@ -27,7 +27,7 @@ export function ScrollCard({ title, itemId, img, idx, restInfoList }) {
     <ButtonBase
       sx={{
         display: "inline-block",
-        width: "40vw",
+        width: "25vh",
         aspectRatio: "1/1",
         userSelect: "none",
         margin: "0px 10px 10px",
@@ -42,7 +42,7 @@ export function ScrollCard({ title, itemId, img, idx, restInfoList }) {
     >
       <Image
         src={img}
-        duration="0"
+        duration={0}
         style={{ borderRadius: "12px" }}
         name={title}
       />

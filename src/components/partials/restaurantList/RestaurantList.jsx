@@ -10,7 +10,7 @@ import styles from './Restaurant.module.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ButtonBase, Grid } from "@mui/material";
+import {ButtonBase, Grid, IconButton} from "@mui/material";
 import { Stack, borderRadius } from "@mui/system";
 import {UserContext} from "../../store/UserContext";
 import {API} from "../../../utils/config";
@@ -77,10 +77,16 @@ export default function RestaurantList() {
                     );
                 })}
             </div>
-            <div className={styles.list_location_wrapper}>
-                <LocationOnIcon/>
-                <span className={styles.list_location_txt}>{userPosAddr}</span>
-            </div>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 3}}>
+                <IconButton
+                    sx={{}}
+                    color="primary"
+                    aria-label="more"
+                >
+                    <LocationOnIcon />
+                </IconButton>
+                <h4>{userPosAddr}</h4>
+            </Box>
             <div className={styles.list_card}>
                 {restInfoList && restInfoList.map((item, idx) => {
                     if (
@@ -128,20 +134,6 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
         }
     }
 
-    // let ratingLabel = "Good";
-    // const ratingNum = Number(rating);
-    // if (ratingNum < 3) {
-    //     ratingLabel = "흐음~"
-    // } else if (ratingNum <= 3.5) {
-    //     ratingLabel = "Not Bad~"
-    // } else if (ratingNum <= 4) {
-    //     ratingLabel = "좋아요~"
-    // } else if (ratingNum <= 4.5) {
-    //     ratingLabel = "추천해요"
-    // } else if (ratingNum <= 5) {
-    //     ratingLabel = "인생식당"
-    // }
-
     // 가게 설명 주석입니다. 재활용 할 수 있을 것 같아서 남겨요
     // <Typography variant="body2" color="text.secondary" sx={{
         // overflow: "hidden",
@@ -157,40 +149,57 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
     // pc화면
     if (!isMobile) {
         return (
-            <Card variant="outlined"
-                  sx={{display: "flex", p: 1, m: 1.5, border: "none", boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)"}}>
-                <CardContent sx={{px: 0, pl: 1}}>
-                    <img src={image} alt='음식점 사진'
-                         style={{width: '120px', height: '120px', borderRadius: '16px', border: "1px solid"}}/>
-                </CardContent>
-                <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: "100%"}}>
-                    <CardContent sx={{width: "90%"}}>
-                        <Typography fontSize="1.5rem" variant="h5" component="div">
-                            {name}
-                        </Typography>
-                        <Typography fontSize="1.1rem" variant="p" component="div" mt={1.5}
-                                    sx={{color: "#9e9e9e"}}>
-                            {intro}
-                        </Typography>
-                        <Box sx={{display: "flex", flexDirection: "row", mt: 1}}>
-                            <Typography fontSize='1.0rem' variant="body2" sx={{pr: 2}}>
-                                ⭐
-                                {rating}
+            <ButtonBase sx={{ marginY: 1,}} onClick={
+                () => {
+                    setTimeout(() => {
+                        handleClickStoreInfo()
+                    }, 200)
+                }
+            }>
+                <Grid container sx={{
+                    alignItems: "center",
+                    padding: 2,
+                    marginX: "auto",
+                    width: "100%",
+                    borderRadius: 2,
+                    boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
+                    backgroundColor: "#fff"
+                }}>
+                    <Grid item xs={3}>
+                        <img src={image} style={{
+                            width: "120px",
+                            aspectRatio: "1 / 1",
+                            borderRadius: "6px",
+                            boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.5)",
+                        }} />
+                    </Grid>
+                    <Grid item xs={9} paddingLeft={"4px"} container spacing={0.5} alignItems={"center"}>
+                        <Grid item xs={8}>
+                            <Typography variant="h5" noWrap textAlign="start" textOverflow={"ellipsis"}>{name}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant="body2" sx={{border: 1, borderRadius: 3, width:"100%", textAlign: "center", backgroundColor: "info.main"}}>
+                                            ⭐ {rating} / 5.0&nbsp;
                             </Typography>
-                            <Typography variant="body2" sx={{pr: 2}}>
-                                배달비 : {deliveryFee}원
+                        </Grid>
+                        <Grid item xs={12} container>
+                            <Typography variant="h6" textAlign="start" color="text.secondary" justifySelf={"flex-start"}>
+                                {intro}
                             </Typography>
-                            <Typography variant="body2">
-                                최소주문 : {minOrderPrice}원
+                        </Grid>
+                        <Grid item xs={12} container>
+                            <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
+                                배달비: {deliveryFee.toLocaleString()}원
                             </Typography>
-                        </Box>
-                    </CardContent>
-                    <CardActions align="center" sx={{flexDirection: "column"}}>
-                        <Button size="small" onClick={handleClickStoreInfo} sx={{fontSize:"0.7rem"}}>
-                            둘러보기</Button>
-                    </CardActions>
-                </Box>
-            </Card>
+                        </Grid>
+                        <Grid item xs={12} container>
+                            <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
+                                최소 주문: {minOrderPrice.toLocaleString()}원
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </ButtonBase>
         );
     } else { // 모바일 화면
         return (
@@ -206,7 +215,6 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                     padding: 2,
                     marginX: "auto",
                     width: "100%",
-                    border: 1,
                     borderRadius: 2,
                     boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)",
                     backgroundColor: "#fff"
@@ -216,6 +224,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                             width: "80px",
                             aspectRatio: "1 / 1",
                             borderRadius: "6px",
+                            boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.5)",
                         }} />
                     </Grid>
                     <Grid item xs={8} paddingLeft={"4px"} container spacing={0.5}>
@@ -239,7 +248,7 @@ export function RestaurantCard({name, rating, id, category, intro, deliveryFee, 
                         </Grid>
                         <Grid item xs={12} container>
                             <Typography variant="body2" color="text.secondary" justifySelf={"flex-start"}>
-                                최소 주문 금액: {minOrderPrice.toLocaleString()}원
+                                최소 주문: {minOrderPrice.toLocaleString()}원
                             </Typography>
                         </Grid>
                             {/* </Stack> */}

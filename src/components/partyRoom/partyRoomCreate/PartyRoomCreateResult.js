@@ -9,67 +9,62 @@ import {Box, Divider} from "@mui/material";
 
 // 파티방을 만들 때 설정 사항들을 최종적으로 보여주는 컴퍼넌트입니다.
 function PartyRoomCrateResult(props) {
+    console.log(props.partyInfo);
     return (
         <Fragment>
-            <Typography variant="h5" sx={{margin: "auto", mb:3}}>
-                {props.partyInfo.partyName}
-            </Typography>
             <Box sx={{width: "95%", margin: "auto"}}>
-                <Typography variant="h6" mb={1}>
-                    🏠가게 정보
-                </Typography>
-                <Typography variant="h6" sx={{color: "#9e9e9e", fontSize: "1.5rem"}}>
-                    오복가 정식
-                </Typography>
-                <Divider sx={{border: 1, my: 4}}/>
-                <Typography variant="h6" mb={1}>
+                <Typography variant="h2" my={2}>
                     🏫파티방 정보
                 </Typography>
-                <Typography variant="h6" sx={{margin: "auto"}}>
+                <Typography variant="body1" mb={1}>
+                    방명 : {props.partyInfo.partyName}
+                </Typography>
+                <Typography variant="body1" mb={1}>
                     정원 : {props.partyInfo.memberNum}명
                 </Typography>
-                <Typography variant="h6" sx={{color: "#FF0023", fontSize: "1rem"}}>
+                <Typography variant="body1" color="primary">
                     파티방 유지 시간 : 🕓 {props.partyInfo.life}분!
                 </Typography>
                 <Divider sx={{border: 1, my: 4}}/>
+                <Typography variant="h2" mb={2}>
+                    🏠가게 정보
+                </Typography>
+                <Typography variant="body1" mb={1}>
+                    가게명 : {props.partyInfo.restaurantName}
+                </Typography>
+                <Typography variant="body1" mb={1}>
+                    최소 주문 금액 : {props.partyInfo.minOrderPrice.toLocaleString()}원
+                </Typography>
+                <Typography variant="body1" color="primary">
+                    배달비 : {props.partyInfo.deliveryFee.toLocaleString()}원
+                </Typography>
+                <Divider sx={{border: 1, my: 4}}/>
+                <Typography  variant="h2" mb={2}>
+                    🚩픽업 장소
+                </Typography>
             </Box>
-            <Typography  variant="h6" mb={1}>
-                🚩픽업 장소
-            </Typography>
-            <Box sx={{width: "80%", height: "50vh"}}>
+            <Box sx={{width: "80%", height: "40vh", border: 1}}>
                 <KakaoMapStore
                     lat={props.partyInfo.latitude}
                     lng={props.partyInfo.longitude}
                 />
             </Box>
-            <Typography  variant="h6" sx={{margin: "auto", fontSize: "1rem", my: 1}}>
-                도로명 주소 : {props.partyInfo.pickUpAddress}
-            </Typography>
-            <Typography  variant="h6" sx={{margin: "auto", fontSize: "1rem"}}>
-                {props.detailPos && `상세 주소 : ${props.detailPos}`}
-            </Typography>
-            <Divider sx={{border: 1, width: "90%", my: 4}}/>
             <Box sx={{width: "95%", margin: "auto"}}>
-                <Typography variant="h6" mb={1}>
+                <Typography  variant="body1" sx={{ my: 2}}>
+                    도로명 주소 : {props.partyInfo.pickUpAddress}
+                </Typography>
+                <Typography  variant="body1" sx={{ mb: 2}}>
+                    {props.detailPos && `상세 주소 : ${props.detailPos}`}
+                </Typography>
+                <Divider sx={{border: 1,  my: 4}}/>
+                <Typography variant="h2" mb={2}>
                     🍽️내가 선택한 메뉴
                 </Typography>
             </Box>
-            <Stack spacing={3} sx={{width: "80%"}}>
+            <Stack spacing={3} sx={{width: "95%", mb: 5}}>
                 {props.menuList.map((item, index) => {
                     if (props.countList[index] > 0) {
-                        return (<Grid container direction="row"
-                                      justifyContent="center"
-                                      alignItems="center"
-                                      key={index}>
-                            <Grid item xs={11}>
-                                <MenuCard key={index} menu={item}/>
-                            </Grid>
-                            <Grid item xs={1} sx={{pl: 1}}>
-                                <Button variant="outlined" disableRipple={true}>
-                                    {props.countList[index]}
-                                </Button>
-                            </Grid>
-                        </Grid>);
+                        return (<MenuCard key={index} menu={item} countNum={props.countList[index]}/>);
                     }
                 })}
             </Stack>

@@ -6,6 +6,12 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {UserContext} from "../../store/UserContext";
 import * as status from "../../../utils/status";
 import { API } from "../../../utils/config";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // 참가자 입장에서 가게의 메뉴를 선택하는 컴포넌트입니다
 function PersonalMenuSelecting() {
@@ -36,6 +42,27 @@ function PersonalMenuSelecting() {
     // 각 메뉴에 대한 수량을 담은 리스트
     const [countList, setCountList] = useState([0]);
 
+    // 경고창 띄우기 위한 변수
+    const [open, setOpen] = useState(false);
+
+    // 경고창의 message에 대한 변수
+    const [alertMessage, setAlertMessage] = useState("");
+
+    // alert창 종류
+    const [alertType, setAlertType] = useState("error");
+
+    // 경고창을 닫는 함수
+    const handleClose = () => {
+        setOpen(false);
+        if (alertType === "success"){
+            navigate("/myPage/0");
+        }
+        else {
+            //에러 시 메인페이지로 이동
+            navigate("/");
+        }
+    };
+
     // 가게의 ID를 가지고 서버로부터 가게 정보 받기
     useEffect(() => {
         const data = {restaurantId: restaurantId};
@@ -59,13 +86,10 @@ function PersonalMenuSelecting() {
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
-                    handleLogOut();
+                    console.log(`${error.name} : ${error.message}`);
                 }
-                // 요청한 것에 대한 데이터가 없을 때 에러 처리
-                else if (error.name === "NoDataError") {
-                    alert("error.message");
-                }
-                console.log(`${error.name} : ${error.message}`);
+                //에러 시 메인페이지로 이동
+                navigate("/");
             });
     }, []);
 
@@ -103,17 +127,26 @@ function PersonalMenuSelecting() {
             .then((data) => {
                 console.log("Respones Data from Party Member API : ", data);
                 // MyPage에서 나의 파티방 페이지로 이동
-                navigate("/myPage/0");
+                setAlertType("success");
+                setAlertMessage("파티방에 입장 완료하였습니다!")
+                setOpen(true);
             })
             .catch((error) => {
                 // 로그인 만료 에러인 경우 로그아웃 실행
                 if (error.name === "LoginExpirationError") {
                     handleLogOut();
                 }
+                else if (error.name === "DuplicateJoinError") {
+                    setAlertType("error");
+                    setAlertMessage("이미 딜리버스 중입니다!")
+                    setOpen(true);
+                }
+                else {
+                    setAlertType("error");
+                    setAlertMessage("파티방 입장이 거부되었습니다");
+                    setOpen(true);
+                }
                 console.log(`${error.name} : ${error.message}`);
-                // 마지막으로 메인 화면으로 이동
-                alert("파티방 입장이 거부되었습니다.");
-                navigate("/");
             });
     };
 
@@ -125,6 +158,12 @@ function PersonalMenuSelecting() {
                 disabled={!countList.some(element => element > 0)}>
             🚩 Deliverus 파티방 입장하기
         </Button>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}
+                  anchorOrigin={{vertical: "top", horizontal : "center"}}>
+            <Alert onClose={handleClose} severity={alertType} sx={{ width: '100%' }}>
+                {alertMessage}
+            </Alert>
+        </Snackbar>
     </Box>);
 }
 

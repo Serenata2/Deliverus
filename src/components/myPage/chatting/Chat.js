@@ -146,35 +146,37 @@ function Chat() {
                 // Do something, all subscribes must be done is this callback
                 // This is needed because this will be executed after a (re)connect
 
-                // connect하고 chatLog 불러오기
-                fetch(`${API.CHAT_MESSAGE}?name=${username}&id=${myPartyId}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                })
-                    .then((respones) => {
-                        status.handleChatResponse(respones.status);
-                        return respones.json();
+                if(Array.isArray(chatLog) && chatLog.length === 0) {
+                    // connect하고 chatLog 불러오기
+                    fetch(`${API.CHAT_MESSAGE}?name=${username}&id=${myPartyId}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: "include",
                     })
-                    .then((data) => {
-                        console.log("Respones Data from CHAT MESSAGE API : ", data);
-                        if (Array.isArray(data) && data.length === 0) {
-                            data.push({
-                                sender: username, time: "00:00",
-                                chat: `${username}님이 입장하셨습니다`, type: 0
-                            });
-                        }
-                        setChatLog(prevState => [...prevState].concat(data));
+                        .then((respones) => {
+                            status.handleChatResponse(respones.status);
+                            return respones.json();
+                        })
+                        .then((data) => {
+                            console.log("Respones Data from CHAT MESSAGE API : ", data);
+                            if (Array.isArray(data) && data.length === 0) {
+                                data.push({
+                                    sender: username, time: "00:00",
+                                    chat: `${username}님이 입장하셨습니다`, type: 0
+                                });
+                            }
+                            setChatLog(prevState => [...prevState].concat(data));
 
-                    })
-                    .catch((error) => {
-                        // 로그인 만료 에러인 경우 로그아웃 실행
-                        if (error.name === "LoginExpirationError") {
-                            handleLogOut();
-                        }
-                        console.log(`CHAT MESSAGE API -> ${error.name} : ${error.message}`);
-                    });
+                        })
+                        .catch((error) => {
+                            // 로그인 만료 에러인 경우 로그아웃 실행
+                            if (error.name === "LoginExpirationError") {
+                                handleLogOut();
+                            }
+                            console.log(`CHAT MESSAGE API -> ${error.name} : ${error.message}`);
+                        });
+                }
 
                 subscription = client.subscribe(`/sub/chat/${myPartyId}`, callback, {});
                 console.log("subscribed!");
