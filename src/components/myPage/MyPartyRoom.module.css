@@ -3,6 +3,11 @@
     transition: transform 0.2s;
 }
 
+.menuWrap {
+  text-align: center;
+  margin: auto;
+}
+
 /* 모달을 화면 중앙에 정렬 */
 .modal {
     position: fixed;
@@ -24,6 +29,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     width: 700px;
+    margin: 10px;
   }
   
   /* 모달 닫기 버튼 */

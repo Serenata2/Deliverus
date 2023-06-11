@@ -7,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import React, { useState } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 // 가게의 하나의 Menu 정보를 보여주는 컴포넌트입니다.
 // prop으로 메뉴 이름, 가격을 담은 객체를 받습니다.
@@ -26,6 +27,8 @@ const MenuCard = ({ menu, countNum }) => {
     setOpen(nextState);
   };
 
+  const isMobile = useMediaQuery("(max-width: 750px)");
+
   const menuIntro = menu.menuIntro;
 
   return (
@@ -42,7 +45,7 @@ const MenuCard = ({ menu, countNum }) => {
         }}
       >
         <CardContent>
-          <Typography variant="h2" component="div" sx={{mb: 1}}>
+          <Typography variant="h2" component="div" sx={{mb: 1, fontSize: isMobile ? '1.2rem' : '1.4rem'}}>
             {menu.menuName}
           </Typography>
           <Typography variant="body2" color="grey">
@@ -53,7 +56,7 @@ const MenuCard = ({ menu, countNum }) => {
             {countNum ? <Button variant="outlined" disableRipple={true} sx={{mr: 1, fontSize:"0.8rem"}}>
                 {countNum}
             </Button> : <Tooltip open={open} title={menuIntro}>
-                <Button fontSize="0.3rem" size="small" onClick={handleToggle}>
+                <Button fontSize="0.3rem" size="small" onClick={handleToggle} sx={{padding: isMobile ? 0.5 : 2, fontSize: isMobile ? '0.65rem' : '0.8rem'}}>
                     자세히 보기
                 </Button>
             </Tooltip>
