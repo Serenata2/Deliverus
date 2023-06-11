@@ -910,26 +910,11 @@ function MyPartyRoom() {
                     </Button>
                   )}
                 </Box>
-                <Box sx={{ width: "90%", margin: "auto" }}>
+                <Box sx={{ width: "95%", margin: "auto" }}>
                   <Stack spacing={3} sx={{}}>
                     {myMenu.map((item, index) => {
                       return (
-                        <Grid
-                          container
-                          direction="row"
-                          justifyContent="center"
-                          alignItems="center"
-                          key={index}
-                        >
-                          <Grid item xs={11}>
-                            <MenuCard key={index} menu={item} />
-                          </Grid>
-                          <Grid item xs={1} sx={{ pl: 1 }}>
-                            <Button variant="outlined" disableRipple={true}>
-                              {item.num}
-                            </Button>
-                          </Grid>
-                        </Grid>
+                          <MenuCard key={index} menu={item} countNum={item.num} />
                       );
                     })}
                   </Stack>
