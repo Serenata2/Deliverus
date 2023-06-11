@@ -25,6 +25,7 @@ import Backdrop from "@mui/material/Backdrop";
 import axios from 'axios';
 import styles from './MyPartyRoom.module.css'
 import deliveryIcon from '../../images/deliveryIcon/delivery.ico';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 // Dialog가 아래에서 위로 올라가는 느낌을 주기위해 선언한 변수
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -117,6 +118,8 @@ function MyPartyRoom() {
 
     // 마지막 화면에서 지도보기 클릭
     const [isMapOpened, setIsMapOpened] = useState(false);
+
+    const isMobile = useMediaQuery("(max-width: 750px)");
 
     // 방장이 주문하기 버튼 클릭
 
@@ -500,6 +503,10 @@ function MyPartyRoom() {
     }, function(rsp) {
       if (rsp.success) {
         // 결제 성공 시 로직
+
+      } else {
+        // 결제에 실패했을 때 로직
+        // alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
         let partyId = parseInt(myPartyId)
         axios.post(`${API.PAYMENT_EACH}`, {
             partyId: partyId,
@@ -509,9 +516,6 @@ function MyPartyRoom() {
                 'Content-Type': 'application/json'
             }
             }).then((res) => console.log(res));
-      } else {
-        // 결제에 실패했을 때 로직
-        alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
       }
     });
     }
