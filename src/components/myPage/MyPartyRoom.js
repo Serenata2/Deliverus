@@ -36,6 +36,7 @@ import deliveryIcon from "../../images/deliveryIcon/delivery.ico";
 import Snackbar from "@mui/material/Snackbar";
 import Fade from "@mui/material/Fade";
 import MuiAlert from "@mui/material/Alert";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -155,7 +156,9 @@ function MyPartyRoom() {
   // 마지막 화면에서 지도보기 클릭
   const [isMapOpened, setIsMapOpened] = useState(false);
 
-  // 방장이 주문하기 버튼 클릭
+    const isMobile = useMediaQuery("(max-width: 750px)");
+
+    // 방장이 주문하기 버튼 클릭
 
   // 결제 상태로 가도 괜찮은지 판단하는 함수
   const meetMinOrderPrice = () => {
@@ -684,7 +687,7 @@ function MyPartyRoom() {
           <Divider sx={{ border: 1, my: 4 }} />
           {partyState == 2 && (
             <>
-              <div style={{ display: "flex", margin: "auto" }}>
+              <div style={{ display: "flex", margin: "auto", flexWrap: "wrap" }}>
                 <div className={styles.menuWrap} onClick={openMenu}>
                   <Typography variant="h1" sx={{ color: "#9e9e9e", mb: 1 }}>
                     결제 내역
@@ -693,8 +696,8 @@ function MyPartyRoom() {
                     src={deliveryIcon}
                     alt="오토바이 아이콘"
                     style={{
-                      width: "420px",
-                      height: "420px",
+                      width: isMobile ? "300px" : "420px",
+                      height: isMobile ? "300px" : "420px",
                       textAlign: "center",
                     }}
                   />
@@ -707,8 +710,8 @@ function MyPartyRoom() {
                     src="https://us.123rf.com/450wm/juliasart/juliasart1704/juliasart170400011/75406260-%EC%A7%80%EB%8F%84-%ED%83%90%EC%83%89-%EA%B0%9C%EB%85%90%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%B0%B0%EB%8B%AC-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg?ver=6"
                     alt="지도 아이콘"
                     style={{
-                      width: "420px",
-                      height: "420px",
+                      width: isMobile ? "300px" : "420px",
+                      height: isMobile ? "300px" : "420px",
                       textAlign: "center",
                     }}
                   />
@@ -925,7 +928,7 @@ function MyPartyRoom() {
                             <MenuCard key={index} menu={item} />
                           </Grid>
                           <Grid item xs={1} sx={{ pl: 1 }}>
-                            <Button variant="outlined" disableRipple={true}>
+                            <Button variant="outlined" disableRipple={true} sx={{padding: isMobile && 0.5, minWidth: isMobile && '48px'}}>
                               {item.num}
                             </Button>
                           </Grid>
